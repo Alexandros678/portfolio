@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AscendHub - Alexandros Giorginis</title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/devicon@2.15.1/devicon.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #1a1a1a;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    /* Navbar (Constellation Style with Enhanced Hover) */
+    .navbar {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 30px;
+      z-index: 100;
+      background: transparent;
+    }
+
+    .navbar a {
+      position: relative;
+      color: rgba(255, 255, 255, 0.9);
+      text-transform: uppercase;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .navbar a::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 8px;
+      height: 8px;
+      background: radial-gradient(circle, #fff, transparent);
+      border-radius: 50%;
+      transition: transform 0.3s;
+    }
+
+    .navbar a:hover {
+      color: #fff;
+    }
+
+    .navbar a:hover::before {
+      transform: translateX(-50%) scale(1.5);
+    }
+
+    .navbar .line {
+      position: absolute;
+      top: -5px;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3), transparent);
+      z-index: -1;
+      transition: background 0.3s;
+    }
+
+    .navbar a:nth-child(1):hover ~ .line {
+      background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.1), transparent);
+    }
+
+    .navbar a:nth-child(2):hover ~ .line {
+      background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.1), transparent);
+    }
+
+    .navbar a:nth-child(3):hover ~ .line,
+    .navbar a:nth-child(4):hover ~ .line,
+    .navbar a:nth-child(5):hover ~ .line {
+      background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.1), transparent);
+    }
+
+    /* Hamburger Menu for Mobile */
+    .hamburger {
+      display: none;
+      font-size: 2rem;
+      color: rgba(255, 255, 255, 0.9);
+      cursor: pointer;
+      z-index: 101;
+      transition: color 0.3s;
+    }
+
+    .hamburger:hover {
+      color: #fff;
+    }
+
+    .navbar.active .hamburger {
+      color: #1e90ff;
+    }
+
+    .navbar.active .line {
+      background: linear-gradient(to right, transparent, #1e90ff, transparent);
+    }
+
+    .dropdown {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 250px;
+      height: 100vh;
+      background: rgba(30, 30, 30, 0.95);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 80px;
+      transform: translateX(100%);
+      transition: transform 0.5s ease-in-out;
+      z-index: 100;
+    }
+
+    .dropdown.active {
+      transform: translateX(0);
+    }
+
+    .dropdown a {
+      margin: 20px 0;
+      font-size: 1.2rem;
+      color: rgba(255, 255, 255, 0.8);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-decoration: none;
+      position: relative;
+      transition: color 0.3s;
+    }
+
+    .dropdown a::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 8px;
+      height: 8px;
+      background: radial-gradient(circle, #fff, transparent);
+      border-radius: 50%;
+      transition: transform 0.3s;
+    }
+
+    .dropdown a:hover {
+      color: #fff;
+    }
+
+    .dropdown a:hover::before {
+      transform: translateX(-50%) scale(1.5);
+    }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 50vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      margin-top: 60px;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      text-transform: uppercase;
+      letter-spacing: 5px;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .hero h1 span {
+      transition: text-shadow 0.3s;
+    }
+
+    .hero h1 span:hover {
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.5);
+    }
+
+    /* Content */
+    .content {
+      padding: 50px 20px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .section {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+      margin-bottom: 40px;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    .section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .section h2 {
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .section h2 span {
+      transition: text-shadow 0.3s;
+    }
+
+    .section h2 span:hover {
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.5);
+    }
+
+    .section p {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .highlight {
+      font-weight: bold;
+      color: #1e90ff;
+    }
+
+    .project-link {
+      margin-top: 10px;
+      display: inline-block;
+      color: #1e90ff;
+      text-decoration: none;
+      font-weight: bold;
+      position: relative;
+    }
+
+    .project-link::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -2px;
+      left: 0;
+      background: #1e90ff;
+      transition: width 0.3s ease-in-out;
+    }
+
+    .project-link:hover::after {
+      width: 100%;
+    }
+ /* Images Section */
+ .images-section {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+      margin-bottom: 40px;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .images-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .images-section h2 {
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .images-section h2 span {
+      transition: text-shadow 0.3s;
+    }
+
+    .images-section h2 span:hover {
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.5);
+    }
+
+    .image-container {
+      margin-top: 15px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .image-placeholder {
+      width: 200px;
+      height: 150px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 5px;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .image-placeholder:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+    }
+
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 200;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal img {
+      max-width: 80%;
+      max-height: 80%;
+      border-radius: 10px;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    /* Footer */
+    .footer {
+      background: rgba(30, 30, 30, 0.95);
+      padding: 20px;
+      text-align: center;
+      position: relative;
+      bottom: 0;
+      width: 100%;
+    }
+
+    .footer ul {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 10px;
+    }
+
+    .footer ul li a {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 1.2rem;
+      transition: color 0.3s;
+    }
+
+    .footer ul li a:hover {
+      color: #fff;
+    }
+
+    .footer p {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* Mobile Styles */
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: row;
+        align-items: center;
+      }
+
+      .navbar .line,
+      .navbar a:not(.dropdown a) {
+        display: none;
+      }
+
+      .hamburger {
+        display: block;
+      }
+
+      .dropdown a {
+        font-size: 1rem;
+      }
+
+      .hero {
+        height: 30vh;
+        margin-top: 80px;
+      }
+
+      .hero h1 {
+        font-size: 2rem;
+        letter-spacing: 3px;
+      }
+
+      .content {
+        padding: 30px 10px;
+      }
+
+      .section h2 {
+        font-size: 1.5rem;
+      }
+
+      .section p {
+        font-size: 0.9rem;
+      }
+
+      .images-section h2 {
+        font-size: 1.5rem;
+      }
+
+      .image-container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .image-placeholder {
+        width: 200px;
+        height: 150px;
+      }
+
+      .footer ul li a {
+        font-size: 1rem;
+      }
+
+      .footer p {
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="line"></div>
+    <a href="index.html">Home</a>
+    <a href="index1.html">EduQuest</a>
+    <a href="index2.html">CampusBridge</a>
+    <a href="index3.html">Greenfield United FC</a>
+    <a href="index4.html">AscendHub</a>
+    <div class="hamburger">
+      <i class="fas fa-bars"></i>
+    </div>
+    <div class="dropdown">
+      <a href="index.html">Home</a>
+      <a href="index1.html">EduQuest</a>
+      <a href="index2.html">CampusBridge</a>
+      <a href="index3.html">Greenfield United FC</a>
+      <a href="index4.html">AscendHub</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1><span>A</span><span>s</span><span>c</span><span>e</span><span>n</span><span>d</span><span>H</span><span>u</span><span>b</span></h1>
+  </section>
+
+  <div class="content">
+    <div class="section">
+      <h2><span>P</span><span>u</span><span>r</span><span>p</span><span>o</span><span>s</span><span>e</span></h2>
+      <p>AscendHub is a gamified web application I created as an individual project for a web development course, designed to motivate users to stay consistent with their daily workouts. Inspired by the anime Solo Leveling, the app assigns users daily exercise routines to complete, allowing them to 'level up' and unlock achievements. Failure to complete tasks results in penalties like losing XP points or missing achievements, turning fitness into an engaging game. The primary goal is to transform mundane routines into an interactive experience, boosting motivation and commitment to health goals.</p>
+    </div>
+
+    <div class="section">
+      <h2><span>T</span><span>e</span><span>c</span><span>h</span><span>n</span><span>o</span><span>l</span><span>o</span><span>g</span><span>i</span><span>e</span><span>s</span></h2>
+      <p>For AscendHub, I utilized PHP with the Laravel framework, Tailwind CSS for a clean and responsive design, Alpine.js for interactivity, and Livewire for real-time updates. The user interface featured an engaging design with smooth functionality, enhanced by Tailwind CSS and Livewire, ensuring a seamless experience as users tracked progress, earned XP, and unlocked achievements.</p>
+    </div>
+
+    <div class="section">
+      <h2><span>S</span><span>o</span><span>f</span><span>t</span> <span>S</span><span>k</span><span>i</span><span>l</span><span>l</span><span>s</span></h2>
+      <p>This project enhanced my <span class="highlight">problem-solving skills</span> as I tackled challenges like real-time updates and dynamic features. I also improved my <span class="highlight">time management</span> by reflecting on rushing certain parts, and developed <span class="highlight">creativity</span> by integrating gamification inspired by Solo Leveling to make fitness engaging.</p>
+    </div>
+
+    <div class="section">
+      <h2><span>R</span><span>o</span><span>l</span><span>e</span></h2>
+      <p>As the sole developer, I took on the role of a <span class="highlight">full-stack developer</span> for AscendHub. I designed the gamified system, implemented workout tracking, XP awards, and penalties using Laravel, Livewire, and Alpine.js, and crafted the user interface with Tailwind CSS. I overcame initial complexities with real-time updates and authentication by seeking help from my teacher, friends, ChatGPT, and Google searches.</p>
+      <p><strong>My Contributions:</strong></p>
+      <ul>
+        <li>Designed a gamified workout system inspired by Solo Leveling</li>
+        <li>Developed backend logic with PHP and Laravel for workout tracking</li>
+        <li>Created a responsive UI using Tailwind CSS</li>
+        <li>Implemented real-time updates with Livewire and Alpine.js</li>
+        <li>Integrated XP system and achievement unlocks</li>
+        <li>Resolved challenges with teacher, peer, and online support</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2><span>D</span><span>o</span><span>c</span><span>u</span><span>m</span><span>e</span><span>n</span><span>t</span><span>a</span><span>t</span><span>i</span><span>o</span><span>n</span></h2>
+      <p>The project documentation covers the gamified structure, including workout routines, XP tracking, and achievement systems. It details the use of Laravel for backend, Tailwind CSS and Livewire for the frontend, and challenges faced with real-time updates. Reflections on time management and potential improvements for future iterations are also included.</p>
+    </div>
+
+    <div class="images-section">
+        <h2><span>I</span><span>m</span><span>a</span><span>g</span><span>e</span><span>s</span></h2>
+        <div class="image-container">
+          <img src="screenshot14.png" alt="Dashboard" class="image-placeholder">
+          <img src="screenshot15.png" alt="Daily Quests" class="image-placeholder">
+          <img src="screenshot16.png" alt="Leaderboard" class="image-placeholder">
+        </div>
+      </div>
+    </div>
+
+  <!-- Modal for enlarged image -->
+  <div class="modal" id="imageModal">
+    <img id="modalImage" src="" alt="Enlarged Image">
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <ul>
+      <li><a href="mailto:alexandros.giorginis1@gmail.com"><i class="fas fa-envelope"></i></a></li>
+      <li><a href="https://www.linkedin.com/in/alexandros-gkiorgkinis"><i class="fab fa-linkedin-in"></i></a></li>
+      <li><a href="https://github.com/Alexandros678"><i class="fab fa-github"></i></a></li>
+    </ul>
+    <p>© 2025 Alexandros Giorginis. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const hamburger = document.querySelector('.hamburger');
+    const navbar = document.querySelector('.navbar');
+    const dropdown = document.querySelector('.dropdown');
+    const modal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('modalImage');
+    const images = document.querySelectorAll('.image-placeholder');
+
+    hamburger.addEventListener('click', () => {
+      navbar.classList.toggle('active');
+      dropdown.classList.toggle('active');
+    });
+
+    document.querySelectorAll('.navbar a, .dropdown a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768) {
+          navbar.classList.remove('active');
+          dropdown.classList.remove('active');
+        }
+      });
+    });
+
+    // Scroll effect
+    function checkVisibility() {
+      const sections = document.querySelectorAll('.section, .images-section');
+      const windowHeight = window.innerHeight;
+
+      sections.forEach(section => {
+        const sectionTop = section.getBoundingClientRect().top;
+        if (sectionTop < windowHeight - 100) {
+          section.classList.add('visible');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', checkVisibility);
+    window.addEventListener('load', checkVisibility);
+
+    // Image click to enlarge
+    images.forEach(image => {
+      image.addEventListener('click', () => {
+        modalImage.src = image.src;
+        modal.classList.add('active');
+      });
+    });
+
+    // Close modal on click
+    modal.addEventListener('click', () => {
+      modal.classList.remove('active');
+    });
+  </script>
+</body>
+</html>

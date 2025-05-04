@@ -6,6 +6,8 @@
   <title>Alexandros Giorginis - Cosmic E-Portfolio</title>
   <!-- Add Devicon for language icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/devicon@2.15.1/devicon.min.css">
+  <!-- Add Font Awesome for contact icons and hamburger -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
   <style>
     * {
       box-sizing: border-box;
@@ -82,8 +84,181 @@
       background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.1), transparent);
     }
 
-    .menu-bar a:nth-child(3):hover ~ .line {
+    .menu-bar a:nth-child(3):hover ~ .line,
+    .menu-bar a:nth-child(4):hover ~ .line,
+    .menu-bar a:nth-child(5):hover ~ .line {
       background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.1), transparent);
+    }
+
+    /* Hamburger Menu for Mobile */
+    .hamburger {
+      display: none;
+      font-size: 2rem;
+      color: rgba(255, 255, 255, 0.9);
+      cursor: pointer;
+      z-index: 101;
+      transition: color 0.3s;
+    }
+
+    .hamburger:hover {
+      color: #fff;
+    }
+
+    .menu-bar.active .hamburger {
+      color: #1e90ff;
+    }
+
+    .menu-bar.active .line {
+      background: linear-gradient(to right, transparent, #1e90ff, transparent);
+    }
+
+    .dropdown {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 250px;
+      height: 100vh;
+      background: rgba(20, 20, 20, 0.95);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 80px;
+      transform: translateX(100%);
+      transition: transform 0.5s ease-in-out;
+      z-index: 100;
+    }
+
+    .dropdown.active {
+      transform: translateX(0);
+    }
+
+    .dropdown a {
+      margin: 20px 0;
+      font-size: 1.2rem;
+      color: rgba(255, 255, 255, 0.8);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-decoration: none;
+      position: relative;
+      transition: color 0.3s;
+    }
+
+    .dropdown a::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 8px;
+      height: 8px;
+      background: radial-gradient(circle, #fff, transparent);
+      border-radius: 50%;
+      transition: transform 0.3s;
+    }
+
+    .dropdown a:hover {
+      color: #fff;
+    }
+
+    .dropdown a:hover::before {
+      transform: translateX(-50%) scale(1.5);
+    }
+
+     /* Footer */
+     .footer {
+      background: rgba(30, 30, 30, 0.95);
+      padding: 20px;
+      text-align: center;
+      position: relative;
+      bottom: 0;
+      width: 100%;
+    }
+
+    .footer p {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* Mobile Styles */
+    @media (max-width: 768px) {
+      .menu-bar {
+        flex-direction: row;
+        align-items: center;
+      }
+
+      .menu-bar .line,
+      .menu-bar a:not(.dropdown a) {
+        display: none;
+      }
+
+      .hamburger {
+        display: block;
+      }
+
+      /* Adjust CV Card Dates for Mobile */
+      .cv-card {
+        margin-left: 0;
+        margin-right: 0;
+        width: 100%;
+        max-width: 100%;
+        padding: 15px;
+      }
+
+      .year-label {
+        display: none;
+      }
+
+      .cv-card-header span {
+        display: block;
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      .cv-card-header h3 {
+        font-size: 1rem;
+      }
+
+      .cv-card p {
+        font-size: 0.9rem;
+      }
+
+      /* Adjust About Me Section */
+      .about-me-content {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .about-me-photo {
+        width: 150px;
+        height: 150px;
+      }
+
+      .about-me-text {
+        font-size: 1rem;
+      }
+
+      /* Adjust Skills Grid */
+      .skills-grid {
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+        gap: 10px;
+      }
+
+      .skill-item i {
+        font-size: 2rem;
+      }
+
+      .skill-item span {
+        font-size: 0.8rem;
+      }
+
+      /* Adjust Contact Icons */
+      .contact-info ul li a {
+        width: 60px;
+        height: 60px;
+        line-height: 60px;
+        font-size: 25px;
+        margin: 0 5px;
+      }
     }
 
     /* Hero Section */
@@ -109,6 +284,16 @@
       text-transform: uppercase;
       letter-spacing: 2px;
       z-index: 10;
+      color: rgba(255, 255, 255, 0.9);
+      cursor: default;
+    }
+
+    .name span {
+      transition: text-shadow 0.2s ease;
+    }
+
+    .name span:hover {
+      text-shadow: 0 0 10px #fff, 0 0 20px #fff;
     }
 
     .hero-content-wrapper {
@@ -143,9 +328,16 @@
       position: relative;
     }
 
+    @media (max-width: 768px) {
+      .overlay-text {
+        font-size: 5rem;
+        letter-spacing: 5px;
+      }
+    }
+
     @keyframes scroll {
-      0% { transform: translateX(0); } /* Reverted to original animation */
-      100% { transform: translateX(-50%); } /* Reverted to original animation */
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
     }
 
     .center-content {
@@ -161,12 +353,19 @@
 
     .breathing-circle {
       position: absolute;
-      width: 300px;
-      height: 300px;
+      width: 370px;
+      height: 370px;
       background: radial-gradient(circle, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.2));
       border-radius: 50%;
       animation: breathe 6s ease-in-out infinite;
       z-index: 5;
+    }
+
+    @media (max-width: 768px) {
+      .breathing-circle {
+        width: 250px;
+        height: 250px;
+      }
     }
 
     @keyframes breathe {
@@ -179,6 +378,13 @@
       height: 350px;
       object-fit: cover;
       z-index: 6;
+    }
+
+    @media (max-width: 768px) {
+      .profile-photo {
+        width: 200px;
+        height: 250px;
+      }
     }
 
     .buttons {
@@ -201,6 +407,13 @@
       transition: background 0.3s, transform 0.3s;
     }
 
+    @media (max-width: 768px) {
+      .buttons button {
+        padding: 8px 15px;
+        font-size: 0.8rem;
+      }
+    }
+
     .buttons button:hover {
       background: rgba(255, 255, 255, 0.2);
       transform: scale(1.05);
@@ -210,7 +423,7 @@
       position: absolute;
       bottom: 0;
       width: 100%;
-      height: 5px; /* Minimal height to position particles at the very bottom */
+      height: 5px;
       z-index: 2;
       pointer-events: none;
     }
@@ -228,7 +441,7 @@
     @keyframes float {
       0% { transform: translateX(0) translateY(0); opacity: 0.5; }
       50% { opacity: 0.8; }
-      100% { transform: translateY(-100vh); opacity: 0.2; } /* Move to the top of the viewport (100vh up) */
+      100% { transform: translateY(-100vh); opacity: 0.2; }
     }
 
     /* General Section Styles */
@@ -240,44 +453,94 @@
       color: rgba(255, 255, 255, 0.9);
     }
 
+    @media (max-width: 768px) {
+      section {
+        padding: 50px 20px;
+      }
+    }
+
     h2 {
       font-size: 3rem;
       font-weight: 900;
       text-transform: uppercase;
       letter-spacing: 5px;
       margin-bottom: 50px;
-      text-align: left;
-    }
-
-    /* Welcome Section */
-    .welcome {
+      display: block;
       text-align: center;
+      width: 100%;
     }
 
-    .welcome p {
-      font-size: 1.2rem;
-      line-height: 1.6;
-      max-width: 600px;
-      margin: 0 auto;
+    @media (max-width: 768px) {
+      h2 {
+        font-size: 2rem;
+        letter-spacing: 3px;
+        margin-bottom: 30px;
+      }
+    }
+
+    h2 span {
+      transition: text-shadow 0.2s ease;
+    }
+
+    h2 span:hover {
+      text-shadow: 0 0 10px #fff, 0 0 20px #fff;
     }
 
     /* About Me Section */
     .about-me {
-      text-align: center;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
     }
 
-    .about-me p {
+    .about-me.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .about-me-content {
+      display: flex;
+      align-items: center;
+      max-width: 900px;
+      margin: 0 auto;
+      gap: 30px;
+    }
+
+    .about-me-photo {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .about-me-text {
+      flex: 1;
       font-size: 1.2rem;
       line-height: 1.6;
-      max-width: 600px;
-      margin: 0 auto;
     }
 
+    .about-me-text p {
+      margin-bottom: 15px;
+    }
+
+    .highlight {
+      font-weight: bold;
+      color: #1e90ff; /* Matches the View CV button blue */
+    }
+
+    /* CV Timeline Section */
     .cv-timeline {
       position: relative;
       max-width: 600px;
       margin: 40px auto 0;
       padding: 40px 0;
+    }
+
+    @media (max-width: 768px) {
+      .cv-timeline {
+        padding: 20px 0;
+      }
     }
 
     .cards-container {
@@ -298,6 +561,14 @@
       transition: transform 0.3s;
       margin-left: auto;
       margin-right: 60px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+
+    .cv-card.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .cv-card:hover {
@@ -318,7 +589,9 @@
     }
 
     .cv-card-header span {
-      display: none; /* Remove the span since we're using year labels */
+      display: none;
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.7);
     }
 
     .cv-card p {
@@ -367,7 +640,110 @@
       transition: background 0.3s, transform 0.3s;
     }
 
+    @media (max-width: 768px) {
+      .cv-download a {
+        padding: 8px 15px;
+        font-size: 0.8rem;
+      }
+    }
+
     .cv-download a:hover {
+      background: #1c86ee;
+      transform: scale(1.05);
+    }
+
+    /* CV Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: #fff;
+      color: #000;
+      padding: 20px;
+      max-width: 800px;
+      max-height: 90vh;
+      overflow-y: auto;
+      border: 10px solid #003087;
+      border-radius: 10px;
+      position: relative;
+      display: flex;
+    }
+
+    @media (max-width: 768px) {
+      .modal-content {
+        flex-direction: column;
+        align-items: center;
+        max-width: 90%;
+        padding: 15px;
+      }
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #000;
+    }
+
+    .cv-photo {
+      width: 130px;
+      height: 130px;
+      border-radius: 100%;
+      object-fit: cover;
+      margin-right: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .cv-photo {
+        margin-right: 0;
+        margin-bottom: 15px;
+      }
+    }
+
+    .cv-details {
+      flex: 1;
+    }
+
+    .section-title {
+      margin-top: 20px;
+      border-bottom: 2px solid #003087;
+      padding-bottom: 5px;
+    }
+
+    .download-cv {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #1e90ff;
+      color: #fff;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      font-weight: 700;
+      border-radius: 20px;
+      text-decoration: none;
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    @media (max-width: 768px) {
+      .download-cv {
+        padding: 8px 15px;
+        font-size: 0.8rem;
+      }
+    }
+
+    .download-cv:hover {
       background: #1c86ee;
       transform: scale(1.05);
     }
@@ -375,6 +751,14 @@
     /* Skills Section */
     .skills {
       text-align: center;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+
+    .skills.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .skills-grid {
@@ -393,10 +777,11 @@
       background: rgba(255, 255, 255, 0.05);
       border-radius: 10px;
       transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+      overflow: hidden;
     }
 
     .skill-item:hover {
-      transform: scale(1.1);
       box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
     }
 
@@ -415,6 +800,14 @@
     .projects {
       position: relative;
       padding: 100px 0;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+
+    .projects.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .projects-container {
@@ -444,16 +837,23 @@
       transition: transform 0.5s, box-shadow 0.5s;
     }
 
+    @media (max-width: 768px) {
+      .project-card {
+        width: 200px;
+        margin-right: 15px;
+      }
+    }
+
     .project-card:hover {
-      transform: scale(1.1) rotate(5deg);
-      box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+      transform: scale(1.1);
+      box-shadow: 0 0 30px rgba(128, 128, 128, 0.5); /* Gray glow effect */
     }
 
     .project-card img {
       width: 100%;
+      object-fit: cover;
       height: auto;
       border-radius: 20px;
-      transform: rotate(-5deg);
     }
 
     .glow {
@@ -464,12 +864,95 @@
       height: 100%;
       border-radius: 20px;
       z-index: -1;
-      transition: opacity 0.5s;
       opacity: 0;
+      transition: opacity 0.5s;
     }
 
-    .project-card:hover .glow {
+    /* Contact Section */
+    .contact {
+      text-align: center;
+      padding-bottom: 50px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+
+    .contact.visible {
       opacity: 1;
+      transform: translateY(0);
+    }
+
+    .contact-info {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      margin-top: 30px;
+    }
+
+    .contact-info ul {
+      display: flex;
+      list-style: none;
+      padding: 0;
+    }
+
+    .contact-info ul li {
+      list-style: none;
+    }
+
+    .contact-info ul li a {
+      width: 80px;
+      height: 80px;
+      background-color: rgba(255, 255, 255, 0.1);
+      text-align: center;
+      line-height: 80px;
+      font-size: 35px;
+      margin: 0 10px;
+      display: block;
+      border-radius: 50%;
+      position: relative;
+      overflow: hidden;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      z-index: 1;
+    }
+
+    .contact-info ul li a .icon {
+      position: relative;
+      color: rgba(255, 255, 255, 0.9);
+      transition: .5s;
+      z-index: 3;
+    }
+
+    .contact-info ul li a:hover .icon {
+      color: #fff;
+      transform: rotateY(360deg);
+    }
+
+    .contact-info ul li a:before {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #1e90ff;
+      transition: .5s;
+      z-index: 2;
+    }
+
+    .contact-info ul li a:hover:before {
+      top: 0;
+    }
+
+    .contact-info ul li:nth-child(1) a:before {
+      background: #ff4d4d; /* Email (pleasant red) */
+    }
+
+    .contact-info ul li:nth-child(2) a:before {
+      background: #0077b5; /* LinkedIn */
+    }
+
+    .contact-info ul li:nth-child(3) a:before {
+      background: #000000; /* GitHub (pure black) */
     }
   </style>
 </head>
@@ -480,11 +963,25 @@
     <a href="#home">Home</a>
     <a href="#about">About Me</a>
     <a href="#projects">Projects</a>
+    <a href="#skills">Skills</a>
+    <a href="#contact">Contact</a>
+    <div class="hamburger">
+      <i class="fas fa-bars"></i>
+    </div>
+    <div class="dropdown">
+      <a href="#home">Home</a>
+      <a href="#about">About Me</a>
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </div>
   </nav>
 
   <!-- Hero Section (Homepage) -->
   <section id="home" class="hero">
-    <div class="name">Alex</div>
+    <div class="name">
+      <span>W</span><span>E</span><span>L</span><span>C</span><span>O</span><span>M</span><span>E</span>
+    </div>
     <div class="hero-content-wrapper">
       <div class="overlay-text-container">
         <div class="overlay-text-wrapper">
@@ -496,50 +993,28 @@
       <div class="center-content">
         <div class="breathing-circle"></div>
         <img src="/Untitled 5@2xezf.png" alt="Profile Photo" class="profile-photo">
-        <!-- Replace YOUR_IMAGE_URL_HERE with the actual URL of your uploaded image -->
       </div>
     </div>
 
     <div class="buttons">
-      <button>UI</button>
-      <button>UX</button>
-      <button>Designer</button>
-      <button>Developer</button>
+      <button>Computer Science Specialist</button>
     </div>
 
-    <div class="particles">
-      <div class="particle" style="left: 5%; animation-delay: 0s;"></div>
-      <div class="particle" style="left: 10%; animation-delay: 1s;"></div>
-      <div class="particle" style="left: 15%; animation-delay: 2s;"></div>
-      <div class="particle" style="left: 20%; animation-delay: 3s;"></div>
-      <div class="particle" style="left: 25%; animation-delay: 4s;"></div>
-      <div class="particle" style="left: 30%; animation-delay: 5s;"></div>
-      <div class="particle" style="left: 35%; animation-delay: 6s;"></div>
-      <div class="particle" style="left: 40%; animation-delay: 7s;"></div>
-      <div class="particle" style="left: 45%; animation-delay: 8s;"></div>
-      <div class="particle" style="left: 50%; animation-delay: 9s;"></div>
-      <div class="particle" style="left: 55%; animation-delay: 10s;"></div>
-      <div class="particle" style="left: 60%; animation-delay: 11s;"></div>
-      <div class="particle" style="left: 65%; animation-delay: 12s;"></div>
-      <div class="particle" style="left: 70%; animation-delay: 13s;"></div>
-      <div class="particle" style="left: 75%; animation-delay: 14s;"></div>
-      <div class="particle" style="left: 80%; animation-delay: 15s;"></div>
-      <div class="particle" style="left: 85%; animation-delay: 16s;"></div>
-      <div class="particle" style="left: 90%; animation-delay: 17s;"></div>
-      <div class="particle" style="left: 95%; animation-delay: 18s;"></div>
-    </div>
-  </section>
-
-  <!-- Welcome Section -->
-  <section class="welcome">
-    <h2>Welcome</h2>
-    <p>Hello, I’m Alexandros Giorginis, a passionate student of Applied Computer Science. Welcome to my e-portfolio, where I showcase my journey, projects, and aspirations in the world of technology and innovation.</p>
+    <div class="particles"></div>
   </section>
 
   <!-- About Me Section with Floating Year Labels Timeline -->
   <section id="about" class="about-me">
-    <h2>About Me</h2>
-    <p>I’m Alexandros Giorginis, a dedicated student with a love for solving complex problems through technology. I chose Applied Computer Science because I’m fascinated by how software can transform industries and improve lives. In my free time, I enjoy astrophotography and building mechanical keyboards—hobbies that fuel my creativity and precision. My dream is to become a software engineer at a leading tech company, creating solutions that impact millions.</p>
+    <h2><span>A</span><span>B</span><span>O</span><span>U</span><span>T</span> <span>M</span><span>E</span></h2>
+    <div class="about-me-content">
+      <img src="/Unt.JPG" alt="About Me Photo" class="about-me-photo">
+      <div class="about-me-text">
+        <p>Hi, I’m <span class="highlight">Alexandros Giorginis</span>, a 21-year-old student from <span class="highlight">Greece</span> and <span class="highlight">Czechia</span>. I’m currently studying <span class="highlight">Applied Computer Science</span> at <span class="highlight">Thomas More</span> in Geel.</p>
+        <p>I speak four languages: <span class="highlight">Greek, Czech, French, and English</span>, which helps me connect with diverse perspectives. My passion for technology started young. I was always tinkering with electronics, so pursuing <span class="highlight">Computer Science</span> felt like the perfect fit.</p>
+        <p>I discovered <span class="highlight">Thomas More</span> during an open day, and the program’s focus on practical skills and innovation drew me in, leading me to apply. Beyond academics, I’m passionate about fitness and sports: I regularly hit the <span class="highlight">gym</span> and play <span class="highlight">football</span> as a goalkeeper for <span class="highlight">ASV Geel</span>. I also enjoy <span class="highlight">designing and building websites</span>, which lets me blend creativity with technical skills.</p>
+        <p>Looking ahead, I dream of becoming a <span class="highlight">professional goalkeeper</span> while also making an impact in tech. I’d love to create innovative <span class="highlight">web applications</span> and explore the potential of <span class="highlight">AI</span> in Computer Science, perhaps developing intelligent systems that solve real-world problems.</p>
+      </div>
+    </div>
 
     <div class="cv-timeline">
       <div class="cards-container">
@@ -573,13 +1048,63 @@
       </div>
     </div>
     <div class="cv-download">
-      <a href="https://via.placeholder.com/250x350?text=CV_Alexandros_Giorginis.pdf" download="CV_Alexandros_Giorginis.pdf">View CV</a>
+      <a href="#" onclick="openCVModal(event)" id="viewCV">View CV</a>
+    </div>
+  </section>
+
+  <!-- Projects Section -->
+  <section id="projects" class="projects">
+    <h2><span>M</span><span>Y</span> <span>W</span><span>O</span><span>R</span><span>K</span></h2>
+    <div class="projects-container" id="scrollContainer">
+      <div class="projects-wrapper" id="scrollWrapper">
+        <a href="index1.html">
+        <div class="project-card">
+          <img src="screenshot1.png" alt="EduQuest Project">
+          <div class="glow" style="background: radial-gradient(circle, rgba(128, 128, 128, 0.3), transparent);"></div>
+        </div></a>
+        <a href="index2.html">
+        <div class="project-card">
+          <img src="screenshot2.png" alt="CampusBridge Project">
+          <div class="glow" style="background: radial-gradient(circle, rgba(128, 128, 128, 0.3), transparent);"></div>
+        </div></a>
+        <a href="index3.html">
+        <div class="project-card">
+          <img src="screenshot3.png" alt="Greenfield United FC Project">
+          <div class="glow" style="background: radial-gradient(circle, rgba(128, 128, 128, 0.3), transparent);"></div>
+        </div></a>
+        <a href="index4.html">
+        <div class="project-card">
+          <img src="screenshot4.png" alt="AscendHub Project">
+          <div class="glow" style="background: radial-gradient(circle, rgba(128, 128, 128, 0.3), transparent);"></div>
+        </div></a>
+        <!-- Duplicate for seamless scrolling -->
+        <a href="index1.html">
+        <div class="project-card">
+          <img src="screenshot1.png" alt="EduQuest Project">
+          <div class="glow" style="background: radial-gradient(circle, rgba(128, 128, 128, 0.3), transparent);"></div>
+        </div></a>
+        <a href="index2.html">
+        <div class="project-card">
+          <img src="screenshot2.png" alt="CampusBridge Project">
+          <div class="glow" style="background: radial-gradient(circle, rgba(128, 128, 128, 0.3), transparent);"></div>
+        </div></a>
+        <a href="index3.html">
+        <div class="project-card">
+          <img src="screenshot3.png" alt="Greenfield United FC Project">
+          <div class="glow" style="background: radial-gradient(circle, rgba(128, 128, 128, 0.3), transparent);"></div>
+        </div></a>
+        <a href="index4.html">
+        <div class="project-card">
+          <img src="screenshot4.png" alt="AscendHub Project">
+          <div class="glow" style="background: radial-gradient(circle, rgba(128, 128, 128, 0.3), transparent);"></div>
+        </div></a>
+      </div>
     </div>
   </section>
 
   <!-- Skills Section -->
   <section id="skills" class="skills">
-    <h2>Skills</h2>
+    <h2><span>S</span><span>K</span><span>I</span><span>L</span><span>L</span><span>S</span></h2>
     <div class="skills-grid">
       <div class="skill-item">
         <i class="devicon-trello-plain"></i>
@@ -661,50 +1186,83 @@
         <i class="devicon-github-plain"></i>
         <span>GitHub</span>
       </div>
-    </div>
-  </section>
-
-  <!-- Projects Section -->
-  <section id="projects" class="projects">
-    <h2>My Work</h2>
-    <div class="projects-container" id="scrollContainer">
-      <div class="projects-wrapper" id="scrollWrapper">
-        <div class="project-card">
-          <img src="https://via.placeholder.com/300x600?text=SKIL2+Semester+2+Project" alt="SKIL2 Semester 2 Project">
-          <div class="glow" style="background: radial-gradient(circle, rgba(255, 255, 0, 0.5), transparent);"></div>
-        </div>
-        <div class="project-card">
-          <img src="https://via.placeholder.com/300x600?text=SKIL2+Semester+1+Project" alt="SKIL2 Semester 1 Project">
-          <div class="glow" style="background: radial-gradient(circle, rgba(0, 255, 255, 0.5), transparent);"></div>
-        </div>
-        <div class="project-card">
-          <img src="https://via.placeholder.com/300x600?text=Personal+Website" alt="Personal Website">
-          <div class="glow" style="background: radial-gradient(circle, rgba(255, 0, 255, 0.5), transparent);"></div>
-        </div>
-        <div class="project-card">
-          <img src="https://via.placeholder.com/300x600?text=Weather+App" alt="Weather App">
-          <div class="glow" style="background: radial-gradient(circle, rgba(0, 255, 0, 0.5), transparent);"></div>
-        </div>
-        <!-- Duplicate for seamless scrolling -->
-        <div class="project-card">
-          <img src="https://via.placeholder.com/300x600?text=SKIL2+Semester+2+Project" alt="SKIL2 Semester 2 Project">
-          <div class="glow" style="background: radial-gradient(circle, rgba(255, 255, 0, 0.5), transparent);"></div>
-        </div>
-        <div class="project-card">
-          <img src="https://via.placeholder.com/300x600?text=SKIL2+Semester+1+Project" alt="SKIL2 Semester 1 Project">
-          <div class="glow" style="background: radial-gradient(circle, rgba(0, 255, 255, 0.5), transparent);"></div>
-        </div>
-        <div class="project-card">
-          <img src="https://via.placeholder.com/300x600?text=Personal+Website" alt="Personal Website">
-          <div class="glow" style="background: radial-gradient(circle, rgba(255, 0, 255, 0.5), transparent);"></div>
-        </div>
-        <div class="project-card">
-          <img src="https://via.placeholder.com/300x600?text=Weather+App" alt="Weather App">
-          <div class="glow" style="background: radial-gradient(circle, rgba(0, 255, 0, 0.5), transparent);"></div>
-        </div>
+      <div class="skill-item">
+        <i class="devicon-figma-plain"></i>
+        <span>Figma</span>
+      </div>
+      <div class="skill-item">
+        <i class="devicon-jira-plain"></i>
+        <span>Jira</span>
       </div>
     </div>
   </section>
+
+  <!-- Contact Me Section -->
+  <section id="contact" class="contact">
+    <h2><span>C</span><span>O</span><span>N</span><span>T</span><span>A</span><span>C</span><span>T</span> <span>M</span><span>E</span></h2>
+    <div class="contact-info">
+      <ul>
+        <li>
+          <a href="mailto:alexandros.giorginis1@gmail.com" target="_blank">
+            <i class="fas fa-envelope icon"></i>
+          </a>
+        </li>
+        <li>
+          <a href="https://www.linkedin.com/in/alexandros-gkiorgkinis" target="_blank">
+            <i class="fab fa-linkedin-in icon"></i>
+          </a>
+        </li>
+        <li>
+          <a href="https://github.com/Alexandros678" target="_blank">
+            <i class="fab fa-github icon"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CV Modal -->
+  <div id="cvModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeCVModal()">×</span>
+      <img src="/Photo1.JPG" alt="Profile Photo" class="cv-photo">
+      <div class="cv-details">
+        <h2>Alexandros Gkiorgkinis</h2>
+        <p><strong>Nationality:</strong> Greek, Czech | <strong>Date of birth:</strong> 07/06/2004 | <strong>Gender:</strong> Male</p>
+        <p><strong>Email:</strong> alexandros.gkiorgkinis1@gmail.com</p>
+        <p><strong>LinkedIn:</strong> Alexandros Gkiorgkinis | <strong>GitHub:</strong> Alexandros678</p>
+        <p><strong>Website:</strong> https://alexandrosgkiorgkinis.com | <strong>Home:</strong> Avenue près des Agneaux, 35, 1160 Auderghem (Belgium)</p>
+
+        <h3 class="section-title">About Myself</h3>
+        <p>Computer Science student at Thomas More University in Geel with a passion for both problem solving and hands on work. Eager to explore new technologies and continuously learn. Strong interest in combining mental and physical challenges in meaningful projects.</p>
+
+        <h3 class="section-title">Education and Training</h3>
+        <p><strong>Bachelor in Applied Computer Science</strong><br>Thomas More University [2023 – Current]<br>City: Geel | Country: Belgium | Website: https://thomasmore.be/nl</p>
+        <p><strong>Bachelor in Computer Science</strong><br>Université libre de Bruxelles (ULB) [2022 – 2023]<br>City: Brussels | Country: Belgium | Website: https://www.ulb.be</p>
+        <p><strong>Secondary education</strong><br>European School Brussels III [2010 – 2022]<br>City: Ixelles | Country: Belgium | Website: https://www.eeb3.eu/en/ | Field(s) of study: Education</p>
+
+        <h3 class="section-title">Language Skills</h3>
+        <p><strong>Mother tongue(s):</strong> Greek | Czech | French</p>
+        <p><strong>Other language(s):</strong><br><strong>English</strong> LISTENING C2 READING C2 WRITING C2 SPOKEN PRODUCTION C2 SPOKEN INTERACTION C2<br><strong>German</strong> LISTENING A2 READING A2 WRITING A1 SPOKEN PRODUCTION A1 SPOKEN INTERACTION A1<br>Levels: A1 and A2: Basic user – B1 and B2: Independent user – C1 and C2: Proficient user</p>
+
+        <h3 class="section-title">Skills</h3>
+        <p><strong>Digital Skills</strong><br>Python Language - Basic knowledge / HTML / CSS / JavaScript / StarUML / MySQL / MongoDB / Operating Systems / Linux / Windows / Kali Linux / Docker / Photoshop / PHP / JSON / Postman / SASS / Bootstrap / Github / Java / Jira / Web Development / Laravel / Qlik / C# / Figma</p>
+
+        <h3 class="section-title">Student Jobs</h3>
+        <p>[05/2022] Security in the Springfest at the European School</p>
+
+        <h3 class="section-title">Hobbies and Interests</h3>
+        <p><strong>Computer Science</strong><br>I'm particularly interested in artificial intelligence and web development, as I enjoy building smart, interactive systems that solve real-world problems. I'm fascinated by how AI can automate tasks, enhance user experiences, and open new possibilities in technology. At the same time, I appreciate the creativity and logic involved in front-end and back-end web development, and I'm eager to deepen my skills in both areas.</p>
+        <p><strong>Football</strong><br>Passionate football player with over 12 years of experience as a goalkeeper. I've played for clubs including R.U. Auderghem, R.R.C. Boitsfort, and KSAV St. Dimpna, and I currently play for ASV Geel. Football has taught me discipline, teamwork, and how to stay focused under pressure, qualities I bring to both my academic and professional life.</p>
+
+        <a href="CV_AlexandrosGkiorgkinis.pdf" class="download-cv" download="CV_Alexandros_Gkiorgkinis.pdf">Download CV</a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>© 2025 Alexandros Giorginis. All rights reserved.</p>
+  </footer>
 
   <script>
     // Generate particles dynamically for hero section
@@ -720,12 +1278,38 @@
       particlesContainer.appendChild(particle);
     }
 
-    // Projects Section Auto-Scroll Script
+    // Scroll effect for sections
+    const observerOptions = {
+      root: null,
+      threshold: 0.2
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    // Observe all sections
+    const aboutMeSection = document.querySelector('.about-me');
+    const projectsSection = document.querySelector('.projects');
+    const skillsSection = document.querySelector('.skills');
+    const contactSection = document.querySelector('.contact');
+    const cvCards = document.querySelectorAll('.cv-card');
+
+    observer.observe(aboutMeSection);
+    observer.observe(projectsSection);
+    observer.observe(skillsSection);
+    observer.observe(contactSection);
+    cvCards.forEach(card => observer.observe(card));
+
+    // Projects Section Auto-Scroll Script (Updated for infinite right scroll)
     const wrapper = document.getElementById("scrollWrapper");
     const container = document.getElementById("scrollContainer");
     let scrollAmount = 0;
-    let lastScrollLeft = 0;
-    let userScrolling = false;
     let autoScrollInterval;
 
     function startAutoScroll() {
@@ -734,7 +1318,7 @@
         container.scrollLeft += 1;
         scrollAmount += 1;
 
-        // Loop effect
+        // Loop effect (right to left reset)
         if (container.scrollLeft >= wrapper.scrollWidth - container.offsetWidth) {
           container.scrollLeft = 0;
         }
@@ -745,25 +1329,95 @@
       clearInterval(autoScrollInterval);
     }
 
+    // Pause on hover indefinitely
     container.addEventListener("mouseenter", stopAutoScroll);
-    container.addEventListener("mouseleave", () => {
-      if (!userScrolling) startAutoScroll();
-    });
+    container.addEventListener("mouseleave", startAutoScroll);
 
+    // Enable infinite scrolling to the right for manual scroll
     container.addEventListener("scroll", () => {
-      if (container.scrollLeft !== lastScrollLeft) {
-        userScrolling = true;
-        lastScrollLeft = container.scrollLeft;
-
-        clearTimeout(window.scrollTimeout);
-        window.scrollTimeout = setTimeout(() => {
-          userScrolling = false;
-          startAutoScroll();
-        }, 1500);
+      if (container.scrollLeft >= wrapper.scrollWidth - container.offsetWidth) {
+        container.scrollLeft = 0;
       }
     });
 
     window.onload = startAutoScroll;
+
+    // CV Modal Functions
+    function openCVModal(event) {
+      event.preventDefault();
+      document.getElementById('cvModal').style.display = 'flex';
+    }
+
+    function closeCVModal() {
+      document.getElementById('cvModal').style.display = 'none';
+    }
+
+    // Close modal when clicking outside
+    window.addEventListener('click', function(event) {
+      const modal = document.getElementById('cvModal');
+      if (event.target === modal) {
+        modal.style.display = 'none';
+      }
+    });
+
+    // Improved hover effect for skill items (looking toward cursor)
+    const skillItems = document.querySelectorAll('.skill-item');
+    skillItems.forEach(item => {
+      item.addEventListener('mousemove', (e) => {
+        const rect = item.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left - rect.width / 2; // Offset from center X
+        const mouseY = e.clientY - rect.top - rect.height / 2; // Offset from center Y
+
+        // Calculate rotation angles to "look" toward cursor
+        const rotateY = (mouseX / rect.width) * 20; // Horizontal tilt (max 20deg)
+        const rotateX = (mouseY / rect.height) * -20; // Vertical tilt (max -20deg)
+
+        item.style.transform = `perspective(500px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      });
+
+      item.addEventListener('mouseleave', () => {
+        item.style.transform = 'perspective(500px) rotateX(0deg) rotateY(0deg)';
+      });
+    });
+
+    // Hamburger Menu Toggle
+    const hamburger = document.querySelector('.hamburger');
+    const dropdown = document.querySelector('.dropdown');
+    const menuBar = document.querySelector('.menu-bar');
+
+    hamburger.addEventListener('click', () => {
+      dropdown.classList.toggle('active');
+      menuBar.classList.toggle('active');
+    });
+
+    // Close dropdown when clicking a link
+    const dropdownLinks = document.querySelectorAll('.dropdown a');
+    dropdownLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        dropdown.classList.remove('active');
+        menuBar.classList.remove('active');
+      });
+    });
+
+     // Smooth scroll function
+  function smoothScroll(target) {
+    document.querySelector(target).scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // Add smooth scroll to all navigation links
+  document.querySelectorAll('.menu-bar a, .dropdown a').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = link.getAttribute('href');
+      smoothScroll(target);
+
+      // Close dropdown on mobile after clicking a link
+      if (window.innerWidth <= 768) {
+        menuBar.classList.remove('active');
+        dropdown.classList.remove('active');
+      }
+    });
+  });
   </script>
 </body>
 </html>
