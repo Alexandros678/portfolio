@@ -18,6 +18,12 @@
       background: #1a1a1a;
       color: #fff;
       overflow-x: hidden;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    body.light-mode {
+      background: #f5f5f5;
+      color: #333;
     }
 
     /* Navbar (Constellation Style with Enhanced Hover) */
@@ -29,6 +35,7 @@
       gap: 30px;
       z-index: 100;
       background: transparent;
+      align-items: center;
     }
 
     .navbar a {
@@ -40,6 +47,10 @@
       letter-spacing: 2px;
       text-decoration: none;
       transition: color 0.3s;
+    }
+
+    body.light-mode .navbar a {
+      color: rgba(51, 51, 51, 0.9);
     }
 
     .navbar a::before {
@@ -55,8 +66,16 @@
       transition: transform 0.3s;
     }
 
+    body.light-mode .navbar a::before {
+      background: radial-gradient(circle, #333, transparent);
+    }
+
     .navbar a:hover {
       color: #fff;
+    }
+
+    body.light-mode .navbar a:hover {
+      color: #333;
     }
 
     .navbar a:hover::before {
@@ -74,18 +93,59 @@
       transition: background 0.3s;
     }
 
+    body.light-mode .navbar .line {
+      background: linear-gradient(to right, transparent, rgba(51, 51, 51, 0.3), transparent);
+    }
+
     .navbar a:nth-child(1):hover ~ .line {
       background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.1), transparent);
+    }
+
+    body.light-mode .navbar a:nth-child(1):hover ~ .line {
+      background: linear-gradient(to right, transparent, rgba(51, 51, 51, 0.1), rgba(51, 51, 51, 0.8), rgba(51, 51, 51, 0.1), transparent);
     }
 
     .navbar a:nth-child(2):hover ~ .line {
       background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.1), transparent);
     }
 
+    body.light-mode .navbar a:nth-child(2):hover ~ .line {
+      background: linear-gradient(to right, transparent, rgba(51, 51, 51, 0.1), rgba(51, 51, 51, 0.4), rgba(51, 51, 51, 0.8), rgba(51, 51, 51, 0.1), transparent);
+    }
+
     .navbar a:nth-child(3):hover ~ .line,
     .navbar a:nth-child(4):hover ~ .line,
     .navbar a:nth-child(5):hover ~ .line {
       background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.1), transparent);
+    }
+
+    body.light-mode .navbar a:nth-child(3):hover ~ .line,
+    body.light-mode .navbar a:nth-child(4):hover ~ .line,
+    body.light-mode .navbar a:nth-child(5):hover ~ .line {
+      background: linear-gradient(to right, transparent, rgba(51, 51, 51, 0.1), rgba(51, 51, 51, 0.8), rgba(51, 51, 51, 0.1), transparent);
+    }
+
+    /* Theme Toggle Button */
+    .theme-toggle {
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: color 0.3s;
+      padding: 0;
+    }
+
+    body.light-mode .theme-toggle {
+      color: rgba(51, 51, 51, 0.9);
+    }
+
+    .theme-toggle:hover {
+      color: #fff;
+    }
+
+    body.light-mode .theme-toggle:hover {
+      color: #333;
     }
 
     /* Hamburger Menu for Mobile */
@@ -98,8 +158,16 @@
       transition: color 0.3s;
     }
 
+    body.light-mode .hamburger {
+      color: rgba(51, 51, 51, 0.9);
+    }
+
     .hamburger:hover {
       color: #fff;
+    }
+
+    body.light-mode .hamburger:hover {
+      color: #333;
     }
 
     .navbar.active .hamburger {
@@ -122,8 +190,12 @@
       align-items: center;
       padding-top: 80px;
       transform: translateX(100%);
-      transition: transform 0.5s ease-in-out;
+      transition: transform 0.5s ease-in-out, background 0.3s;
       z-index: 100;
+    }
+
+    body.light-mode .dropdown {
+      background: rgba(245, 245, 245, 0.95);
     }
 
     .dropdown.active {
@@ -141,6 +213,10 @@
       transition: color 0.3s;
     }
 
+    body.light-mode .dropdown a {
+      color: rgba(51, 51, 51, 0.8);
+    }
+
     .dropdown a::before {
       content: '';
       position: absolute;
@@ -154,8 +230,16 @@
       transition: transform 0.3s;
     }
 
+    body.light-mode .dropdown a::before {
+      background: radial-gradient(circle, #333, transparent);
+    }
+
     .dropdown a:hover {
       color: #fff;
+    }
+
+    body.light-mode .dropdown a:hover {
+      color: #333;
     }
 
     .dropdown a:hover::before {
@@ -173,6 +257,11 @@
       align-items: center;
       text-align: center;
       margin-top: 60px;
+      transition: background 0.3s;
+    }
+
+    body.light-mode .hero {
+      background: url('https://via.placeholder.com/1920x1080?text=Light+Textured+Background') center/cover no-repeat;
     }
 
     .hero h1 {
@@ -180,6 +269,11 @@
       text-transform: uppercase;
       letter-spacing: 5px;
       color: rgba(255, 255, 255, 0.9);
+      transition: color 0.3s;
+    }
+
+    body.light-mode .hero h1 {
+      color: rgba(51, 51, 51, 0.9);
     }
 
     .hero h1 span {
@@ -188,6 +282,10 @@
 
     .hero h1 span:hover {
       text-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.5);
+    }
+
+    body.light-mode .hero h1 span:hover {
+      text-shadow: 0 0 15px rgba(51, 51, 51, 0.8), 0 0 30px rgba(51, 51, 51, 0.5);
     }
 
     /* Content */
@@ -205,6 +303,11 @@
       background: rgba(255, 255, 255, 0.05);
       padding: 20px;
       border-radius: 10px;
+      transition: background 0.3s;
+    }
+
+    body.light-mode .section {
+      background: rgba(51, 51, 51, 0.05);
     }
 
     .section.visible {
@@ -227,10 +330,19 @@
       text-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.5);
     }
 
+    body.light-mode .section h2 span:hover {
+      text-shadow: 0 0 15px rgba(51, 51, 51, 0.8), 0 0 30px rgba(51, 51, 51, 0.5);
+    }
+
     .section p {
       font-size: 1rem;
       line-height: 1.6;
       color: rgba(255, 255, 255, 0.9);
+      transition: color 0.3s;
+    }
+
+    body.light-mode .section p {
+      color: rgba(51, 51, 51, 0.9);
     }
 
     .highlight {
@@ -248,6 +360,11 @@
       padding: 20px;
       border-radius: 10px;
       text-align: center;
+      transition: background 0.3s;
+    }
+
+    body.light-mode .images-section {
+      background: rgba(51, 51, 51, 0.05);
     }
 
     .images-section.visible {
@@ -270,6 +387,10 @@
       text-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.5);
     }
 
+    body.light-mode .images-section h2 span:hover {
+      text-shadow: 0 0 15px rgba(51, 51, 51, 0.8), 0 0 30px rgba(51, 51, 51, 0.5);
+    }
+
     .image-container {
       margin-top: 15px;
       display: flex;
@@ -283,12 +404,20 @@
       border: 1px solid rgba(255, 255, 255, 0.3);
       border-radius: 5px;
       cursor: pointer;
-      transition: transform 0.3s, box-shadow 0.3s;
+      transition: transform 0.3s, box-shadow 0.3s, border 0.3s;
+    }
+
+    body.light-mode .image-placeholder {
+      border: 1px solid rgba(51, 51, 51, 0.3);
     }
 
     .image-placeholder:hover {
       transform: scale(1.05);
       box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+    }
+
+    body.light-mode .image-placeholder:hover {
+      box-shadow: 0 0 15px rgba(51, 51, 51, 0.5);
     }
 
     .modal {
@@ -302,6 +431,11 @@
       z-index: 200;
       justify-content: center;
       align-items: center;
+      transition: background 0.3s;
+    }
+
+    body.light-mode .modal {
+      background: rgba(255, 255, 255, 0.9);
     }
 
     .modal img {
@@ -322,6 +456,11 @@
       position: relative;
       bottom: 0;
       width: 100%;
+      transition: background 0.3s;
+    }
+
+    body.light-mode .footer {
+      background: rgba(200, 200, 200, 0.95);
     }
 
     .footer ul {
@@ -338,16 +477,29 @@
       transition: color 0.3s;
     }
 
+    body.light-mode .footer ul li a {
+      color: rgba(51, 51, 51, 0.7);
+    }
+
     .footer ul li a:hover {
       color: #fff;
+    }
+
+    body.light-mode .footer ul li a:hover {
+      color: #333;
     }
 
     .footer p {
       font-size: 0.9rem;
       color: rgba(255, 255, 255, 0.7);
+      transition: color 0.3s;
     }
 
-    /* Mobile Styles */
+    body.light-mode .footer p {
+      color: rgba(51, 51, 51, 0.7);
+    }
+
+    /* Mobile and Theme Toggle Adjustments */
     @media (max-width: 768px) {
       .navbar {
         flex-direction: row;
@@ -359,6 +511,7 @@
         display: none;
       }
 
+      .theme-toggle,
       .hamburger {
         display: block;
       }
@@ -411,28 +564,46 @@
         font-size: 0.8rem;
       }
     }
+
+    @media (min-width: 769px) {
+      .navbar {
+        gap: 30px; /* Consistent spacing between nav items */
+      }
+      .theme-toggle {
+        font-size: 1.5rem; /* Match the size for better integration */
+        padding: 0; /* Remove extra padding for alignment */
+        margin-left: 10px; /* Small margin to separate from last link */
+        line-height: 1; /* Align vertically with nav links */
+      }
+      .hamburger {
+        display: none; /* Hide hamburger on big screens */
+      }
+    }
   </style>
 </head>
 <body>
- <!-- Navbar -->
- <nav class="navbar">
-  <div class="line"></div>
-  <a href="index.html">Home</a>
-  <a href="index1.html">EduQuest</a>
-  <a href="index2.html">CampusBridge</a>
-  <a href="index3.html">Greenfield United FC</a>
-  <a href="index4.html">AscendHub</a>
-  <div class="hamburger">
-    <i class="fas fa-bars"></i>
-  </div>
-  <div class="dropdown">
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="line"></div>
     <a href="index.html">Home</a>
     <a href="index1.html">EduQuest</a>
     <a href="index2.html">CampusBridge</a>
     <a href="index3.html">Greenfield United FC</a>
     <a href="index4.html">AscendHub</a>
-  </div>
-</nav>
+    <button class="theme-toggle" onclick="toggleTheme()">
+      <i class="fas fa-moon"></i>
+    </button>
+    <div class="hamburger">
+      <i class="fas fa-bars"></i>
+    </div>
+    <div class="dropdown">
+      <a href="index.html">Home</a>
+      <a href="index1.html">EduQuest</a>
+      <a href="index2.html">CampusBridge</a>
+      <a href="index3.html">Greenfield United FC</a>
+      <a href="index4.html">AscendHub</a>
+    </div>
+  </nav>
 
   <!-- Hero Section -->
   <section class="hero">
@@ -483,7 +654,7 @@
   <!-- Footer -->
   <footer class="footer">
     <ul>
-      <li><a href="mailto:alexandros.gkiorgkinis1@gmail.com"><i class="fas fa-envelope"></i></a></li>
+      <li><a href="mailto:alexandros.giorginis1@gmail.com"><i class="fas fa-envelope"></i></a></li>
       <li><a href="https://www.linkedin.com/in/alexandros-gkiorgkinis"><i class="fab fa-linkedin-in"></i></a></li>
       <li><a href="https://github.com/Alexandros678"><i class="fab fa-github"></i></a></li>
     </ul>
@@ -497,6 +668,33 @@
     const modal = document.getElementById('imageModal');
     const modalImage = document.getElementById('modalImage');
     const images = document.querySelectorAll('.image-placeholder');
+
+    // Theme Toggle Functionality
+    function toggleTheme() {
+      const body = document.body;
+      const themeToggleIcon = document.querySelector('.theme-toggle i');
+      body.classList.toggle('light-mode');
+
+      if (body.classList.contains('light-mode')) {
+        themeToggleIcon.classList.remove('fa-moon');
+        themeToggleIcon.classList.add('fa-sun');
+        localStorage.setItem('theme', 'light');
+      } else {
+        themeToggleIcon.classList.remove('fa-sun');
+        themeToggleIcon.classList.add('fa-moon');
+        localStorage.setItem('theme', 'dark');
+      }
+    }
+
+    // Load theme preference on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'light') {
+        document.body.classList.add('light-mode');
+        document.querySelector('.theme-toggle i').classList.remove('fa-moon');
+        document.querySelector('.theme-toggle i').classList.add('fa-sun');
+      }
+    });
 
     hamburger.addEventListener('click', () => {
       navbar.classList.toggle('active');

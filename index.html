@@ -6,7 +6,7 @@
   <title>Alexandros Giorginis - Cosmic E-Portfolio</title>
   <!-- Add Devicon for language icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/devicon@2.15.1/devicon.min.css">
-  <!-- Add Font Awesome for contact icons and hamburger -->
+  <!-- Add Font Awesome for contact icons, hamburger, and theme toggle -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
   <style>
     * {
@@ -20,6 +20,12 @@
       background: #1a1a1a;
       color: #fff;
       overflow-x: hidden;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    body.light-mode {
+      background: #f5f5f5;
+      color: #333;
     }
 
     /* Menu Bar (Constellation Style with Enhanced Hover) */
@@ -44,6 +50,18 @@
       transition: color 0.3s;
     }
 
+    body.light-mode .menu-bar a {
+      color: rgba(51, 51, 51, 0.9);
+    }
+
+    .menu-bar a:hover {
+      color: #fff;
+    }
+
+    body.light-mode .menu-bar a:hover {
+      color: #333;
+    }
+
     .menu-bar a::before {
       content: '';
       position: absolute;
@@ -57,8 +75,8 @@
       transition: transform 0.3s;
     }
 
-    .menu-bar a:hover {
-      color: #fff;
+    body.light-mode .menu-bar a::before {
+      background: radial-gradient(circle, #333, transparent);
     }
 
     .menu-bar a:hover::before {
@@ -76,18 +94,58 @@
       transition: background 0.3s;
     }
 
+    body.light-mode .menu-bar .line {
+      background: linear-gradient(to right, transparent, rgba(51, 51, 51, 0.3), transparent);
+    }
+
     .menu-bar a:nth-child(1):hover ~ .line {
       background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.1), transparent);
+    }
+
+    body.light-mode .menu-bar a:nth-child(1):hover ~ .line {
+      background: linear-gradient(to right, transparent, rgba(51, 51, 51, 0.1), rgba(51, 51, 51, 0.8), rgba(51, 51, 51, 0.1), transparent);
     }
 
     .menu-bar a:nth-child(2):hover ~ .line {
       background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.1), transparent);
     }
 
+    body.light-mode .menu-bar a:nth-child(2):hover ~ .line {
+      background: linear-gradient(to right, transparent, rgba(51, 51, 51, 0.1), rgba(51, 51, 51, 0.4), rgba(51, 51, 51, 0.8), rgba(51, 51, 51, 0.1), transparent);
+    }
+
     .menu-bar a:nth-child(3):hover ~ .line,
     .menu-bar a:nth-child(4):hover ~ .line,
     .menu-bar a:nth-child(5):hover ~ .line {
       background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.1), transparent);
+    }
+
+    body.light-mode .menu-bar a:nth-child(3):hover ~ .line,
+    body.light-mode .menu-bar a:nth-child(4):hover ~ .line,
+    body.light-mode .menu-bar a:nth-child(5):hover ~ .line {
+      background: linear-gradient(to right, transparent, rgba(51, 51, 51, 0.1), rgba(51, 51, 51, 0.8), rgba(51, 51, 51, 0.1), transparent);
+    }
+
+    /* Theme Toggle Button */
+    .theme-toggle {
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    body.light-mode .theme-toggle {
+      color: rgba(51, 51, 51, 0.9);
+    }
+
+    .theme-toggle:hover {
+      color: #fff;
+    }
+
+    body.light-mode .theme-toggle:hover {
+      color: #333;
     }
 
     /* Hamburger Menu for Mobile */
@@ -100,8 +158,16 @@
       transition: color 0.3s;
     }
 
+    body.light-mode .hamburger {
+      color: rgba(51, 51, 51, 0.9);
+    }
+
     .hamburger:hover {
       color: #fff;
+    }
+
+    body.light-mode .hamburger:hover {
+      color: #333;
     }
 
     .menu-bar.active .hamburger {
@@ -124,8 +190,12 @@
       align-items: center;
       padding-top: 80px;
       transform: translateX(100%);
-      transition: transform 0.5s ease-in-out;
+      transition: transform 0.5s ease-in-out, background 0.3s;
       z-index: 100;
+    }
+
+    body.light-mode .dropdown {
+      background: rgba(245, 245, 245, 0.95);
     }
 
     .dropdown.active {
@@ -143,6 +213,10 @@
       transition: color 0.3s;
     }
 
+    body.light-mode .dropdown a {
+      color: rgba(51, 51, 51, 0.8);
+    }
+
     .dropdown a::before {
       content: '';
       position: absolute;
@@ -156,27 +230,45 @@
       transition: transform 0.3s;
     }
 
+    body.light-mode .dropdown a::before {
+      background: radial-gradient(circle, #333, transparent);
+    }
+
     .dropdown a:hover {
       color: #fff;
+    }
+
+    body.light-mode .dropdown a:hover {
+      color: #333;
     }
 
     .dropdown a:hover::before {
       transform: translateX(-50%) scale(1.5);
     }
 
-     /* Footer */
-     .footer {
+    /* Footer */
+    .footer {
       background: rgba(30, 30, 30, 0.95);
       padding: 20px;
       text-align: center;
       position: relative;
       bottom: 0;
       width: 100%;
+      transition: background 0.3s;
+    }
+
+    body.light-mode .footer {
+      background: rgba(200, 200, 200, 0.95);
     }
 
     .footer p {
       font-size: 0.9rem;
       color: rgba(255, 255, 255, 0.7);
+      transition: color 0.3s;
+    }
+
+    body.light-mode .footer p {
+      color: rgba(51, 51, 51, 0.7);
     }
 
     /* Mobile Styles */
@@ -191,6 +283,7 @@
         display: none;
       }
 
+      .theme-toggle,
       .hamburger {
         display: block;
       }
@@ -212,6 +305,11 @@
         display: block;
         font-size: 0.9rem;
         color: rgba(255, 255, 255, 0.7);
+        transition: color 0.3s;
+      }
+
+      body.light-mode .cv-card-header span {
+        color: rgba(51, 51, 51, 0.7);
       }
 
       .cv-card-header h3 {
@@ -273,6 +371,11 @@
       align-items: center;
       overflow: hidden;
       z-index: 0;
+      transition: background 0.3s;
+    }
+
+    body.light-mode .hero {
+      background: url('https://via.placeholder.com/1920x1080?text=Light+Textured+Background') center/cover no-repeat;
     }
 
     .name {
@@ -286,6 +389,11 @@
       z-index: 10;
       color: rgba(255, 255, 255, 0.9);
       cursor: default;
+      transition: color 0.3s;
+    }
+
+    body.light-mode .name {
+      color: rgba(51, 51, 51, 0.9);
     }
 
     .name span {
@@ -294,6 +402,10 @@
 
     .name span:hover {
       text-shadow: 0 0 10px #fff, 0 0 20px #fff;
+    }
+
+    body.light-mode .name span:hover {
+      text-shadow: 0 0 10px #333, 0 0 20px #333;
     }
 
     .hero-content-wrapper {
@@ -326,6 +438,11 @@
       letter-spacing: 10px;
       padding-right: 100px;
       position: relative;
+      transition: color 0.3s;
+    }
+
+    body.light-mode .overlay-text {
+      color: rgba(51, 51, 51, 0.9);
     }
 
     @media (max-width: 768px) {
@@ -359,6 +476,11 @@
       border-radius: 50%;
       animation: breathe 6s ease-in-out infinite;
       z-index: 5;
+      transition: background 0.3s;
+    }
+
+    body.light-mode .breathing-circle {
+      background: radial-gradient(circle, rgba(51, 51, 51, 0.8), rgba(51, 51, 51, 0.2));
     }
 
     @media (max-width: 768px) {
@@ -404,7 +526,13 @@
       font-size: 0.9rem;
       text-transform: uppercase;
       cursor: pointer;
-      transition: background 0.3s, transform 0.3s;
+      transition: background 0.3s, transform 0.3s, color 0.3s, border 0.3s;
+    }
+
+    body.light-mode .buttons button {
+      background: rgba(51, 51, 51, 0.1);
+      border: 1px solid rgba(51, 51, 51, 0.3);
+      color: #333;
     }
 
     @media (max-width: 768px) {
@@ -417,6 +545,10 @@
     .buttons button:hover {
       background: rgba(255, 255, 255, 0.2);
       transform: scale(1.05);
+    }
+
+    body.light-mode .buttons button:hover {
+      background: rgba(51, 51, 51, 0.2);
     }
 
     .particles {
@@ -436,6 +568,11 @@
       border-radius: 50%;
       opacity: 0.5;
       animation: float 15s infinite linear;
+      transition: background 0.3s;
+    }
+
+    body.light-mode .particle {
+      background: #333;
     }
 
     @keyframes float {
@@ -451,6 +588,12 @@
       padding: 100px 50px;
       background: #1a1a1a;
       color: rgba(255, 255, 255, 0.9);
+      transition: background 0.3s, color 0.3s;
+    }
+
+    body.light-mode section {
+      background: #f5f5f5;
+      color: rgba(51, 51, 51, 0.9);
     }
 
     @media (max-width: 768px) {
@@ -486,6 +629,10 @@
       text-shadow: 0 0 10px #fff, 0 0 20px #fff;
     }
 
+    body.light-mode h2 span:hover {
+      text-shadow: 0 0 10px #333, 0 0 20px #333;
+    }
+
     /* About Me Section */
     .about-me {
       opacity: 0;
@@ -512,6 +659,11 @@
       object-fit: cover;
       border-radius: 10px;
       border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: border 0.3s;
+    }
+
+    body.light-mode .about-me-photo {
+      border: 1px solid rgba(51, 51, 51, 0.3);
     }
 
     .about-me-text {
@@ -558,12 +710,18 @@
       text-align: left;
       border: 1px solid rgba(255, 255, 255, 0.2);
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      transition: transform 0.3s;
+      transition: transform 0.3s, background 0.3s, border 0.3s, box-shadow 0.3s;
       margin-left: auto;
       margin-right: 60px;
       opacity: 0;
       transform: translateY(20px);
       transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+
+    body.light-mode .cv-card {
+      background: rgba(51, 51, 51, 0.05);
+      border: 1px solid rgba(51, 51, 51, 0.2);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
     .cv-card.visible {
@@ -592,12 +750,22 @@
       display: none;
       font-size: 0.9rem;
       color: rgba(255, 255, 255, 0.7);
+      transition: color 0.3s;
+    }
+
+    body.light-mode .cv-card-header span {
+      color: rgba(51, 51, 51, 0.7);
     }
 
     .cv-card p {
       font-size: 1rem;
       line-height: 1.6;
       color: rgba(255, 255, 255, 0.9);
+      transition: color 0.3s;
+    }
+
+    body.light-mode .cv-card p {
+      color: rgba(51, 51, 51, 0.9);
     }
 
     .year-label {
@@ -611,6 +779,12 @@
       text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
       opacity: 0;
       animation: fadeIn 1s ease-out forwards;
+      transition: color 0.3s, text-shadow 0.3s;
+    }
+
+    body.light-mode .year-label {
+      color: rgba(51, 51, 51, 0.7);
+      text-shadow: 0 0 10px rgba(51, 51, 51, 0.3);
     }
 
     .cv-card:nth-child(1) .year-label { animation-delay: 0s; }
@@ -637,7 +811,11 @@
       font-weight: 700;
       border-radius: 20px;
       text-decoration: none;
-      transition: background 0.3s, transform 0.3s;
+      transition: background 0.3s, transform 0.3s, color 0.3s;
+    }
+
+    body.light-mode .cv-download a {
+      color: #fff;
     }
 
     @media (max-width: 768px) {
@@ -664,6 +842,11 @@
       z-index: 1000;
       justify-content: center;
       align-items: center;
+      transition: background 0.3s;
+    }
+
+    body.light-mode .modal {
+      background: rgba(255, 255, 255, 0.8);
     }
 
     .modal-content {
@@ -677,6 +860,12 @@
       border-radius: 10px;
       position: relative;
       display: flex;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    body.light-mode .modal-content {
+      background: #f5f5f5;
+      color: #333;
     }
 
     @media (max-width: 768px) {
@@ -695,6 +884,11 @@
       font-size: 1.5rem;
       cursor: pointer;
       color: #000;
+      transition: color 0.3s;
+    }
+
+    body.light-mode .close-modal {
+      color: #333;
     }
 
     .cv-photo {
@@ -733,7 +927,11 @@
       font-weight: 700;
       border-radius: 20px;
       text-decoration: none;
-      transition: background 0.3s, transform 0.3s;
+      transition: background 0.3s, transform 0.3s, color 0.3s;
+    }
+
+    body.light-mode .download-cv {
+      color: #fff;
     }
 
     @media (max-width: 768px) {
@@ -776,13 +974,21 @@
       padding: 15px;
       background: rgba(255, 255, 255, 0.05);
       border-radius: 10px;
-      transition: transform 0.3s, box-shadow 0.3s;
+      transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
       position: relative;
       overflow: hidden;
     }
 
+    body.light-mode .skill-item {
+      background: rgba(51, 51, 51, 0.05);
+    }
+
     .skill-item:hover {
       box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+    }
+
+    body.light-mode .skill-item:hover {
+      box-shadow: 0 0 15px rgba(51, 51, 51, 0.3);
     }
 
     .skill-item i {
@@ -913,18 +1119,32 @@
       overflow: hidden;
       border: 3px solid rgba(255, 255, 255, 0.3);
       z-index: 1;
+      transition: background 0.3s, border 0.3s;
+    }
+
+    body.light-mode .contact-info ul li a {
+      background-color: rgba(51, 51, 51, 0.1);
+      border: 3px solid rgba(51, 51, 51, 0.3);
     }
 
     .contact-info ul li a .icon {
       position: relative;
       color: rgba(255, 255, 255, 0.9);
-      transition: .5s;
+      transition: color 0.5s, transform 0.5s;
       z-index: 3;
+    }
+
+    body.light-mode .contact-info ul li a .icon {
+      color: rgba(51, 51, 51, 0.9);
     }
 
     .contact-info ul li a:hover .icon {
       color: #fff;
       transform: rotateY(360deg);
+    }
+
+    body.light-mode .contact-info ul li a:hover .icon {
+      color: #fff;
     }
 
     .contact-info ul li a:before {
@@ -935,7 +1155,7 @@
       width: 100%;
       height: 100%;
       background: #1e90ff;
-      transition: .5s;
+      transition: top 0.5s;
       z-index: 2;
     }
 
@@ -965,6 +1185,9 @@
     <a href="#projects">Projects</a>
     <a href="#skills">Skills</a>
     <a href="#contact">Contact</a>
+    <button class="theme-toggle" onclick="toggleTheme()">
+      <i class="fas fa-moon"></i>
+    </button>
     <div class="hamburger">
       <i class="fas fa-bars"></i>
     </div>
@@ -1265,6 +1488,34 @@
   </footer>
 
   <script>
+    // Theme Toggle Functionality
+    function toggleTheme() {
+      const body = document.body;
+      const themeToggleIcon = document.querySelector('.theme-toggle i');
+      body.classList.toggle('light-mode');
+
+      // Switch the icon between moon (dark mode) and sun (light mode)
+      if (body.classList.contains('light-mode')) {
+        themeToggleIcon.classList.remove('fa-moon');
+        themeToggleIcon.classList.add('fa-sun');
+        localStorage.setItem('theme', 'light');
+      } else {
+        themeToggleIcon.classList.remove('fa-sun');
+        themeToggleIcon.classList.add('fa-moon');
+        localStorage.setItem('theme', 'dark');
+      }
+    }
+
+    // Load theme preference from localStorage on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'light') {
+        document.body.classList.add('light-mode');
+        document.querySelector('.theme-toggle i').classList.remove('fa-moon');
+        document.querySelector('.theme-toggle i').classList.add('fa-sun');
+      }
+    });
+
     // Generate particles dynamically for hero section
     const particlesContainer = document.querySelector('.particles');
     for (let i = 0; i < 50; i++) {
@@ -1399,25 +1650,25 @@
       });
     });
 
-     // Smooth scroll function
-  function smoothScroll(target) {
-    document.querySelector(target).scrollIntoView({ behavior: 'smooth' });
-  }
+    // Smooth scroll function
+    function smoothScroll(target) {
+      document.querySelector(target).scrollIntoView({ behavior: 'smooth' });
+    }
 
-  // Add smooth scroll to all navigation links
-  document.querySelectorAll('.menu-bar a, .dropdown a').forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      const target = link.getAttribute('href');
-      smoothScroll(target);
+    // Add smooth scroll to all navigation links
+    document.querySelectorAll('.menu-bar a, .dropdown a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = link.getAttribute('href');
+        smoothScroll(target);
 
-      // Close dropdown on mobile after clicking a link
-      if (window.innerWidth <= 768) {
-        menuBar.classList.remove('active');
-        dropdown.classList.remove('active');
-      }
+        // Close dropdown on mobile after clicking a link
+        if (window.innerWidth <= 768) {
+          menuBar.classList.remove('active');
+          dropdown.classList.remove('active');
+        }
+      });
     });
-  });
   </script>
 </body>
 </html>
