@@ -1,0 +1,6 @@
+exclude:
+  - prototype.html
+  - prototype2.html
+  - prototype3.html
+  - stadium_env.html
+  - assets/
