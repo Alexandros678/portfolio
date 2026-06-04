@@ -462,114 +462,191 @@ body{background:#000;color:#fff;font-family:'Segoe UI',Arial,sans-serif;overflow
 }
 
 /* ── CARD SCREEN ── */
-/* ── CARD SCREEN ── */
 #card-screen{
   position:fixed;inset:0;z-index:200;
-  background:radial-gradient(ellipse 120% 80% at 50% 100%,#1a0040 0%,#080015 45%,#000 100%);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse 80% 70% at 50% 55%,#0a0020 0%,#04000e 55%,#000 100%);
+  display:flex;align-items:center;justify-content:center;
   opacity:0;pointer-events:none;transition:opacity .8s ease;
   overflow:hidden;
 }
 #card-screen.on{opacity:1;pointer-events:all;}
 #card-screen.out{opacity:0;pointer-events:none;}
-
-/* Stadium crowd texture */
 #card-screen::before{
-  content:'';position:absolute;inset:0;pointer-events:none;
-  background:
-    radial-gradient(ellipse 200% 60% at 50% 0%,rgba(80,30,180,.12),transparent 55%),
-    repeating-linear-gradient(90deg,transparent,transparent 4px,rgba(255,255,255,.008) 4px,rgba(255,255,255,.008) 5px),
-    repeating-linear-gradient(0deg,transparent,transparent 18px,rgba(255,255,255,.005) 18px,rgba(255,255,255,.005) 19px);
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(255,255,255,.005) 3px,rgba(255,255,255,.005) 4px);
 }
 
-/* Spotlight cone from top */
-.cs-light-cone{
-  position:absolute;top:-60px;left:50%;transform:translateX(-50%);
+/* Spotlight beam */
+#cs-spot-beam{
+  position:absolute;top:-40px;left:50%;transform:translateX(-50%);
   width:0;height:0;
-  border-left:220px solid transparent;
-  border-right:220px solid transparent;
-  border-top:85vh solid rgba(255,220,80,.055);
-  pointer-events:none;
-  filter:blur(30px);
+  border-left:200px solid transparent;border-right:200px solid transparent;
+  border-top:95vh solid rgba(255,235,160,.055);
+  pointer-events:none;filter:blur(22px);opacity:0;transition:opacity 1s ease;
 }
+#card-screen.on #cs-spot-beam{opacity:1;}
 
-/* Podium glow platform */
-.cs-podium-glow{
-  position:absolute;bottom:12%;left:50%;transform:translateX(-50%);
-  width:640px;height:90px;
-  background:radial-gradient(ellipse 80% 100% at 50% 50%,rgba(255,200,60,.22),rgba(180,80,255,.08) 55%,transparent 75%);
-  border-radius:50%;
-  pointer-events:none;
+/* Floor glow */
+#cs-floor-glow{
+  position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:900px;height:220px;
+  background:radial-gradient(ellipse at 50% 100%,rgba(255,200,60,.15),rgba(180,60,255,.07) 55%,transparent 75%);
+  border-radius:50%;pointer-events:none;
   animation:podiumPulse 3s ease-in-out infinite;
 }
 @keyframes podiumPulse{0%,100%{opacity:.7}50%{opacity:1}}
 
-/* Label */
-.cs-label{
-  font-size:.48rem;letter-spacing:12px;text-transform:uppercase;
-  color:#ffcc44;margin-bottom:36px;position:relative;z-index:2;
-  opacity:0;transform:translateY(-20px);transition:opacity .6s ease .4s,transform .6s ease .4s;
+/* Announcement bar */
+#cs-announce{
+  position:absolute;top:6%;left:50%;transform:translateX(-50%);
+  text-align:center;z-index:3;opacity:0;pointer-events:none;width:100%;
 }
-#card-screen.on .cs-label{opacity:.85;transform:translateY(0);}
+#cs-announce.show{animation:announceIn .55s cubic-bezier(.34,1.56,.64,1) forwards;}
+@keyframes announceIn{
+  from{opacity:0;transform:translateX(-50%) translateY(-18px);}
+  to{opacity:1;transform:translateX(-50%) translateY(0);}
+}
+#cs-announce-chip{font-size:.42rem;letter-spacing:9px;text-transform:uppercase;color:rgba(255,200,60,.55);margin-bottom:8px;}
+#cs-announce-title{font-size:.88rem;font-weight:900;letter-spacing:9px;text-transform:uppercase;color:#ffcc44;text-shadow:0 0 30px rgba(255,200,50,.7),0 0 60px rgba(255,180,0,.35);}
 
-/* Stage: model + card side by side */
-.cs-stage{
-  display:flex;align-items:flex-end;gap:55px;
-  position:relative;z-index:2;
+/* Card drop container */
+#cs-card-drop{
+  position:relative;z-index:3;
+  transform:translateY(-120vh) rotate(-10deg) scale(1.3);opacity:0;
+}
+#cs-card-drop.drop{animation:cardSmash .75s cubic-bezier(.2,1.3,.4,1) forwards;}
+@keyframes cardSmash{
+  from{transform:translateY(-120vh) rotate(-10deg) scale(1.3);opacity:0;}
+  65%{transform:translateY(14px) rotate(1.5deg) scale(.97);opacity:1;}
+  80%{transform:translateY(-8px) rotate(-.5deg) scale(1.01);}
+  90%{transform:translateY(4px) rotate(.3deg);}
+  100%{transform:translateY(0) rotate(0) scale(1);opacity:1;}
 }
 
-/* 3D model container */
-.cs-model-area{
-  width:220px;height:360px;position:relative;
-  opacity:0;transform:translateX(-40px);
-  transition:opacity .7s ease .6s,transform .7s cubic-bezier(.34,1.1,.64,1) .6s;
+/* Shockwave */
+#cs-shockwave{
+  position:absolute;width:340px;height:340px;border-radius:50%;
+  border:3px solid rgba(255,200,50,.85);
+  left:50%;top:50%;transform:translate(-50%,-50%) scale(0);
+  opacity:0;pointer-events:none;
 }
-#card-screen.on .cs-model-area{opacity:1;transform:translateX(0);}
+#cs-shockwave.fire{animation:shockOut .65s ease-out forwards;}
+#cs-shockwave::after{content:'';position:absolute;inset:-12px;border-radius:50%;border:2px solid rgba(255,160,0,.45);}
+#cs-shockwave.fire::after{animation:shockOut .65s ease-out .14s forwards;}
+@keyframes shockOut{
+  0%{transform:translate(-50%,-50%) scale(.15);opacity:.95;}
+  100%{transform:translate(-50%,-50%) scale(4.2);opacity:0;}
+}
 
-/* Card entrance */
-.card-outer{
-  perspective:900px;
-  opacity:0;transform:translateY(50px) scale(.9);
-  transition:opacity .7s ease .3s,transform .7s cubic-bezier(.34,1.1,.64,1) .3s;
+/* ── ELITE CARD ─────────────────────────────────────────────── */
+.card-frame{
+  filter:
+    drop-shadow(0 0 2px rgba(255,200,50,1))
+    drop-shadow(0 0 14px rgba(255,200,50,.55))
+    drop-shadow(0 0 40px rgba(255,200,50,.2))
+    drop-shadow(0 30px 55px rgba(0,0,0,.95));
+  transition:filter .2s;
 }
-#card-screen.on .card-outer{opacity:1;transform:translateY(0) scale(1);}
+.card-frame:hover{
+  filter:
+    drop-shadow(0 0 3px #ffcc44)
+    drop-shadow(0 0 22px rgba(255,200,50,.75))
+    drop-shadow(0 0 60px rgba(170,50,255,.35))
+    drop-shadow(0 35px 65px rgba(0,0,0,.98));
+}
+.card-elite{
+  width:268px;height:388px;
+  clip-path:path('M 26,0 L 242,0 C 262,19 268,42 268,71 L 268,304 C 268,349 197,372 134,388 C 71,372 0,349 0,304 L 0,71 C 0,42 6,19 26,0 Z');
+  position:relative;overflow:hidden;cursor:pointer;
+  background:linear-gradient(155deg,#080014,#12002a 28%,#080014 55%,#1c0036);
+  transition:transform .2s;
+}
+.card-elite::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;z-index:6;background:linear-gradient(90deg,transparent,rgba(255,200,50,.6),transparent);}
+.card-elite::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;z-index:6;background:linear-gradient(90deg,transparent,#ffcc44,rgba(180,60,255,.9),#44aaff,#ffcc44,transparent);animation:borderPulse 2.8s ease-in-out infinite;}
+@keyframes borderPulse{0%,100%{opacity:.5}50%{opacity:1}}
+
+.ce-holo{position:absolute;inset:0;z-index:4;pointer-events:none;background:linear-gradient(115deg,transparent 18%,rgba(255,80,80,.06) 26%,rgba(255,200,0,.09) 33%,rgba(80,255,80,.06) 40%,rgba(0,180,255,.09) 47%,rgba(180,0,255,.07) 54%,transparent 62%);animation:holoShift 4.5s ease-in-out infinite;}
+@keyframes holoShift{0%,100%{transform:translateX(-30%) skewX(-5deg);opacity:.65}50%{transform:translateX(65%) skewX(5deg);opacity:1}}
+.ce-gloss{position:absolute;inset:0;z-index:3;pointer-events:none;background:linear-gradient(135deg,rgba(255,255,255,.13) 0%,rgba(255,255,255,.03) 40%,transparent 65%);}
+
+.ce-topleft{position:absolute;top:12px;left:14px;display:flex;flex-direction:column;align-items:center;gap:2px;z-index:5;}
+.ce-ovr{font-size:3rem;font-weight:900;color:#fff;line-height:1;text-shadow:0 0 20px rgba(255,200,50,.8),0 2px 0 rgba(0,0,0,.6);}
+.ce-pos{font-size:.48rem;font-weight:900;letter-spacing:1px;color:rgba(255,255,255,.7);text-align:center;line-height:1.4;}
+.ce-flag{width:26px;height:18px;border-radius:3px;margin-top:5px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.55);background:repeating-linear-gradient(to bottom,#005baa 0,#005baa 22%,#fff 22%,#fff 44%,#005baa 44%,#005baa 66%,#fff 66%,#fff 88%,#005baa 88%,#005baa 100%);}
+
+.ce-badge{position:absolute;top:10px;right:12px;z-index:5;font-size:.36rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,200,60,.65);text-align:center;line-height:1.6;}
+.ce-stars{font-size:.55rem;letter-spacing:3px;color:#ffcc44;display:block;}
+
+.ce-photo{position:absolute;top:44px;left:50%;transform:translateX(-50%);width:192px;height:196px;overflow:hidden;border-radius:50% 50% 30% 30%;z-index:2;}
+.ce-photo img{width:100%;height:100%;object-fit:cover;object-position:center top;filter:contrast(1.08) brightness(1.07);}
+.ce-photo::after{content:'';position:absolute;bottom:0;left:0;right:0;height:55%;background:linear-gradient(to top,rgba(4,0,14,.9),transparent);}
+
+.ce-name{position:absolute;bottom:72px;left:0;right:0;text-align:center;z-index:5;font-size:1.05rem;font-weight:900;letter-spacing:4px;text-transform:uppercase;color:#fff;text-shadow:0 0 18px rgba(255,200,50,.45),0 2px 0 rgba(0,0,0,.7);}
+.ce-name::after{content:'';position:absolute;bottom:-5px;left:25%;right:25%;height:1px;background:linear-gradient(90deg,transparent,rgba(255,200,50,.35),transparent);}
+
+.ce-stats{position:absolute;bottom:10px;left:0;right:0;display:flex;justify-content:center;gap:16px;padding:0 14px;z-index:5;}
+.stat-item{display:flex;flex-direction:column;align-items:center;gap:2px;opacity:0;transform:rotateX(90deg);transform-origin:center bottom;perspective:300px;}
+.stat-item.show{animation:statReveal .38s cubic-bezier(.34,1.56,.64,1) forwards;}
+@keyframes statReveal{from{opacity:0;transform:rotateX(90deg);}to{opacity:1;transform:rotateX(0);}}
+.stat-item .sn{font-size:.82rem;font-weight:900;color:#fff;text-shadow:0 0 8px rgba(255,200,50,.55);}
+.stat-item .sl{font-size:.38rem;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:rgba(255,255,255,.5);}
 
 /* Floating confetti */
-.cs-conf{
-  position:fixed;pointer-events:none;z-index:201;border-radius:2px;
-  animation:csFloat linear forwards;
+.cs-conf{position:fixed;pointer-events:none;z-index:201;border-radius:2px;animation:csFloat linear forwards;}
+@keyframes csFloat{0%{opacity:1;transform:translate(0,0) rotate(0deg);}80%{opacity:.8;}100%{opacity:0;transform:translate(var(--cx),110vh) rotate(var(--cr));}}
+
+/* cs-model-area — invisible anchor for 3D goalkeeper */
+#cs-model-area{position:absolute;left:calc(50% - 330px);top:50%;transform:translateY(-50%);width:220px;height:360px;opacity:0;visibility:hidden;pointer-events:none;}
+
+/* Transfer banner */
+#cs-transfer-banner{
+  position:absolute;bottom:14%;left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:12px;
+  font-size:.46rem;letter-spacing:3px;text-transform:uppercase;white-space:nowrap;z-index:4;
+  background:rgba(0,0,0,.65);border:1px solid rgba(255,200,50,.2);
+  padding:8px 22px;border-radius:3px;backdrop-filter:blur(10px);
+  opacity:0;pointer-events:none;
 }
-@keyframes csFloat{
-  0%  {opacity:1;transform:translate(0,0) rotate(0deg);}
-  80% {opacity:.8;}
-  100%{opacity:0;transform:translate(var(--cx),110vh) rotate(var(--cr));}
+#cs-transfer-banner.show{animation:slideUp .5s cubic-bezier(.34,1.56,.64,1) forwards;}
+@keyframes slideUp{from{opacity:0;transform:translateX(-50%) translateY(12px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
+.ctb-from{color:rgba(255,255,255,.42);}
+.ctb-arrow{color:#ffcc44;font-size:.65rem;}
+.ctb-to{color:#ffcc44;font-weight:900;}
+
+/* CTA */
+#cs-btn{
+  position:absolute;bottom:5%;left:50%;transform:translateX(-50%);
+  padding:14px 58px;background:transparent;
+  border:1px solid rgba(255,200,50,.45);color:#ffcc44;
+  font-size:.62rem;letter-spacing:8px;text-transform:uppercase;
+  cursor:pointer;border-radius:2px;transition:all .28s;
+  white-space:nowrap;opacity:0;pointer-events:none;z-index:4;
 }
-.card{width:240px;height:348px;border-radius:14px;position:relative;overflow:hidden;cursor:pointer;background:linear-gradient(155deg,#b8861e,#f5d060,#c89a22,#f0c840,#9a7018,#e8c038);box-shadow:0 0 50px rgba(255,200,50,.3),0 20px 60px rgba(0,0,0,.9);transition:transform .2s,box-shadow .2s;}
-.card:hover{transform:rotateY(6deg) rotateX(-3deg) scale(1.04);box-shadow:0 0 80px rgba(255,200,50,.5),0 30px 70px rgba(0,0,0,.95);}
-.card::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(55deg,transparent,transparent 9px,rgba(255,255,255,.04) 9px,rgba(255,255,255,.04) 10px);}
-.card::after{content:'';position:absolute;top:0;left:-80%;width:60%;height:100%;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);transform:skewX(-15deg);animation:sheen2 5s ease-in-out infinite;}
-@keyframes sheen2{0%,40%{left:-80%}70%,100%{left:160%}}
-.c-top{position:absolute;top:14px;left:16px;display:flex;flex-direction:column;align-items:center;gap:2px;}
-.c-rating{font-size:2.8rem;font-weight:900;color:#1a0e00;line-height:1;text-shadow:0 1px 0 rgba(255,255,255,.3);}
-.c-pos{font-size:.65rem;font-weight:800;letter-spacing:1px;color:#1a0e00;opacity:.8;}
-.c-flag{position:absolute;top:14px;right:16px;width:30px;height:20px;border-radius:3px;overflow:hidden;box-shadow:0 2px 5px rgba(0,0,0,.4);background:repeating-linear-gradient(to bottom,#005baa 0,#005baa 22%,#fff 22%,#fff 44%,#005baa 44%,#005baa 66%,#fff 66%,#fff 88%,#005baa 88%,#005baa 100%);}
-.c-photo{position:absolute;top:50px;left:50%;transform:translateX(-50%);width:160px;height:160px;overflow:hidden;border-radius:50% 50% 30% 30%;}
-.c-photo img{width:100%;height:100%;object-fit:cover;object-position:center top;filter:contrast(1.05) brightness(1.05);}
-.c-name{position:absolute;bottom:98px;left:0;right:0;text-align:center;font-size:1rem;font-weight:900;letter-spacing:3px;text-transform:uppercase;color:#1a0e00;text-shadow:0 1px 0 rgba(255,255,255,.3);}
-.c-div{position:absolute;bottom:92px;left:16px;right:16px;height:1px;background:rgba(0,0,0,.2);}
-.c-stats{position:absolute;bottom:14px;left:0;right:0;display:flex;justify-content:center;gap:18px;padding:0 18px;}
-.sc{display:flex;flex-direction:column;gap:4px;}
-.st{display:flex;align-items:center;gap:6px;}
-.sn{font-size:.72rem;font-weight:900;color:#1a0e00;min-width:18px;}
-.sl{font-size:.5rem;font-weight:800;letter-spacing:.5px;color:rgba(0,0,0,.55);text-transform:uppercase;}
-.cs-btn{margin-top:32px;padding:13px 50px;background:transparent;border:1px solid rgba(255,200,50,.4);color:#ffcc44;font-size:.6rem;letter-spacing:7px;text-transform:uppercase;cursor:pointer;border-radius:2px;transition:all .25s;}
-.cs-btn:hover{background:rgba(255,200,50,.12);border-color:#ffcc44;}
-.card.happy{animation:cardHappy .6s ease;}
+#cs-btn.show{opacity:1;pointer-events:all;animation:btnPop .5s cubic-bezier(.34,1.56,.64,1) forwards;}
+@keyframes btnPop{from{opacity:0;transform:translateX(-50%) scale(.88);}to{opacity:1;transform:translateX(-50%) scale(1);}}
+#cs-btn:hover{background:rgba(255,200,50,.1);border-color:#ffcc44;letter-spacing:11px;}
+
+.card-elite.happy{animation:cardHappy .6s ease;}
 @keyframes cardHappy{0%,100%{transform:none}25%{transform:rotate(-3deg) scale(1.05)}75%{transform:rotate(3deg) scale(1.05)}}
 
 /* ── WORLD ── */
 #world{position:fixed;inset:0;z-index:100;opacity:0;pointer-events:none;transition:opacity 1.2s ease;}
 #world.on{opacity:1;pointer-events:all;}
+#ex-flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:200;transition:opacity .08s ease;}
+#ex-flash.pop{opacity:.72;}
+#ex-flash.fade{opacity:0;transition:opacity .35s ease;}
+/* ── Section overlays ── */
+#section-overlay{position:fixed;inset:0;background:#0a0a0f;z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .5s ease;}
+#section-overlay.open{opacity:1;pointer-events:all;}
+#section-overlay h1{color:#ffd700;font-size:2.2rem;font-family:'Segoe UI',sans-serif;letter-spacing:.08em;margin-bottom:1.2rem;}
+#section-overlay .content{color:rgba(255,255,255,.85);font-family:'Segoe UI',sans-serif;font-size:1rem;max-width:680px;text-align:center;line-height:1.7;}
+#section-back{position:absolute;top:24px;left:28px;background:none;border:1px solid rgba(255,255,255,.3);color:#fff;padding:8px 20px;border-radius:4px;cursor:pointer;font-size:.85rem;letter-spacing:.1em;font-family:'Segoe UI',sans-serif;}
+#section-back:hover{background:rgba(255,255,255,.1);}
+#enter-tunnel{position:fixed;bottom:14%;left:50%;transform:translateX(-50%) scale(.88);opacity:0;pointer-events:none;text-align:center;transition:opacity .8s ease,transform .8s ease;z-index:9000;}
+#enter-tunnel.show{opacity:1;transform:translateX(-50%) scale(1);pointer-events:all;}
+#enter-tunnel button{background:none;border:2px solid #fff;color:#fff;font-size:1.1rem;font-family:'Segoe UI',sans-serif;font-weight:700;letter-spacing:.18em;padding:14px 40px;border-radius:4px;cursor:pointer;text-transform:uppercase;backdrop-filter:blur(6px);background:rgba(255,255,255,.06);transition:background .2s,transform .15s;}
+#enter-tunnel button:hover{background:rgba(255,255,255,.16);transform:scale(1.05);}
+#enter-tunnel small{display:block;margin-top:8px;color:rgba(255,255,255,.4);font-size:.72rem;letter-spacing:.12em;}
 #world canvas{position:absolute;top:0;left:0;display:block;}
 
 /* ── HUD ── */
@@ -762,36 +839,52 @@ body{background:#000;color:#fff;font-family:'Segoe UI',Arial,sans-serif;overflow
 
 <!-- CARD -->
 <div id="card-screen">
-  <div class="cs-light-cone"></div>
-  <div class="cs-podium-glow"></div>
+  <div id="cs-spot-beam"></div>
+  <div id="cs-floor-glow"></div>
 
-  <div class="cs-label">⚡ &nbsp; New Player Unlocked</div>
 
-  <div class="cs-stage">
-    <!-- 3D player model -->
-    <div class="cs-model-area" id="cs-model-area"></div>
-
-    <!-- FIFA card -->
-    <div class="card-outer">
-      <div class="card" id="the-card">
-        <div class="c-top"><div class="c-rating">94</div><div class="c-pos">GK · DEV</div></div>
-        <div class="c-flag"></div>
-        <div class="c-photo"><img src="assets/image.png" alt="Alexandros" onerror="this.parentElement.innerHTML='🧤'"></div>
-        <div class="c-name">Alexandros</div>
-        <div class="c-div"></div>
-        <div class="c-stats">
-          <div class="sc"><div class="st"><span class="sn">90</span><span class="sl">HTML</span></div><div class="st"><span class="sn">88</span><span class="sl">CSS</span></div><div class="st"><span class="sn">84</span><span class="sl">JS</span></div></div>
-          <div class="sc"><div class="st"><span class="sn">82</span><span class="sl">PHP</span></div><div class="st"><span class="sn">80</span><span class="sl">Python</span></div><div class="st"><span class="sn">95</span><span class="sl">GK</span></div></div>
-        </div>
+  <div id="cs-card-drop">
+    <div id="cs-shockwave"></div>
+    <div class="card-frame"><div class="card-elite" id="the-card">
+      <div class="ce-holo"></div>
+      <div class="ce-gloss"></div>
+      <div class="ce-topleft">
+        <div class="ce-ovr">94</div>
+        <div class="ce-pos">GK<br>DEV</div>
+        <div class="ce-flag"></div>
       </div>
-    </div>
+      <div class="ce-badge"><span class="ce-stars">★ ★ ★</span>RARE</div>
+      <div class="ce-photo">
+        <img src="assets/image.png" alt="Alexandros" onerror="this.style.display='none'">
+      </div>
+      <div class="ce-name">Alexandros</div>
+      <div class="ce-stats">
+        <div class="stat-item" data-val="90"><span class="sn">0</span><span class="sl">HTML</span></div>
+        <div class="stat-item" data-val="88"><span class="sn">0</span><span class="sl">CSS</span></div>
+        <div class="stat-item" data-val="84"><span class="sn">0</span><span class="sl">JS</span></div>
+        <div class="stat-item" data-val="95"><span class="sn">0</span><span class="sl">GK</span></div>
+        <div class="stat-item" data-val="82"><span class="sn">0</span><span class="sl">PHP</span></div>
+        <div class="stat-item" data-val="80"><span class="sn">0</span><span class="sl">PY</span></div>
+      </div>
+    </div></div>
   </div>
 
-  <button class="cs-btn" id="cs-btn" style="margin-top:38px;position:relative;z-index:2;">▶ &nbsp; Select Player</button>
+  <!-- invisible anchor so the goalkeeper knows where to stand -->
+  <div id="cs-model-area"></div>
+
+
+  <button id="cs-btn">Sign Him &nbsp; ▶</button>
 </div>
 
 <!-- WORLD -->
+<div id="enter-tunnel"><button>▶ Enter</button><small>kick off your journey</small></div>
+<div id="section-overlay">
+  <button id="section-back">← Back</button>
+  <h1 id="section-title"></h1>
+  <div class="content" id="section-content"></div>
+</div>
 <div id="world">
+  <div id="ex-flash"></div>
   <div id="hud">
     <div id="clock-hud"><div id="clock-min">0'</div><div id="clock-label">Match Time</div></div>
     <div id="score-hud"><span class="team-name">Alexandros</span><span id="score-val">1 <span style="color:rgba(255,255,255,.3)">—</span> 0</span><span class="team-name">World</span></div>
@@ -812,6 +905,11 @@ import { EffectComposer }  from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass }      from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { OutputPass }      from 'three/addons/postprocessing/OutputPass.js';
+import { GLTFLoader }      from 'three/addons/loaders/GLTFLoader.js';
+import { FBXLoader }       from 'three/addons/loaders/FBXLoader.js';
+import { OrbitControls }   from 'three/addons/controls/OrbitControls.js';
+import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
+window.THREE = THREE; // expose for console debugging
 
 // ── PACK STARS ────────────────────────────────────────────────────────────
 const starBg=document.createElement('div');
@@ -887,11 +985,1569 @@ document.getElementById('pack-wrap').addEventListener('click',()=>{
     setTimeout(()=>{
       document.getElementById('pack-screen').style.display='none';
       document.getElementById('card-screen').classList.add('on');
-      initFigurine();
+      initCardBackground();
+      initCardReveal();
       spawnCardConfetti();
     },900);
   },850);
 });
+
+// ── CARD SCREEN 3D BACKGROUND ─────────────────────────────────────────────
+function initCardBackground(){
+  const cs=document.getElementById('card-screen');
+  if(!cs||cs.dataset.bg)return; cs.dataset.bg='1';
+  try{ _initCardBg(cs); }catch(e){ console.error('bg:',e); }
+}
+function _initCardBg(cs){
+  const W=innerWidth,H=innerHeight;
+
+  const rend=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
+  rend.setSize(W,H);
+  rend.setPixelRatio(Math.min(devicePixelRatio,2));
+  rend.toneMapping=THREE.ACESFilmicToneMapping;
+  rend.toneMappingExposure=1.05;
+  rend.outputColorSpace=THREE.SRGBColorSpace;
+  rend.domElement.style.cssText='position:absolute;top:0;left:0;z-index:1;pointer-events:all;';
+  cs.insertBefore(rend.domElement,cs.firstChild);
+
+  const scene=new THREE.Scene();
+  scene.fog=new THREE.FogExp2(0x000508,.026);
+
+  const cam=new THREE.PerspectiveCamera(50,W/H,.1,120);
+  cam.position.set(0,4,-6); cam.lookAt(0,3,0);
+
+  // Bloom post-processing
+  const composer=new EffectComposer(rend);
+  composer.addPass(new RenderPass(scene,cam));
+  composer.addPass(new UnrealBloomPass(new THREE.Vector2(W,H),.48,.38,.76));
+  composer.addPass(new OutputPass());
+
+  // ── MATERIALS ─────────────────────────────────────────────────
+  const floorMat =new THREE.MeshStandardMaterial({color:0x090912,metalness:.93,roughness:.07});
+  // Repainting material presets
+  const mDark=new THREE.MeshStandardMaterial({color:0x0a0a18,metalness:.88,roughness:.2});
+  const mGold=new THREE.MeshStandardMaterial({color:0xffcc44,emissive:0xffaa00,emissiveIntensity:.55,metalness:1,roughness:.06});
+  const mChrome=new THREE.MeshStandardMaterial({color:0x1a1a30,metalness:.95,roughness:.05});
+  const mPurple=new THREE.MeshStandardMaterial({color:0x220044,emissive:0x440088,emissiveIntensity:.3,metalness:.7,roughness:.3});
+  const mGlass=new THREE.MeshStandardMaterial({color:0x0a0a1e,metalness:.98,roughness:.02,envMapIntensity:1});
+
+  // ── FLOOR ─────────────────────────────────────────────────────
+  const floor=new THREE.Mesh(new THREE.PlaneGeometry(80,80),floorMat);
+  floor.rotation.x=-Math.PI/2; scene.add(floor);
+
+  // Glow ring (positioned after model loads)
+  const glowRingMat=new THREE.MeshBasicMaterial({color:0xffcc44,transparent:true,opacity:.52,side:THREE.DoubleSide,depthWrite:false});
+  const glowRing=new THREE.Mesh(new THREE.RingGeometry(1.5,2.0,64),glowRingMat);
+  glowRing.rotation.x=-Math.PI/2; glowRing.position.set(0,.1,0); scene.add(glowRing);
+  glowRingMat.opacity=0; // start invisible
+  window.__glowRing=glowRing;
+
+  // ── LOAD GLB PODIUM ───────────────────────────────────────────
+  new GLTFLoader().load('assets/venue_stage_for_great_events.glb',(gltf)=>{
+    const model=gltf.scene;
+
+    // Exact values found by user navigation
+    model.scale.setScalar(1.5);
+    model.position.set(0, 0, 5);
+    model.rotation.y=Math.PI;
+    scene.add(model);
+
+    window.__bgModel=model; window.__bgCam=cam;
+
+    // Log all mesh names so we can identify the TV screen
+    console.log('=== GLB meshes ===');
+    model.traverse(o=>{ if(o.isMesh) console.log(o.name, o); });
+
+    // ── TV CANVAS (starts black) ──────────────────────────────────
+    const TW=1024,TH=512;
+    const cvs=document.createElement('canvas'); cvs.width=TW; cvs.height=TH;
+    const ctx2=cvs.getContext('2d');
+    ctx2.fillStyle='#000'; ctx2.fillRect(0,0,TW,TH);
+
+    const tex=new THREE.CanvasTexture(cvs);
+    tex.colorSpace=THREE.SRGBColorSpace;
+
+    let tvMat=null;
+    let applied=false;
+    const screenNames=['tv','screen','monitor','display','LED','panel','video'];
+    model.traverse(o=>{
+      if(!o.isMesh||applied) return;
+      const n=o.name.toLowerCase();
+      if(screenNames.some(k=>n.includes(k))){
+        tvMat=new THREE.MeshStandardMaterial({map:tex,emissiveMap:tex,emissive:new THREE.Color(1,1,1),emissiveIntensity:0,roughness:.25,metalness:.1});
+        o.material=tvMat;
+        applied=true;
+        console.log('Applied screen texture to:', o.name);
+      }
+    });
+    if(!applied) console.warn('No screen mesh found by name. Check mesh names above and update screenNames array.');
+
+    function drawTVBase(){
+      ctx2.fillStyle='#000'; ctx2.fillRect(0,0,TW,TH);
+      ctx2.fillStyle='#0a0020'; ctx2.fillRect(0,0,TW,TH);
+      for(let sy=0;sy<TH;sy+=4){ ctx2.fillStyle='rgba(0,0,0,0.18)'; ctx2.fillRect(0,sy,TW,2); }
+      const grd=ctx2.createRadialGradient(TW/2,TH/2,40,TW/2,TH/2,440);
+      grd.addColorStop(0,'rgba(100,60,255,0.22)'); grd.addColorStop(1,'transparent');
+      ctx2.fillStyle=grd; ctx2.fillRect(0,0,TW,TH);
+      ctx2.strokeStyle='rgba(255,200,60,0.25)'; ctx2.lineWidth=2;
+      ctx2.beginPath(); ctx2.moveTo(80,380); ctx2.lineTo(944,380); ctx2.stroke();
+    }
+
+    function playTVOn(){
+      try{
+        const ac=new AudioContext();
+        const buf=ac.createBuffer(1,ac.sampleRate*.3,ac.sampleRate);
+        const d=buf.getChannelData(0);
+        for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*Math.exp(-i/d.length*16);
+        const src=ac.createBufferSource(); src.buffer=buf;
+        const hpf=ac.createBiquadFilter(); hpf.type='highpass'; hpf.frequency.value=350;
+        const g=ac.createGain(); g.gain.value=.4;
+        src.connect(hpf); hpf.connect(g); g.connect(ac.destination); src.start();
+        const o=ac.createOscillator(),og=ac.createGain();
+        o.frequency.value=1400; og.gain.setValueAtTime(.28,ac.currentTime);
+        og.gain.exponentialRampToValueAtTime(.001,ac.currentTime+.07);
+        o.connect(og); og.connect(ac.destination); o.start(); o.stop(ac.currentTime+.07);
+      }catch(e){}
+    }
+
+    // ── TV SEQUENCE ───────────────────────────────────────────────
+    // 1s: turn on flash
+    setTimeout(()=>{
+      playTVOn();
+      ctx2.fillStyle='#fff'; ctx2.fillRect(0,0,TW,TH); tex.needsUpdate=true;
+      if(tvMat) tvMat.emissiveIntensity=4;
+      setTimeout(()=>{ ctx2.fillStyle='#000'; ctx2.fillRect(0,0,TW,TH); tex.needsUpdate=true; if(tvMat) tvMat.emissiveIntensity=0; },80);
+    },1000);
+
+    // 1.6s: "Welcome to"
+    setTimeout(()=>{
+      drawTVBase();
+      ctx2.font='bold 48px Arial'; ctx2.textAlign='center';
+      ctx2.fillStyle='rgba(255,200,60,0.6)';
+      ctx2.fillText('✦  WELCOME TO  ✦',TW/2,110);
+      tex.needsUpdate=true; if(tvMat) tvMat.emissiveIntensity=1.2;
+    },1600);
+
+    // 2.1s: "ALEXANDROS"
+    setTimeout(()=>{
+      drawTVBase();
+      ctx2.font='bold 48px Arial'; ctx2.textAlign='center'; ctx2.fillStyle='rgba(255,200,60,0.6)';
+      ctx2.fillText('✦  WELCOME TO  ✦',TW/2,110);
+      ctx2.font='bold 88px Arial'; ctx2.fillStyle='#fff';
+      ctx2.shadowColor='rgba(120,60,255,0.9)'; ctx2.shadowBlur=38;
+      ctx2.fillText('ALEXANDROS',TW/2,268); ctx2.shadowBlur=0;
+      tex.needsUpdate=true;
+    },2100);
+
+    // 2.6s: "Gkiorgkinis"
+    setTimeout(()=>{
+      drawTVBase();
+      ctx2.font='bold 48px Arial'; ctx2.textAlign='center'; ctx2.fillStyle='rgba(255,200,60,0.6)';
+      ctx2.fillText('✦  WELCOME TO  ✦',TW/2,110);
+      ctx2.font='bold 88px Arial'; ctx2.fillStyle='#fff';
+      ctx2.shadowColor='rgba(120,60,255,0.9)'; ctx2.shadowBlur=38;
+      ctx2.fillText('ALEXANDROS',TW/2,268); ctx2.shadowBlur=0;
+      ctx2.font='bold 36px Arial'; ctx2.fillStyle='rgba(255,200,60,0.85)';
+      ctx2.fillText('GKIORGKINIS · PORTFOLIO',TW/2,340);
+      tex.needsUpdate=true;
+    },2600);
+
+    // Point lights at the podium center
+    glowRing.position.set(0, 2, 5);
+    podUp.position.set(0, 3, 5);
+    key.target.position.set(0, 3, 5); key.target.updateMatrixWorld();
+  },(xhr)=>{},(err)=>console.error('GLB:',err));
+
+  // ── DON'T PUSH BUTTON ─────────────────────────────────────────
+  new GLTFLoader().load('assets/dont_push_button.glb',(gltf)=>{
+    const btn=gltf.scene;
+    // Auto-scale to ~0.6 units tall
+    const box=new THREE.Box3().setFromObject(btn);
+    const sz=box.getSize(new THREE.Vector3());
+    btn.scale.setScalar(0.4/sz.y);
+    // Centre base
+    box.setFromObject(btn);
+    btn.position.y-=box.min.y;
+    // Place next to card (card is at x=0, z=5)
+    btn.position.x=14;
+    btn.position.y+=6;
+    btn.position.z=21;
+    btn.rotation.y=270*Math.PI/180;
+    btn.rotation.x=Math.PI/2;
+    btn.rotation.z=Math.PI;
+    scene.add(btn);
+    window.__btnModel=btn;
+
+    // Strong spotlight aimed directly at the button
+    const btnSpot=new THREE.SpotLight(0xffffff,18,20,Math.PI/6,.3,1);
+    btnSpot.position.set(14,14,21);
+    btnSpot.target.position.set(14,6,21);
+    scene.add(btnSpot); scene.add(btnSpot.target);
+    const btnFill=new THREE.PointLight(0xffffff,8,8);
+    btnFill.position.set(14,7,20);
+    scene.add(btnFill);
+    // Canvas texture with "SIGN HIM" text
+    const tCv=document.createElement('canvas'); tCv.width=256; tCv.height=256;
+    const tc=tCv.getContext('2d');
+    tc.fillStyle='#cc0000'; tc.fillRect(0,0,256,256);
+    tc.save();
+    tc.translate(128,128); tc.rotate(Math.PI);
+    tc.fillStyle='#ffffff'; tc.font='bold 36px Arial'; tc.textAlign='center'; tc.textBaseline='middle';
+    tc.shadowColor='rgba(0,0,0,0.5)'; tc.shadowBlur=6;
+    tc.fillText('SIGN',0,-22);
+    tc.fillText('HIM',0,22);
+    tc.restore();
+    const tTex=new THREE.CanvasTexture(tCv); tTex.colorSpace=THREE.SRGBColorSpace;
+    tTex.wrapS=THREE.RepeatWrapping; tTex.repeat.x=-1; tTex.offset.x=1;
+
+    // Emissive map: black bg, white text only — so only text glows on hover
+    const eCv=document.createElement('canvas'); eCv.width=256; eCv.height=256;
+    const ec=eCv.getContext('2d');
+    ec.fillStyle='#000000'; ec.fillRect(0,0,256,256);
+    ec.save();
+    ec.translate(128,128); ec.rotate(Math.PI);
+    ec.fillStyle='#ffffff'; ec.font='bold 36px Arial'; ec.textAlign='center'; ec.textBaseline='middle';
+    ec.fillText('SIGN',0,-22);
+    ec.fillText('HIM',0,22);
+    ec.restore();
+    const eTex=new THREE.CanvasTexture(eCv);
+    eTex.wrapS=THREE.RepeatWrapping; eTex.repeat.x=-1; eTex.offset.x=1;
+
+    // Collect meshes; force DoubleSide so edge normals always face the raycaster
+    const btnMeshes=[];
+    btn.traverse(o=>{
+      if(!o.isMesh) return;
+      btnMeshes.push(o);
+      const mats=Array.isArray(o.material)?o.material:[o.material];
+      mats.forEach(m=>{ m.side=THREE.DoubleSide; });
+    });
+
+    // Sort by volume, apply to 2nd largest (cap/face, not the base body)
+    const byVol=[...btnMeshes].sort((a,b)=>{
+      const sa=new THREE.Box3().setFromObject(a).getSize(new THREE.Vector3());
+      const sb=new THREE.Box3().setFromObject(b).getSize(new THREE.Vector3());
+      return sb.x*sb.y*sb.z - sa.x*sa.y*sa.z;
+    });
+    const target=byVol[1]||byVol[0];
+    if(target){
+      // MeshStandardMaterial so emissive works for hover glow
+      target.material=new THREE.MeshStandardMaterial({map:tTex,emissiveMap:eTex,emissive:new THREE.Color(0xffffff),emissiveIntensity:0,side:THREE.DoubleSide,roughness:.4,metalness:.1,transparent:true,opacity:0});
+      console.log('Applied text to:',target.name,'(index 1 of',byVol.length,')');
+    }
+    window.__btnTextMesh=target||null;
+
+    // Start fully invisible; fade in triggered when card lands
+    btn.traverse(o=>{
+      if(!o.isMesh) return;
+      const mats=Array.isArray(o.material)?o.material:[o.material];
+      mats.forEach(m=>{ m.transparent=true; m.opacity=0; });
+    });
+    window.__btnFadeIn=()=>{
+      window.__btnFadeT0=performance.now();
+      window.__btnFading=true;
+    };
+
+    // Raycaster click — press animation + sound + triggers Sign Him
+    const _ray=new THREE.Raycaster();
+    const _btnBaseY=btn.position.y;
+    rend.domElement.addEventListener('click',(e)=>{
+      if(window.__signTriggered) return;
+      const rect=rend.domElement.getBoundingClientRect();
+      _ray.setFromCamera(new THREE.Vector2(
+        ((e.clientX-rect.left)/rect.width)*2-1,
+        -((e.clientY-rect.top)/rect.height)*2+1
+      ),cam);
+      if(_ray.intersectObjects(btnMeshes,true).length>0){
+        // Press sound
+        try{
+          const ac=new AudioContext();
+          const o=ac.createOscillator(),g=ac.createGain();
+          o.frequency.setValueAtTime(320,ac.currentTime);
+          o.frequency.exponentialRampToValueAtTime(180,ac.currentTime+.06);
+          g.gain.setValueAtTime(.4,ac.currentTime);
+          g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+.12);
+          o.connect(g); g.connect(ac.destination); o.start(); o.stop(ac.currentTime+.12);
+          const o2=ac.createOscillator(),g2=ac.createGain();
+          o2.type='square'; o2.frequency.value=80;
+          g2.gain.setValueAtTime(.15,ac.currentTime);
+          g2.gain.exponentialRampToValueAtTime(.001,ac.currentTime+.08);
+          o2.connect(g2); g2.connect(ac.destination); o2.start(); o2.stop(ac.currentTime+.08);
+        }catch(e2){}
+        // Press animation
+        window.__btnPressT0=performance.now();
+        window.__btnBaseY=_btnBaseY;
+        // Trigger sequence
+        setTimeout(()=>{ if(window.__triggerSignHim) window.__triggerSignHim(); },200);
+      }
+    });
+
+    // Hover — cursor + glow + sound
+    const _hoverSnd=new Audio('assets/mixkit-on-or-off-light-switch-tap-2585.wav');
+    _hoverSnd.volume=0.4;
+    let _btnHovered=false;
+    rend.domElement.addEventListener('mousemove',(e)=>{
+      if(window.__signTriggered) return;
+      const rect=rend.domElement.getBoundingClientRect();
+      _ray.setFromCamera(new THREE.Vector2(
+        ((e.clientX-rect.left)/rect.width)*2-1,
+        -((e.clientY-rect.top)/rect.height)*2+1
+      ),cam);
+      const hit=_ray.intersectObjects(btnMeshes,true).length>0;
+      if(hit!==_btnHovered){
+        _btnHovered=hit;
+        rend.domElement.style.cursor=hit?'pointer':'';
+        const tm=window.__btnTextMesh;
+        if(tm&&tm.material) tm.material.emissiveIntensity=hit?1.8:0;
+        _hoverSnd.currentTime=0; _hoverSnd.play().catch(()=>{});
+      }
+    });
+
+    // Hide HTML Sign Him button — 3D button replaces it
+    const htmlBtn=document.getElementById('cs-btn');
+    if(htmlBtn) htmlBtn.style.display='none';
+
+  },undefined,(err)=>console.error('Button GLB:',err));
+
+  // ── DOOR GLB ──────────────────────────────────────────────────
+  let _doorScene=null,_hallDoorSetup=null;
+  new GLTFLoader().load('assets/door_metal_old_-_16mb.glb',(gltf)=>{
+    // Drop the open-door half — keep closed set only (f__0, door__0, handel__0)
+    const drop=[];
+    gltf.scene.traverse(o=>{if(['f_2__0','door_2__0','handel_2__0'].includes(o.name))drop.push(o);});
+    drop.forEach(o=>o.removeFromParent());
+    _doorScene=gltf.scene;
+    if(_hallDoorSetup)_hallDoorSetup();
+  });
+
+  // ── HALLWAY ───────────────────────────────────────────────────
+  new GLTFLoader().load('assets/building_hallway.glb',(gltf)=>{
+    const hall=gltf.scene;
+    const box=new THREE.Box3().setFromObject(hall);
+    const sz=box.getSize(new THREE.Vector3());
+    hall.scale.setScalar(4/sz.y);
+    hall.rotation.y=Math.PI/2;
+    box.setFromObject(hall);
+    hall.position.set(0,-box.min.y+2,-22);
+    scene.add(hall);
+    window.__hall=hall;
+
+    // Scroll (independent of door GLB)
+    let _hallCamZ=-6;
+    window.addEventListener('wheel',e=>{
+      if(window.__tunnelPhase!=='hallway') return;
+      _hallCamZ=Math.max(-47,Math.min(-6,_hallCamZ+e.deltaY*0.02));
+    },{passive:true});
+    window.__hallCamZ=()=>_hallCamZ;
+
+    // ── CORRIDOR DOORS (waits for door GLB) ───────────────────────
+    _hallDoorSetup=()=>{
+      const DOORS=[
+        {x:-3.010, y:3.5, z:-12.1, label:'About Me',   section:'about'},
+        {x: 2.92, y:3.5, z:-17.7, label:'Projects',   section:'projects'},
+        {x:-3.010, y:3.5, z:-23,   label:'Internship', section:'internship'},
+        {x: 2.92, y:3.5, z:-28.5, label:'Skills',     section:'skills'},
+        {x:-3.010, y:3.5, z:-34, label:'CV',         section:'cv'},
+      ];
+      const DOORS_CS=[
+        {x:-3.010, y:3.5, z:-17.4},
+        {x:-3.010, y:3.5, z:-28.7},
+        {x: 2.92, y:3.5, z:-12},
+        {x: 2.92, y:3.5, z:-23.2},
+        {x: 2.92, y:3.5, z:-34},
+      ];
+
+      const DW=1.8, DH=3.0;
+      const DSCALE=DH/2.40;
+      const doorGroups=[], doorHitMeshes=[], csLabels=[];
+
+      const _labelWrap=document.createElement('div');
+      Object.assign(_labelWrap.style,{position:'fixed',inset:'0',pointerEvents:'none',zIndex:'300'});
+      document.body.appendChild(_labelWrap);
+
+      function makeLabel(text,color,size){
+        const el=document.createElement('div');
+        el.textContent=text;
+        Object.assign(el.style,{
+          position:'absolute',color,fontFamily:"'Segoe UI',sans-serif",fontSize:size,
+          fontWeight:'700',letterSpacing:'.13em',textTransform:'uppercase',
+          textShadow:'0 0 10px rgba(255,210,80,.8)',pointerEvents:'none',
+          whiteSpace:'nowrap',transform:'translateX(-50%)',transition:'opacity .25s'
+        });
+        _labelWrap.appendChild(el);
+        return el;
+      }
+
+      // Door sounds
+      const _sndOpen=new Audio('assets/Sonic_Soundfx_household_bedroom_door_open_1.mp3');
+      _sndOpen.volume=0.7; _sndOpen.playbackRate=1.6;
+      const _sndClose=new Audio('assets/mixkit-automatic-door-shut-204.wav');
+      _sndClose.volume=0.7; _sndClose.playbackRate=1.1;
+      let _openStopTimer=null;
+      function playDoorOpen(){
+        clearTimeout(_openStopTimer);
+        _sndOpen.currentTime=0.4;
+        _sndOpen.play().catch(()=>{});
+        _openStopTimer=setTimeout(()=>{_sndOpen.pause();_sndOpen.currentTime=0;},1000);
+      }
+      function playDoorClose(){
+        _sndClose.currentTime=0;
+        _sndClose.play().catch(()=>{});
+      }
+
+      DOORS.forEach(d=>{
+        const isLeft=d.x<0;
+
+        // Dark backdrop — sits just behind the door panel so the wall is hidden when door opens
+        const bdrop=new THREE.Mesh(
+          new THREE.PlaneGeometry(1.45, 2.85),
+          new THREE.MeshBasicMaterial({color:0x050505,side:THREE.DoubleSide})
+        );
+        bdrop.position.set(d.x+(isLeft?-0.05:0.05), d.y, d.z);
+        bdrop.rotation.y=isLeft?Math.PI/2:-Math.PI/2;
+        scene.add(bdrop);
+
+        // ── 3D door from GLB ──────────────────────────────────────
+        const doorClone=_doorScene.clone(true);
+        doorClone.scale.setScalar(DSCALE);
+        doorClone.rotation.y=Math.PI/2;
+        scene.add(doorClone);
+        // Centre the bounding box of the clone at the door slot
+        const dbb=new THREE.Box3().setFromObject(doorClone);
+        const dc=dbb.getCenter(new THREE.Vector3());
+        doorClone.position.set(d.x-dc.x, d.y-dc.y, d.z-dc.z);
+        // Force world matrices so panel bbox is accurate
+        doorClone.updateMatrixWorld(true);
+
+        // Find swinging panel + handle inside the clone
+        let doorPanel=null, doorHandle=null;
+        doorClone.traverse(o=>{
+          if(o.name==='door__0')   doorPanel=o;
+          else if(o.name==='handel__0') doorHandle=o;
+        });
+
+        // Clone panel materials so each door has independent emissive
+        const doorMats=[];
+        if(doorPanel) doorPanel.traverse(o=>{
+          if(o.isMesh&&o.material){
+            o.material=o.material.clone();
+            doorMats.push(o.material);
+          }
+        });
+
+        // Invisible hit plane — faces the corridor so raycasting works from both walls
+        const hit=new THREE.Mesh(new THREE.PlaneGeometry(DW,DH),
+          new THREE.MeshBasicMaterial({visible:false,side:THREE.DoubleSide}));
+        hit.position.set(d.x,d.y,d.z);
+        hit.rotation.y=isLeft ? Math.PI/2 : -Math.PI/2;
+        scene.add(hit);
+
+        // Hover glow light
+        const dLight=new THREE.PointLight(0xffd080,0,6);
+        dLight.position.set(d.x+(isLeft?1:-1),d.y,d.z);
+        scene.add(dLight);
+
+        // ── Hinge group ───────────────────────────────────────────
+        const hinge=new THREE.Group();
+        // Hinge at the back Z edge so the door swings sideways into the room
+        let hingeZ=d.z-DW/2;
+        if(doorPanel){
+          const pb=new THREE.Box3().setFromObject(doorPanel);
+          hingeZ=pb.min.z;
+        }
+        hinge.position.set(d.x,d.y,hingeZ);
+        scene.add(hinge);
+
+        // Attach panel + handle to hinge (world transforms preserved)
+        if(doorPanel)  hinge.attach(doorPanel);
+        if(doorHandle) hinge.attach(doorHandle);
+
+        hit.userData={section:d.section,label:d.label,hinge,dLight,isLeft};
+        doorHitMeshes.push(hit);
+
+        const lbl=makeLabel(d.label,'#fff','13px');
+        lbl.style.opacity='0';
+        hinge.userData={openAngle:0,targetAngle:0,dLight,lbl,mats:doorMats,
+          labelPos:new THREE.Vector3(d.x,d.y+2.1,d.z)};
+        doorGroups.push(hinge);
+      });
+
+      // Coming-soon: static door GLB + label, no interaction
+      DOORS_CS.forEach(d=>{
+        const csClone=_doorScene.clone(true);
+        csClone.scale.setScalar(DSCALE);
+        csClone.rotation.y=Math.PI/2;
+        scene.add(csClone);
+        const csBB=new THREE.Box3().setFromObject(csClone);
+        const csC=csBB.getCenter(new THREE.Vector3());
+        csClone.position.set(d.x-csC.x, d.y-csC.y, d.z-csC.z);
+        const lbl=makeLabel('Coming Soon','rgba(255,255,255,.22)','10px');
+        csLabels.push({lbl,pos:new THREE.Vector3(d.x,d.y+2.1,d.z)});
+      });
+
+      window.__doorGroups=doorGroups;
+      window.__doorHitMeshes=doorHitMeshes;
+      window.__csLabels=csLabels;
+
+      // ── SECTION CONTENT ──────────────────────────────────────────
+      const SECTION_DATA={
+        about:{title:'About Me',content:'Hi! I\'m Alexandros — a 21-year-old Computer Science student at Thomas More Geel. Greek and Czech, goalkeeper, and passionate developer.'},
+        projects:{title:'Projects',content:'EduQuest · CampusBridge · Greenfield United FC · AscendHub — full-stack projects built with modern web technologies.'},
+        internship:{title:'Internship',content:'Details about my internship experience coming soon.'},
+        skills:{title:'Skills',content:'JavaScript · Three.js · React · Java · Python · SQL · Git · UI/UX Design'},
+        cv:{title:'CV',content:'<a href="assets/cv.pdf" target="_blank" style="color:#ffd700">Download my CV →</a>'},
+      };
+
+      const _dRay=new THREE.Raycaster();
+      let _hoveredDoor=null;
+      rend.domElement.addEventListener('mousemove',e=>{
+        if(window.__tunnelPhase!=='hallway') return;
+        const rect=rend.domElement.getBoundingClientRect();
+        _dRay.setFromCamera(new THREE.Vector2(
+          ((e.clientX-rect.left)/rect.width)*2-1,
+          -((e.clientY-rect.top)/rect.height)*2+1
+        ),cam);
+        const hits=_dRay.intersectObjects(doorHitMeshes);
+        const hovered=hits.length?hits[0].object:null;
+        if(hovered!==_hoveredDoor){
+          if(_hoveredDoor){
+            _hoveredDoor.userData.hinge.userData.targetAngle=0;
+            playDoorClose();
+          }
+          _hoveredDoor=hovered;
+          if(hovered){
+            const {hinge,isLeft}=hovered.userData;
+            hinge.userData.targetAngle=isLeft?Math.PI*.5:-Math.PI*.5;
+            playDoorOpen();
+          }
+        }
+        rend.domElement.style.cursor=hovered?'pointer':'';
+      });
+
+      rend.domElement.addEventListener('click',e=>{
+        if(window.__tunnelPhase!=='hallway') return;
+        const rect=rend.domElement.getBoundingClientRect();
+        _dRay.setFromCamera(new THREE.Vector2(
+          ((e.clientX-rect.left)/rect.width)*2-1,
+          -((e.clientY-rect.top)/rect.height)*2+1
+        ),cam);
+        const hits=_dRay.intersectObjects(doorHitMeshes);
+        if(!hits.length) return;
+        const {section}=hits[0].object.userData;
+        const data=SECTION_DATA[section];
+        if(!data) return;
+        document.getElementById('section-title').textContent=data.title;
+        document.getElementById('section-content').innerHTML=data.content;
+        document.getElementById('section-overlay').classList.add('open');
+      });
+
+      document.getElementById('section-back').addEventListener('click',()=>{
+        document.getElementById('section-overlay').classList.remove('open');
+        if(_hoveredDoor){_hoveredDoor.userData.hinge.userData.targetAngle=0;_hoveredDoor=null;}
+      });
+    };
+    if(_doorScene)_hallDoorSetup();
+
+    // Find the 7 emissive ring-light meshes baked into the hallway GLB
+    // Dim them all to 0, then light up back→front when entering
+    const _ringLights=[];
+    hall.traverse(o=>{
+      if(!o.isMesh) return;
+      const mats=Array.isArray(o.material)?o.material:[o.material];
+      mats.forEach(m=>{
+        if(!m||!m.emissive) return;
+        if(m.emissive.getHex()===0&&!(m.emissiveIntensity>0)) return;
+        m.userData._origInt=m.emissiveIntensity||1;
+        m.emissiveIntensity=0;
+        o.updateWorldMatrix(true,false);
+        const wp=new THREE.Vector3(); o.getWorldPosition(wp);
+        _ringLights.push({m, z:wp.z});
+      });
+    });
+    // Sort back→front
+    _ringLights.sort((a,b)=>a.z-b.z);
+
+    // Also restore the corridor spotlights (still useful for scene illumination)
+    const lampZ=[-2,-6,-10,-14,-18,-22,-26,-30,-36,-44,-50];
+    const _corridorLamps=[];
+    lampZ.forEach(z=>{
+      const spot=new THREE.SpotLight(0xfff5e0,0,18,Math.PI/7,.4,1.2);
+      spot.position.set(0,7,z);
+      spot.target.position.set(0,0,z);
+      scene.add(spot); scene.add(spot.target);
+      const fill=new THREE.PointLight(0xfff0cc,0,10);
+      fill.position.set(0,6,z);
+      scene.add(fill);
+      _corridorLamps.push({z,spot,fill});
+    });
+    _corridorLamps.sort((a,b)=>a.z-b.z);
+
+    const _sndSwitch=new Audio('assets/transportation_van_headlight_dial_switch_turn_mercedes_sprinter_002.mp3');
+    _sndSwitch.volume=0.6;
+    window.__lightUpCorridor=()=>{
+      // Animate emissive ring meshes back→front
+      _ringLights.forEach(({m},i)=>{
+        setTimeout(()=>{
+          if(i < _ringLights.length-2){
+            const snd=_sndSwitch.cloneNode();
+            snd.volume=0.6;
+            setTimeout(()=>{ snd.play().catch(()=>{}); },150);
+          }
+          let s=0;
+          const iv=setInterval(()=>{
+            s=Math.min(s+1,20);
+            m.emissiveIntensity=m.userData._origInt*(s/20);
+            if(s>=20) clearInterval(iv);
+          },30);
+        },i*500);
+      });
+      // Sync scene spotlights
+      _corridorLamps.forEach(({spot,fill},i)=>{
+        setTimeout(()=>{
+          let s=0;
+          const iv=setInterval(()=>{
+            s=Math.min(s+1,20);
+            spot.intensity=25*(s/20);
+            fill.intensity=4*(s/20);
+            if(s>=20) clearInterval(iv);
+          },30);
+        },i*500);
+      });
+    };
+    console.log('=== Hallway meshes ===');
+    let _mi=0;
+    hall.traverse(o=>{
+      if(!o.isMesh) return;
+      const b=new THREE.Box3().setFromObject(o);
+      const s=b.getSize(new THREE.Vector3());
+      const c=b.getCenter(new THREE.Vector3());
+      console.log(`[${_mi++}] "${o.name}" | size: ${s.x.toFixed(2)} x ${s.y.toFixed(2)} x ${s.z.toFixed(2)} | center: ${c.x.toFixed(2)}, ${c.y.toFixed(2)}, ${c.z.toFixed(2)}`);
+    });
+  },undefined,(err)=>console.error('Hallway GLB:',err));
+
+  // ── LIGHTS ────────────────────────────────────────────────────
+  scene.add(new THREE.AmbientLight(0x070818,3));
+
+  // Key spotlight (overhead center)
+  const key=new THREE.SpotLight(0xfff8e8,9,46,Math.PI/7,.28,1.4);
+  key.position.set(0,20,8); key.target.position.set(0,1,3);
+  scene.add(key); scene.add(key.target);
+
+  // Fill spots (flanks)
+  [-11,11].forEach(kx=>{
+    const sp=new THREE.SpotLight(0xffe8cc,4.5,38,Math.PI/8,.35,1.5);
+    sp.position.set(kx,17,7); sp.target.position.set(0,1,3);
+    scene.add(sp); scene.add(sp.target);
+  });
+
+  // Cool rim / back lights
+  const rim1=new THREE.DirectionalLight(0x4455cc,1.4); rim1.position.set(-6,6,-6); scene.add(rim1);
+  const rim2=new THREE.DirectionalLight(0x7733cc,1.0); rim2.position.set(6,6,-6); scene.add(rim2);
+
+  // Podium up-light (gold)
+  const podUp=new THREE.PointLight(0xffcc44,4,9); podUp.position.set(0,1.8,0); scene.add(podUp);
+  const sideL=new THREE.PointLight(0x8833ff,2.2,12); sideL.position.set(-7,2.5,2); scene.add(sideL);
+  const sideR=new THREE.PointLight(0x3355ff,2.2,12); sideR.position.set(7,2.5,2); scene.add(sideR);
+
+  // ── VOLUMETRIC BEAMS ──────────────────────────────────────────
+  [[0,20,6],[-11,17,5],[11,17,5]].forEach(([lx,ly,lz])=>{
+    const cL=ly, cR=Math.tan(Math.PI/8)*cL*.85;
+    const cone=new THREE.Mesh(
+      new THREE.ConeGeometry(cR,cL,24,1,true),
+      new THREE.MeshBasicMaterial({color:0xfff8e8,transparent:true,opacity:.018,side:THREE.FrontSide,depthWrite:false})
+    );
+    const src=new THREE.Vector3(lx,ly,lz);
+    const dir=new THREE.Vector3(0,1,0).sub(src).normalize();
+    cone.position.copy(src).addScaledVector(dir,cL*.5);
+    cone.quaternion.setFromUnitVectors(new THREE.Vector3(0,-1,0),dir);
+    scene.add(cone);
+  });
+
+  // ── BOKEH BACKGROUND PARTICLES ────────────────────────────────
+  const bkPos=new Float32Array(220*3);
+  for(let i=0;i<220;i++){
+    bkPos[i*3]=(Math.random()-.5)*60;
+    bkPos[i*3+1]=Math.random()*22+.5;
+    bkPos[i*3+2]=-12-Math.random()*35;
+  }
+  const bkGeo=new THREE.BufferGeometry();
+  bkGeo.setAttribute('position',new THREE.BufferAttribute(bkPos,3));
+  const bkPts=new THREE.Points(bkGeo,
+    new THREE.PointsMaterial({color:0xfff0cc,size:.18,transparent:true,opacity:.55,sizeAttenuation:true}));
+  scene.add(bkPts);
+
+  // ── DEBUG FPS CAMERA (click to enter, ESC to exit, WASD to move) ──
+  // Mouse parallax — camera rotates toward mouse
+  let _mx=0,_my=0,_lx=0,_ly=4;
+  const _keys={};
+  rend.domElement.addEventListener('mousemove',e=>{
+    _mx=Math.max(-1,Math.min(1,(e.clientX/innerWidth)*2-1));
+    _my=Math.max(-1,Math.min(1,-((e.clientY/innerHeight)*2-1)));
+  });
+
+  // WASD debug camera
+  const fpsCam=new PointerLockControls(cam,rend.domElement);
+  document.addEventListener('keydown',e=>_keys[e.code]=true);
+  document.addEventListener('keyup',e=>_keys[e.code]=false);
+  rend.domElement.addEventListener('click',()=>{ if(!fpsCam.isLocked) fpsCam.lock(); });
+  const _hint=document.createElement('div');
+  _hint.innerHTML='🎮 Click to enter · WASD move · Space/Shift up/down · ESC exit';
+  Object.assign(_hint.style,{position:'fixed',bottom:'12px',left:'50%',transform:'translateX(-50%)',
+    background:'rgba(0,0,0,.6)',color:'#fff',padding:'6px 14px',borderRadius:'8px',
+    fontSize:'13px',pointerEvents:'none',zIndex:'9999',fontFamily:'monospace'});
+  document.body.appendChild(_hint);
+  fpsCam.addEventListener('lock',()=>_hint.style.opacity='0');
+  fpsCam.addEventListener('unlock',()=>_hint.style.opacity='1');
+  window.__bgControls=fpsCam;
+
+  // Camera position readout (debug)
+  const _posEl=document.createElement('div');
+  Object.assign(_posEl.style,{position:'fixed',top:'10px',right:'12px',background:'rgba(0,0,0,.7)',
+    color:'#0f0',padding:'4px 10px',borderRadius:'4px',fontSize:'12px',fontFamily:'monospace',
+    pointerEvents:'none',zIndex:'9999'});
+  document.body.appendChild(_posEl);
+  setInterval(()=>{
+    _posEl.textContent=`x:${cam.position.x.toFixed(1)} y:${cam.position.y.toFixed(1)} z:${cam.position.z.toFixed(1)}`;
+  },100);
+
+  // ── 3D CARD ───────────────────────────────────────────────────
+  let cardMesh=null;
+
+  function buildCardCanvas(photo, statVals){
+    const W=512,H=744;
+    const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+    const c=cv.getContext('2d');
+    // clip to FIFA shield (scaled from 450×600 → 512×744)
+    const shield=new Path2D('M 49,0 L 463,0 C 501,37 512,81 512,136 L 512,583 C 512,670 376,713 256,744 C 137,713 0,670 0,583 L 0,136 C 0,81 11,37 49,0 Z');
+    c.save(); c.clip(shield);
+    // background — light yellow gold
+    const bg=c.createLinearGradient(0,0,W,H);
+    bg.addColorStop(0,'#fef3a0'); bg.addColorStop(.25,'#fde84a');
+    bg.addColorStop(.6,'#f0c020'); bg.addColorStop(1,'#d4960a');
+    c.fillStyle=bg; c.fillRect(0,0,W,H);
+    // inner lighter centre glow
+    const cg=c.createRadialGradient(W*.55,H*.3,40,W*.55,H*.3,W*.7);
+    cg.addColorStop(0,'rgba(255,240,160,.45)'); cg.addColorStop(1,'rgba(0,0,0,0)');
+    c.fillStyle=cg; c.fillRect(0,0,W,H);
+    // gloss top-left
+    const gl=c.createLinearGradient(0,0,W*.6,H*.4);
+    gl.addColorStop(0,'rgba(255,255,255,.22)'); gl.addColorStop(.5,'rgba(255,255,255,.06)'); gl.addColorStop(1,'rgba(255,255,255,0)');
+    c.fillStyle=gl; c.fillRect(0,0,W,H);
+    // dark border inset line
+    c.strokeStyle='rgba(120,60,0,.45)'; c.lineWidth=3;
+    c.beginPath(); c.moveTo(52,5); c.lineTo(460,5); c.stroke();
+    // rating
+    c.fillStyle='#1a0a00'; c.font='bold 90px Arial'; c.textAlign='left';
+    c.shadowColor='rgba(0,0,0,.25)'; c.shadowBlur=8;
+    c.fillText('99',44,140); c.shadowBlur=0;
+    c.fillStyle='rgba(26,10,0,.75)'; c.font='bold 32px Arial';
+    c.fillText('GK',52,178);
+    // combined Czech + Greek flag — top RIGHT
+    {
+      const fw=96,fh=62,fx=W-fw-44,fy=144,mid=fx+fw/2;
+      c.save();
+      c.beginPath(); c.roundRect(fx,fy,fw,fh,5); c.clip();
+      // LEFT: Czech Republic
+      c.fillStyle='#fff'; c.fillRect(fx,fy,fw/2,fh/2);        // white top
+      c.fillStyle='#d7141a'; c.fillRect(fx,fy+fh/2,fw/2,fh/2); // red bottom
+      c.fillStyle='#11457e';                                    // blue triangle
+      c.beginPath(); c.moveTo(fx,fy); c.lineTo(mid,fy+fh/2); c.lineTo(fx,fy+fh); c.closePath(); c.fill();
+      // RIGHT: Greece — 9 stripes
+      const sh=fh/9;
+      for(let i=0;i<9;i++){
+        c.fillStyle=i%2===0?'#0d5eaf':'#fff';
+        c.fillRect(mid,fy+i*sh,fw/2,sh+1);
+      }
+      // Greek canton (top-left of right half)
+      const cw=fw/2*5/9, ch=fh*5/9;
+      c.fillStyle='#0d5eaf'; c.fillRect(mid,fy,cw,ch);
+      // white cross
+      const cx=mid+cw/2, cy=fy+ch/2, ct=ch/4.5;
+      c.fillStyle='#fff';
+      c.fillRect(cx-ct/2,fy+2,ct,ch-4);  // vertical
+      c.fillRect(mid+2,cy-ct/2,cw-4,ct); // horizontal
+      // thin divider
+      c.strokeStyle='rgba(0,0,0,0.18)'; c.lineWidth=1;
+      c.beginPath(); c.moveTo(mid,fy); c.lineTo(mid,fy+fh); c.stroke();
+      // border
+      c.strokeStyle='rgba(80,40,0,0.35)'; c.lineWidth=2;
+      c.beginPath(); c.roundRect(fx,fy,fw,fh,5); c.stroke();
+      c.restore();
+    }
+    // photo
+    const pr=140;
+    c.save();
+    c.beginPath(); c.arc(W/2,310,pr,0,Math.PI*2); c.clip();
+    if(photo){ c.drawImage(photo,W/2-pr,170,pr*2,pr*2); }
+    else{ c.fillStyle='rgba(255,255,255,.08)'; c.fill(); }
+    const pf=c.createLinearGradient(0,390,0,450);
+    pf.addColorStop(0,'transparent'); pf.addColorStop(1,'rgba(8,0,20,.92)');
+    c.fillStyle=pf; c.fillRect(0,390,W,60);
+    c.restore();
+    // photo ring
+    c.strokeStyle='rgba(120,60,0,.4)'; c.lineWidth=2;
+    c.beginPath(); c.arc(W/2,310,pr,0,Math.PI*2); c.stroke();
+    // name
+    c.fillStyle='#1a0a00'; c.font='bold 48px Arial'; c.textAlign='center';
+    c.shadowColor='rgba(0,0,0,.2)'; c.shadowBlur=6;
+    c.fillText('ALEXANDROS',W/2,508); c.shadowBlur=0;
+    // name underline
+    c.strokeStyle='rgba(120,60,0,.4)'; c.lineWidth=2;
+    c.beginPath(); c.moveTo(W*.25,522); c.lineTo(W*.75,522); c.stroke();
+    // stats
+    const statLabels=['GRK','CZE','ENG','FRN','GK','DEV'];
+    const statFinals=[99,68,92,86,99,84];
+    const curVals=statVals||statFinals;
+    const sx0=56,sxStep=(W-112)/5;
+    statLabels.forEach((l,i)=>{
+      const x=sx0+i*sxStep;
+      c.font='bold 36px Arial'; c.textAlign='center';
+      c.fillStyle='#1a0a00'; c.shadowColor='rgba(0,0,0,.2)'; c.shadowBlur=4;
+      c.fillText(curVals[i],x,590); c.shadowBlur=0;
+      c.font='20px Arial'; c.fillStyle='rgba(26,10,0,.6)';
+      c.fillText(l,x,618);
+    });
+    // bottom dark line
+    c.strokeStyle='rgba(120,60,0,.4)'; c.lineWidth=2;
+    c.beginPath(); c.moveTo(90,668); c.lineTo(422,668); c.stroke();
+    c.restore();
+    return cv;
+  }
+
+  function spawnCard(photo){
+    const cv=buildCardCanvas(photo);
+    const tex=new THREE.CanvasTexture(cv);
+    tex.colorSpace=THREE.SRGBColorSpace;
+    const mat=new THREE.MeshStandardMaterial({
+      map:tex, emissiveMap:tex, emissive:new THREE.Color(1,1,1), emissiveIntensity:.5,
+      transparent:true, opacity:0, roughness:.2, metalness:.4, side:THREE.DoubleSide
+    });
+    cardMesh=new THREE.Mesh(new THREE.PlaneGeometry(2.36,3.42),mat);
+    cardMesh.userData.mats=[mat];
+    cardMesh.userData.photo=photo;
+    cardMesh.userData.cardTex=tex;
+    cardMesh.position.set(0,22,5);
+    cardMesh.rotation.y=Math.PI;
+    cardMesh.rotation.x=.12;
+    scene.add(cardMesh);
+
+    const drop=document.getElementById('cs-card-drop');
+    if(drop) drop.style.display='none';
+    setTimeout(()=>{
+      playCardWhoosh();
+      window.__ringFadeStart=performance.now();
+      if(window.__glowRing) window.__glowRing.visible=true;
+      cardMesh.userData.dropping=true;
+      cardMesh.userData.dropStartMs=performance.now();
+    },5000);
+  }
+
+  function playCardWhoosh(){
+    try{
+      const ac=new AudioContext();
+      const buf=ac.createBuffer(1,ac.sampleRate*.7,ac.sampleRate);
+      const d=buf.getChannelData(0);
+      for(let i=0;i<d.length;i++){ const tt=i/ac.sampleRate; d[i]=(Math.random()*2-1)*Math.pow(tt/.7,0.4)*(1-tt/.7); }
+      const src=ac.createBufferSource(); src.buffer=buf;
+      const bpf=ac.createBiquadFilter(); bpf.type='bandpass'; bpf.frequency.value=900; bpf.Q.value=.6;
+      const g=ac.createGain(); g.gain.value=.45;
+      src.connect(bpf); bpf.connect(g); g.connect(ac.destination); src.start();
+    }catch(e){}
+  }
+
+  function playCardLand(){
+    try{
+      const ac=new AudioContext();
+      const o=ac.createOscillator(),g=ac.createGain();
+      o.frequency.setValueAtTime(130,ac.currentTime); o.frequency.exponentialRampToValueAtTime(18,ac.currentTime+.55);
+      g.gain.setValueAtTime(1.1,ac.currentTime); g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+.55);
+      o.connect(g); g.connect(ac.destination); o.start(); o.stop(ac.currentTime+.55);
+      const o2=ac.createOscillator(),g2=ac.createGain();
+      o2.type='sawtooth'; o2.frequency.setValueAtTime(90,ac.currentTime); o2.frequency.exponentialRampToValueAtTime(28,ac.currentTime+.35);
+      g2.gain.setValueAtTime(.5,ac.currentTime); g2.gain.exponentialRampToValueAtTime(.001,ac.currentTime+.35);
+      o2.connect(g2); g2.connect(ac.destination); o2.start(); o2.stop(ac.currentTime+.35);
+    }catch(e){}
+  }
+
+  const _photoImg=new Image();
+  _photoImg.onload=()=>spawnCard(_photoImg);
+  _photoImg.onerror=()=>spawnCard(null);
+  _photoImg.src='assets/image.png';
+
+  // ── GOALKEEPER ────────────────────────────────────────────────
+  let gkMixer=null, gkPrevT=0;
+  new GLTFLoader().load('assets/goalkeeper_stylized_-_rig_and_animation.glb',(gltf)=>{
+    const gk=gltf.scene;
+
+    console.log('=== GK bones ===');
+    gk.traverse(o=>{ if(o.isBone||o.type==='Bone') console.log(o.name); });
+
+    // Auto-scale to ~0.9 units tall
+    const box=new THREE.Box3().setFromObject(gk);
+    const sz=box.getSize(new THREE.Vector3());
+    gk.scale.setScalar(0.75/sz.y);
+
+    // Wrap in a group so we can freely position the visual centre
+    const gkGroup=new THREE.Group();
+    box.setFromObject(gk);
+    const ctr=box.getCenter(new THREE.Vector3());
+    gk.position.x-=ctr.x;
+    gk.position.y-=box.min.y;
+    gk.position.z-=ctr.z;
+    gkGroup.add(gk);
+
+    // Position the group
+    gkGroup.position.set(1.3, 1.3, 8);
+    gkGroup.rotation.y=Math.PI;
+
+
+    // Lights as children of gkGroup — z flipped because group has rotation.y=PI
+    const gkLight=new THREE.PointLight(0xfff8e0,10,6);
+    gkLight.position.set(0,4,2);
+    gkGroup.add(gkLight);
+    const gkFill=new THREE.PointLight(0xaaddff,5,6);
+    gkFill.position.set(1.5,2.5,3);
+    gkGroup.add(gkFill);
+    const gkUnder=new THREE.PointLight(0xffeedd,3,4);
+    gkUnder.position.set(0,1,2);
+    gkGroup.add(gkUnder);
+
+    scene.add(gkGroup);
+    window.__gk=gkGroup;
+    window.__bgScene=scene;
+
+    // Hide GK — starts far behind stage, revealed on Sign Him
+    window.__gkTargetZ=gkGroup.position.z;
+    gkGroup.position.z=16;
+    gkGroup.visible=false;
+    console.log('GK ready, targetZ=',window.__gkTargetZ);
+
+    // Start first animation clip
+    // Build bone name map: stripped base name → full GLB bone name
+    const boneMap={};
+    gk.traverse(o=>{
+      if(o.isBone||o.type==='Bone'){
+        const base=o.name.replace(/_0*\d+$/,'').toLowerCase();
+        boneMap[base]=o.name;
+      }
+    });
+    console.log('Bone map:',boneMap);
+
+    function retargetClip(clip, rotOnly=false){
+      const tracks=[];
+      clip.tracks.forEach(t=>{
+        const dot=t.name.indexOf('.');
+        const boneName=t.name.substring(0,dot);
+        const prop=t.name.substring(dot);
+        // skip position tracks when rotOnly (avoids FBX cm vs GLB m scale issue)
+        if(rotOnly && prop!=='.quaternion') return;
+        const stripped=boneName.replace(/^mixamorig:?/i,'').toLowerCase();
+        const mapped=boneMap[stripped];
+        if(!mapped) return;
+        tracks.push(new t.constructor(mapped+prop, t.times, t.values, t.getInterpolation()));
+      });
+      return new THREE.AnimationClip(clip.name,clip.duration,tracks);
+    }
+
+    gkMixer=new THREE.AnimationMixer(gk);
+    window.__gkMixer=gkMixer;
+
+    // Load drop kick
+    new FBXLoader().load('assets/goalkeeper-stylized-rig-and-animation/source/Goalkeeper_Stylized/ThuMon/Drop Kick (1).fbx',(fbx)=>{
+      window.__dropKickClip=retargetClip(fbx.animations[0]);
+    });
+
+    // Load victory
+    new FBXLoader().load('assets/goalkeeper-stylized-rig-and-animation/source/Goalkeeper_Stylized/ThuMon/Victory.fbx',(fbx)=>{
+      const clip=fbx.animations[1];
+      const retargeted=retargetClip(clip,false);
+      window.__victoryClip=retargeted;
+    });
+
+    // Load walking — pre-check which index has the real animation
+    new FBXLoader().load('assets/goalkeeper-stylized-rig-and-animation/source/Goalkeeper_Stylized/ThuMon/Walking.fbx',(fbx)=>{
+      fbx.animations.forEach((a,i)=>console.log('Walking anim['+i+'] duration:',a.duration,'tracks:',a.tracks.length));
+      // Pick longest animation
+      const realIdx=fbx.animations.reduce((best,a,i)=>a.duration>fbx.animations[best].duration?i:best,0);
+      const raw=retargetClip(fbx.animations[realIdx],true);
+      // Trim last frame to make loop seamless (last frame is usually duplicate of first)
+      const fps=30;
+      const totalFrames=Math.round(raw.duration*fps);
+      const trimmed=THREE.AnimationUtils.subclip(raw,'walk',0,Math.max(totalFrames-1,1),fps);
+      window.__walkClip=trimmed;
+      console.log('Walk clip ready, idx:',realIdx,'duration:',raw.duration,'trimmed:',trimmed.duration);
+    });
+
+    // Load Idle (1).fbx — play as-is
+    let idleWaiting=false;
+    function startIdle(){
+      console.log('startIdle called, clip ready:',!!window.__idleClip);
+      if(!window.__idleClip){ idleWaiting=true; return; }
+      gkMixer.stopAllAction();
+      const idle=gkMixer.clipAction(window.__idleClip);
+      idle.reset().play();
+      // Shift right when idle starts
+      if(window.__gk) window.__gk.position.x=0.2;
+      console.log('Idle playing, tracks:',window.__idleClip.tracks.length);
+    }
+
+    new FBXLoader().load('assets/goalkeeper-stylized-rig-and-animation/source/Goalkeeper_Stylized/ThuMon/Idle (1).fbx',(fbx)=>{
+      console.log('Idle raw tracks:',fbx.animations[0].tracks.slice(0,4).map(t=>t.name));
+      window.__idleClip=retargetClip(fbx.animations[0],false);
+      if(idleWaiting||window.__idleWaiting) startIdle();
+    });
+
+    gkMixer.addEventListener('finished',()=>{
+      if(window.__signTriggered&&!window.__victoryPlayed){
+        window.__victoryPlayed=true;
+        const doVic=()=>{
+          if(!window.__victoryClip){setTimeout(doVic,200);return;}
+          gkMixer.stopAllAction();
+          const vic=gkMixer.clipAction(window.__victoryClip);
+          vic.setLoop(THREE.LoopRepeat);
+          vic.reset().play();
+          // Show ENTER button after 3s of victory
+          setTimeout(()=>{
+            const eb=document.getElementById('enter-tunnel');
+            console.log('Showing enter button, element found:',!!eb);
+            if(eb) eb.classList.add('show');
+          },3000);
+        };
+        doVic();
+      }
+    });
+    window.__startIdle=startIdle;
+
+    // ── TUNNEL TRANSITION ─────────────────────────────────────────
+    window.__tunnelPhase=null; // null | 'walking' | 'turning' | 'hallway'
+    window.__tunnelPrevT=0;
+
+    function startTunnelTransition(){
+      const eb=document.getElementById('enter-tunnel');
+      if(eb) eb.classList.remove('show');
+
+      // Switch to walk animation
+      if(!window.__walkClip){ console.warn('Walk clip not ready'); return; }
+      gkMixer.stopAllAction();
+      const walk=gkMixer.clipAction(window.__walkClip);
+      walk.setLoop(THREE.LoopRepeat); walk.reset().play();
+
+      window.__tunnelPhase='walking';
+      window.__tunnelWalkT0=performance.now();
+      window.__tunnelPrevT=performance.now();
+
+      // Disable FPS controls during scripted sequence
+      if(window.__bgControls&&window.__bgControls.isLocked) window.__bgControls.unlock();
+      window.__scriptedCamera=true;
+      // Store starting camera quaternion for the 180° turn
+      window.__tunnelCamQ0=cam.quaternion.clone();
+      const q1=cam.quaternion.clone();
+      q1.multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0),Math.PI));
+      window.__tunnelCamQ1=q1;
+    }
+    window.__startTunnelTransition=startTunnelTransition;
+
+    document.getElementById('enter-tunnel')?.querySelector('button')
+      .addEventListener('click',startTunnelTransition);
+
+    // Debug: press E to force-show enter button
+    document.addEventListener('keydown',e=>{
+      if(e.code==='KeyE'){
+        const eb=document.getElementById('enter-tunnel');
+        console.log('Force showing enter button, el:',!!eb);
+        if(eb) eb.classList.add('show');
+      }
+    });
+
+    // Hair → brown
+    gk.traverse(o=>{
+      if(!o.isMesh) return;
+      if(o.name.toLowerCase().includes('hair')){
+        const mats=Array.isArray(o.material)?o.material:[o.material];
+        mats.forEach(m=>{ m.color.set(0x1a0a02); m.needsUpdate=true; });
+      }
+    });
+  },undefined,(err)=>console.error('GK GLB error:',err));
+
+  // ── EXPLOSION PARTICLES ───────────────────────────────────────
+  function spawnExplosion(pos){
+    // Screen flash
+    const fl=document.getElementById('ex-flash');
+    if(fl){ fl.className='pop'; setTimeout(()=>fl.className='fade',80); }
+
+    // Particle burst
+    const N=90;
+    const positions=new Float32Array(N*3);
+    const vels=[];
+    for(let i=0;i<N;i++){
+      positions[i*3]=pos.x; positions[i*3+1]=pos.y; positions[i*3+2]=pos.z;
+      const theta=Math.random()*Math.PI*2;
+      const phi=Math.random()*Math.PI*.9;
+      const spd=3+Math.random()*7;
+      vels.push({x:Math.sin(phi)*Math.cos(theta)*spd, y:Math.abs(Math.cos(phi))*spd+1, z:Math.sin(phi)*Math.sin(theta)*spd});
+    }
+    const geo=new THREE.BufferGeometry();
+    geo.setAttribute('position',new THREE.BufferAttribute(positions,3));
+    const colors=['#ffdd44','#ff8800','#ff4422','#ffffff'];
+    const mat=new THREE.PointsMaterial({size:.22,color:new THREE.Color(colors[Math.floor(Math.random()*colors.length)]),transparent:true,opacity:1,depthWrite:false});
+    const pts=new THREE.Points(geo,mat);
+    scene.add(pts);
+    if(!window.__explosions) window.__explosions=[];
+    window.__explosions.push({pts,vels,geo,pos:positions,t0:performance.now()});
+  }
+
+  // ── CARD RIP ──────────────────────────────────────────────────
+  function triggerCardRip(){
+    if(!cardMesh) return;
+    cardMesh.visible=false;
+    spawnExplosion(cardMesh.position);
+    // Play paper rip sound
+    try{ const a=new Audio('assets/foley_paper_rip_001.mp3'); a.volume=.9; a.play().catch(()=>{}); }catch(e){}
+
+    const pos=cardMesh.position.clone();
+    const W=2.36,H=3.42;
+    const baseTex=cardMesh.userData.cardTex||cardMesh.material.map;
+    const FLOOR=0.08; // stage surface y
+
+    // 5 pieces: [u0,u1,v0,v1, xOff,yOff, vx,vy,vz, rx,rz]
+    const defs=[
+      [0,1,   .68,1,   0,    H*.34,  (Math.random()-.5)*.8, 2.5+Math.random(), (Math.random()-.5)*.5,  (Math.random()-.5)*4, (Math.random()-.5)*3],
+      [0,.52, .32,.68, -W*.26,0,     -1.8-Math.random(),    1.8+Math.random(), (Math.random()-.5)*.6,  (Math.random()-.5)*5, (Math.random()-.5)*4],
+      [.52,1, .32,.68,  W*.26,0,      1.8+Math.random(),    1.8+Math.random(), (Math.random()-.5)*.6,  (Math.random()-.5)*5, (Math.random()-.5)*4],
+      [0,.5,  0,.32,   -W*.26,-H*.34,-1.2-Math.random(),    1.2+Math.random(), (Math.random()-.5)*.5,  (Math.random()-.5)*3, (Math.random()-.5)*3],
+      [.5,1,  0,.32,    W*.26,-H*.34, 1.2+Math.random(),    1.2+Math.random(), (Math.random()-.5)*.5,  (Math.random()-.5)*3, (Math.random()-.5)*3],
+    ];
+
+    const pieces=defs.map(([u0,u1,v0,v1,xOff,yOff,vx,vy,vz,rx,rz])=>{
+      const pw=W*(u1-u0), ph=H*(v1-v0);
+      const geo=new THREE.PlaneGeometry(pw,ph);
+      const uv=geo.attributes.uv;
+      for(let i=0;i<uv.count;i++){
+        uv.setX(i,u0+uv.getX(i)*(u1-u0));
+        uv.setY(i,v0+uv.getY(i)*(v1-v0));
+      }
+      uv.needsUpdate=true;
+      const mat=new THREE.MeshBasicMaterial({map:baseTex,transparent:true,opacity:1,side:THREE.DoubleSide});
+      const m=new THREE.Mesh(geo,mat);
+      m.position.set(pos.x+xOff, pos.y+yOff, pos.z);
+      m.rotation.set(cardMesh.rotation.x, cardMesh.rotation.y, cardMesh.rotation.z);
+      m.userData={vx,vy,vz,rx,rz,landed:false};
+      scene.add(m); return m;
+    });
+    window.__ripPieces={pieces,lastT:null};
+  }
+
+  // Exposed so Sign Him handler (outside this closure) can call it
+  window.__triggerSignHim=function(){
+    console.log('triggerSignHim called, __gk=',window.__gk,'targetZ=',window.__gkTargetZ);
+    if(window.__signTriggered) return; window.__signTriggered=true;
+    // Reset hover state so cursor doesn't stay stuck
+    rend.domElement.style.cursor='';
+    const tm=window.__btnTextMesh; if(tm&&tm.material) tm.material.emissiveIntensity=0;
+    const btn=document.getElementById('cs-btn');
+    if(btn){btn.style.opacity='0';btn.style.pointerEvents='none';}
+    if(window.__gk){
+      window.__gk.position.z=window.__gkTargetZ;
+      window.__gk.visible=true;
+      window.__gk.userData.phase='kicking';
+      window.__gk.userData.phaseT0=performance.now();
+      if(gkMixer&&window.__dropKickClip){
+        const a=gkMixer.clipAction(window.__dropKickClip);
+        a.setLoop(THREE.LoopOnce); a.clampWhenFinished=true; a.reset().play();
+      }
+    } else { console.warn('__gk not ready yet'); }
+  };
+
+  // ── RENDER LOOP ───────────────────────────────────────────────
+  let bgActive=true; const t0=performance.now();
+  window._bgStop=()=>{ bgActive=false; };
+
+  (function tick(){
+    if(!bgActive){try{rend.dispose();}catch(e){}return;}
+    requestAnimationFrame(tick);
+    const t=(performance.now()-t0)/1000;
+    podUp.intensity=3.8+Math.sin(t*1.9)*.85;
+    if(window.__glowRing&&window.__glowRing.visible){
+      if(window.__ringFadeStart){
+        const fadeP=Math.min((performance.now()-window.__ringFadeStart)/1200,1);
+        glowRingMat.opacity=fadeP*(.48+Math.sin(t*1.9)*.12);
+      }
+    }
+    mGold.emissiveIntensity=.44+Math.sin(t*1.9)*.14;
+    sideL.intensity=2.0+Math.sin(t*1.3+.9)*.45;
+    sideR.intensity=2.0+Math.sin(t*1.3+2.1)*.45;
+    bkPts.rotation.y=t*.014;
+    if(gkMixer){ gkMixer.update(t-gkPrevT); }
+    gkPrevT=t;
+    if(cardMesh){
+      if(cardMesh.userData.dropping){
+        const el=(performance.now()-cardMesh.userData.dropStartMs)/1000;
+        const dur=1.5, p=Math.min(el/dur,1);
+        let pp=p; const bo=pp<1/2.75?7.5625*pp*pp:pp<2/2.75?(pp-=1.5/2.75,7.5625*pp*pp+.75):pp<2.5/2.75?(pp-=2.25/2.75,7.5625*pp*pp+.9375):(pp-=2.625/2.75,7.5625*pp*pp+.984375);
+        cardMesh.position.y=22+(4-22)*bo+Math.sin(t*.9)*.12;
+        cardMesh.rotation.x=.12+Math.sin(p*Math.PI)*.35;
+        cardMesh.rotation.z=p<.45?Math.sin(p*Math.PI*5)*.18*(1-p*1.8):Math.sin(t*.5)*.018;
+        const op=Math.min(1,el/.25); if(cardMesh.userData.mats) cardMesh.userData.mats.forEach(m=>m.opacity=op);
+        if(!cardMesh.userData.landPlayed && el>dur*.38){ playCardLand(); cardMesh.userData.landPlayed=true; }
+        if(el>=dur){
+          cardMesh.userData.dropping=false;
+          cardMesh.userData.countingUp=true;
+          cardMesh.userData.countStart=performance.now();
+          if(window.__btnFadeIn) window.__btnFadeIn();
+        }
+      } else {
+        cardMesh.position.y=4+Math.sin(t*.9)*.12;
+        cardMesh.rotation.x=.12;
+        cardMesh.rotation.z=Math.sin(t*.5)*.018;
+      }
+      // count-up animation
+      if(cardMesh.userData.countingUp){
+        const el2=(performance.now()-cardMesh.userData.countStart)/1000;
+        const p2=Math.min(el2/1.8,1);
+        const finals=[99,68,92,86,99,84];
+        const cv2=buildCardCanvas(cardMesh.userData.photo,finals.map(v=>Math.round(v*p2)));
+        const tx=cardMesh.userData.cardTex;
+        if(tx){ tx.image=cv2; tx.needsUpdate=true; }
+        if(p2>=1){ cardMesh.userData.countingUp=false; }
+      }
+    }
+    // GK entrance + kick sequence
+    const gkG=window.__gk;
+    if(gkG&&gkG.userData.phase==='entering'){
+      const el=(performance.now()-gkG.userData.phaseT0)/1000;
+      const p=Math.min(el/1.4,1);
+      const ease=p<0.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
+      gkG.position.z=16+(gkG.userData.targetZ-16)*ease;
+      if(p>=1){
+        gkG.userData.phase='kicking';
+        gkG.userData.phaseT0=performance.now();
+        if(gkMixer&&window.__dropKickClip){
+          const a=gkMixer.clipAction(window.__dropKickClip);
+          a.setLoop(THREE.LoopOnce); a.clampWhenFinished=true; a.reset().play();
+          console.log('Playing drop kick');
+        } else { console.warn('dropKickClip not ready',!!gkMixer,!!window.__dropKickClip); }
+      }
+    }
+    if(gkG&&gkG.userData.phase==='kicking'){
+      const el=(performance.now()-gkG.userData.phaseT0)/1000;
+      if(el>0.65&&!gkG.userData.ripDone){
+        gkG.userData.ripDone=true;
+        triggerCardRip();
+        if(window.__gk) spawnExplosion(window.__gk.position.clone().add(new THREE.Vector3(0,4,2)));
+        if(window.__glowRing) window.__glowRing.visible=false;
+        try{ const a=new Audio('assets/smartsound_HUMAN_CROWD_Applause_Small_Audience_Club_Back_01.mp3'); a.volume=1; a.play().catch(()=>{}); setTimeout(()=>{a.pause();a.currentTime=0;},5000); }catch(e){}
+        // Kick impact sound
+        try{
+          const ac=new AudioContext();
+          const o=ac.createOscillator(),g=ac.createGain();
+          o.frequency.setValueAtTime(180,ac.currentTime);
+          o.frequency.exponentialRampToValueAtTime(22,ac.currentTime+.18);
+          g.gain.setValueAtTime(1.2,ac.currentTime);
+          g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+.22);
+          o.connect(g); g.connect(ac.destination); o.start(); o.stop(ac.currentTime+.22);
+          const o2=ac.createOscillator(),g2=ac.createGain();
+          o2.type='sawtooth'; o2.frequency.value=60;
+          g2.gain.setValueAtTime(.5,ac.currentTime); g2.gain.exponentialRampToValueAtTime(.001,ac.currentTime+.12);
+          o2.connect(g2); g2.connect(ac.destination); o2.start(); o2.stop(ac.currentTime+.12);
+        }catch(e){}
+      }
+    }
+    // Rip pieces physics
+    if(window.__ripPieces){
+      const rp=window.__ripPieces;
+      const dt=rp.lastT===null?0:Math.min(t-rp.lastT,.05);
+      rp.lastT=t;
+      const GRAVITY=14, FLOOR=0.08;
+      rp.pieces.forEach(m=>{
+        if(m.userData.settled) return;
+        if(m.userData.landed){
+          // Settle flat: lerp rotation toward face-up
+          m.rotation.x+=(Math.PI*.5-m.rotation.x)*.12;
+          m.rotation.z*=.88;
+          if(Math.abs(m.rotation.x-Math.PI*.5)<.01&&Math.abs(m.rotation.z)<.01){
+            m.rotation.x=Math.PI*.5; m.rotation.z=0; m.userData.settled=true;
+          }
+          return;
+        }
+        m.userData.vy-=GRAVITY*dt;
+        m.position.x+=m.userData.vx*dt;
+        m.position.y+=m.userData.vy*dt;
+        m.position.z+=m.userData.vz*dt;
+        m.rotation.x+=m.userData.rx*dt;
+        m.rotation.z+=m.userData.rz*dt;
+        m.userData.vx*=0.96; m.userData.vz*=0.96;
+        if(m.position.y<=FLOOR){
+          m.position.y=FLOOR;
+          m.userData.vy*=-0.12;
+          m.userData.vx*=0.35; m.userData.vz*=0.35;
+          m.userData.rx*=0.08; m.userData.rz*=0.08;
+          if(Math.abs(m.userData.vy)<0.04) m.userData.landed=true;
+        }
+      });
+    }
+    // Explosion particles
+    if(window.__explosions){
+      const GRAV=9.8;
+      window.__explosions=window.__explosions.filter(ex=>{
+        const age=(performance.now()-ex.t0)/1000;
+        if(age>1.4){ scene.remove(ex.pts); ex.geo.dispose(); return false; }
+        const dt2=Math.min(age*.016,.05);
+        for(let i=0;i<ex.vels.length;i++){
+          ex.vels[i].y-=GRAV*dt2;
+          ex.pos[i*3]  +=ex.vels[i].x*dt2;
+          ex.pos[i*3+1]+=ex.vels[i].y*dt2;
+          ex.pos[i*3+2]+=ex.vels[i].z*dt2;
+          if(ex.pos[i*3+1]<0.08) ex.pos[i*3+1]=0.08;
+        }
+        ex.geo.attributes.position.needsUpdate=true;
+        ex.pts.material.opacity=Math.max(0,1-age/1.4);
+        return true;
+      });
+    }
+    // ── Tunnel transition sequence ────────────────────────────────
+    if(window.__tunnelPhase){
+      const now=performance.now();
+      const dt2=Math.min((now-(window.__tunnelPrevT||now))/1000,.05);
+      window.__tunnelPrevT=now;
+      const gkG=window.__gk;
+
+      if(window.__tunnelPhase==='walking'&&gkG){
+        // Walk GK toward camera (negative Z)
+        gkG.position.z-=5*dt2;
+        gkG.position.y-=0.8*dt2;
+        // Fixed threshold: when GK has walked past z=-3 (well past camera start)
+        if(gkG.position.z<-3){
+          window.__tunnelPhase='turning';
+          window.__tunnelTurnT0=performance.now();
+          // Recapture camera quaternion fresh at turn time
+          window.__tunnelCamQ0=cam.quaternion.clone();
+          const q1=cam.quaternion.clone();
+          q1.multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0),Math.PI));
+          window.__tunnelCamQ1=q1;
+          // Hide GK and podium scene silently during spin
+          if(gkG) gkG.visible=false;
+          ['__bgModel','__btnModel','__glowRing','bkPts'].forEach(k=>{
+            if(window[k]) window[k].visible=false;
+          });
+          bkPts.visible=false;
+          if(window.__ripPieces) window.__ripPieces.pieces.forEach(p=>p.visible=false);
+        }
+      }
+
+      if(window.__tunnelPhase==='turning'){
+        // Flash white → instant camera snap → fade out
+        const fl=document.getElementById('ex-flash');
+        if(fl){ fl.className='pop'; setTimeout(()=>fl.className='fade',120); }
+        cam.quaternion.copy(window.__tunnelCamQ1);
+        window.__tunnelPhase='hallway';
+        window.__scriptedCamera=false;
+        if(window.__lightUpCorridor) window.__lightUpCorridor();
+      }
+    }
+
+    // FPS movement (skip during scripted camera)
+    // Button fade-in
+    if(window.__btnFading&&window.__btnModel){
+      const p=Math.min((performance.now()-window.__btnFadeT0)/900,1);
+      window.__btnModel.traverse(o=>{
+        if(!o.isMesh) return;
+        const mats=Array.isArray(o.material)?o.material:[o.material];
+        mats.forEach(m=>{ m.opacity=p; });
+      });
+      if(p>=1) window.__btnFading=false;
+    }
+    // Button press animation
+    if(window.__btnModel&&window.__btnPressT0){
+      const el=(performance.now()-window.__btnPressT0)/1000;
+      const dur=0.3;
+      const p=Math.min(el/dur,1);
+      const press=Math.sin(p*Math.PI)*0.18; // dip down then back
+      window.__btnModel.position.y=(window.__btnBaseY||0)-press;
+      if(p>=1) window.__btnPressT0=null;
+    }
+    // Parallax when not in FPS mode and not in hallway yet
+    if(!fpsCam.isLocked&&!window.__scriptedCamera&&window.__tunnelPhase!=='hallway'){
+      _lx+=(-_mx*1.5-_lx)*.04;
+      _ly+=(4+_my*1.5-_ly)*.04;
+      cam.lookAt(_lx,_ly,0);
+    }
+    // Hallway scroll camera + mouse look (max ±45° so can't turn back)
+    if(window.__tunnelPhase==='hallway'&&!fpsCam.isLocked){
+      const tz=window.__hallCamZ?window.__hallCamZ():-6;
+      cam.position.z+=(tz-cam.position.z)*.06;
+      cam.position.x+=(0-cam.position.x)*.06;
+      cam.position.y+=(4-cam.position.y)*.06;
+      // Mouse look: offset lookAt but clamp so camera always faces forward (-Z)
+      const lookX=Math.max(-30,Math.min(30,_mx*30));
+      const lookY=Math.max(0.5,Math.min(7,3.5+_my*3.5));
+      cam.lookAt(lookX, lookY, cam.position.z-20);
+    }
+    // WASD movement
+    if(fpsCam.isLocked&&!window.__scriptedCamera){
+      const spd=0.12;
+      const fwd=new THREE.Vector3(); cam.getWorldDirection(fwd); fwd.y=0; fwd.normalize();
+      const right=new THREE.Vector3(); right.crossVectors(fwd,new THREE.Vector3(0,1,0)).normalize();
+      if(_keys['KeyW']||_keys['ArrowUp'])    cam.position.addScaledVector(fwd,spd);
+      if(_keys['KeyS']||_keys['ArrowDown'])  cam.position.addScaledVector(fwd,-spd);
+      if(_keys['KeyA']||_keys['ArrowLeft'])  cam.position.addScaledVector(right,-spd);
+      if(_keys['KeyD']||_keys['ArrowRight']) cam.position.addScaledVector(right,spd);
+      if(_keys['Space'])     cam.position.y+=spd;
+      if(_keys['ShiftLeft']) cam.position.y-=spd;
+    }
+    composer.render();
+    // ── Door swing + label positioning ───────────────────────────
+    if(window.__tunnelPhase==='hallway'){
+      const _v=new THREE.Vector3();
+      function projectToScreen(pos3d){
+        _v.copy(pos3d); _v.project(cam);
+        return {
+          x:(_v.x*.5+.5)*innerWidth,
+          y:(-.5*_v.y+.5)*innerHeight,
+          visible:_v.z<1
+        };
+      }
+      // Active doors
+      if(window.__doorGroups) window.__doorGroups.forEach(g=>{
+        const ud=g.userData;
+        if(ud.openAngle===undefined) return;
+        // Smooth swing — slower easing (0.05) to avoid glitch
+        ud.openAngle+=(ud.targetAngle-ud.openAngle)*.05;
+        g.rotation.y=ud.openAngle;
+        // Emissive + light based on open amount
+        const t=Math.abs(ud.openAngle/(Math.PI*.5+.001));
+        if(ud.mat){ ud.mat.emissiveIntensity=t*.5; ud.mat.emissive.set(0xffd080); }
+        if(ud.mats){ ud.mats.forEach(m=>{m.emissive.set(0xffd080);m.emissiveIntensity=t*.5;}); }
+        if(ud.dLight) ud.dLight.intensity=t*4;
+        // Label — always visible, positioned above door
+        if(ud.lbl&&ud.labelPos){
+          const s=projectToScreen(ud.labelPos);
+          ud.lbl.style.left=s.x+'px';
+          ud.lbl.style.top=s.y+'px';
+          ud.lbl.style.opacity=s.visible?'1':'0';
+        }
+      });
+      // Coming soon labels
+      if(window.__csLabels) window.__csLabels.forEach(({lbl,pos})=>{
+        const s=projectToScreen(pos);
+        lbl.style.left=s.x+'px';
+        lbl.style.top=s.y+'px';
+        lbl.style.opacity=s.visible?'1':'0';
+      });
+    }
+    // Position readout
+    if(!window.__posEl){
+      window.__posEl=document.createElement('div');
+      Object.assign(window.__posEl.style,{position:'fixed',top:'10px',right:'12px',
+        background:'rgba(0,0,0,.8)',color:'#00ff88',padding:'5px 10px',borderRadius:'4px',
+        fontSize:'13px',fontFamily:'monospace',pointerEvents:'none',zIndex:'99999'});
+      document.body.appendChild(window.__posEl);
+    }
+    window.__posEl.textContent=`x:${cam.position.x.toFixed(1)} y:${cam.position.y.toFixed(1)} z:${cam.position.z.toFixed(1)}`;
+  })();
+
+  window.addEventListener('resize',()=>{
+    cam.aspect=innerWidth/innerHeight; cam.updateProjectionMatrix();
+    rend.setSize(innerWidth,innerHeight);
+    composer.setSize(innerWidth,innerHeight);
+  });
+}
+
+// ── CARD REVEAL SEQUENCE ──────────────────────────────────────────────────
+function initCardReveal(){
+  playCrowdSwell();
+  setTimeout(()=>document.getElementById('cs-card-drop').classList.add('drop'),900);
+  // Impact (drop anim ≈700ms → lands at 900+700=1600ms)
+  setTimeout(()=>{
+    playImpactBoom();
+    document.getElementById('cs-shockwave').classList.add('fire');
+    spawnImpactBurst();
+    setTimeout(()=>document.getElementById('the-card').classList.add('tiltable'),500);
+  },1600);
+  // Stats flip in one by one
+  document.querySelectorAll('.stat-item').forEach((s,i)=>{
+    setTimeout(()=>{ s.classList.add('show'); playStatTick(); countUpStat(s); },2100+i*230);
+  });
+  // Transfer banner + fanfare
+  setTimeout(()=>{ playFanfare(); },3500);
+  // Button
+  setTimeout(()=>document.getElementById('cs-btn').classList.add('show'),4000);
+}
+
+function playCrowdSwell(){
+  try{
+    const ctx=new AudioContext();
+    const buf=ctx.createBuffer(1,ctx.sampleRate*7,ctx.sampleRate);
+    const d=buf.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
+    const src=ctx.createBufferSource(); src.buffer=buf; src.loop=true;
+    const bp=ctx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=550; bp.Q.value=0.6;
+    const bp2=ctx.createBiquadFilter(); bp2.type='bandpass'; bp2.frequency.value=180; bp2.Q.value=0.9;
+    const g=ctx.createGain();
+    g.gain.setValueAtTime(0,ctx.currentTime);
+    g.gain.linearRampToValueAtTime(.28,ctx.currentTime+1.1);
+    g.gain.linearRampToValueAtTime(.52,ctx.currentTime+1.7);
+    g.gain.linearRampToValueAtTime(.32,ctx.currentTime+3.8);
+    g.gain.linearRampToValueAtTime(.14,ctx.currentTime+6);
+    g.gain.linearRampToValueAtTime(0,ctx.currentTime+7);
+    src.connect(bp); bp.connect(bp2); bp2.connect(g); g.connect(ctx.destination);
+    src.start(); setTimeout(()=>{try{src.stop();ctx.close();}catch(e){}},7500);
+  }catch(e){}
+}
+function playImpactBoom(){
+  try{
+    const ctx=new AudioContext();
+    const o=ctx.createOscillator(),g=ctx.createGain();
+    o.frequency.setValueAtTime(95,ctx.currentTime);
+    o.frequency.exponentialRampToValueAtTime(16,ctx.currentTime+.5);
+    g.gain.setValueAtTime(.95,ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.6);
+    o.connect(g); g.connect(ctx.destination); o.start(); o.stop(ctx.currentTime+.6);
+    const o2=ctx.createOscillator(),g2=ctx.createGain();
+    o2.type='sawtooth'; o2.frequency.value=280;
+    g2.gain.setValueAtTime(.18,ctx.currentTime);
+    g2.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.09);
+    o2.connect(g2); g2.connect(ctx.destination); o2.start(); o2.stop(ctx.currentTime+.09);
+  }catch(e){}
+}
+function playStatTick(){
+  try{
+    const ctx=new AudioContext(),o=ctx.createOscillator(),g=ctx.createGain();
+    o.frequency.value=880+Math.random()*220; o.type='square';
+    g.gain.setValueAtTime(.07,ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.09);
+    o.connect(g); g.connect(ctx.destination); o.start(); o.stop(ctx.currentTime+.09);
+  }catch(e){}
+}
+function playFanfare(){
+  try{
+    const ctx=new AudioContext();
+    [[523,0],[659,.13],[784,.26],[1047,.39],[1047,.55],[784,.65],[1047,.75],[1318,.9]].forEach(([f,t])=>{
+      const o=ctx.createOscillator(),g=ctx.createGain();
+      o.frequency.value=f; o.type='triangle';
+      const st=ctx.currentTime+t;
+      g.gain.setValueAtTime(0,st); g.gain.linearRampToValueAtTime(.13,st+.04);
+      g.gain.exponentialRampToValueAtTime(.001,st+.38);
+      o.connect(g); g.connect(ctx.destination); o.start(st); o.stop(st+.4);
+    });
+  }catch(e){}
+}
+function countUpStat(el){
+  const target=parseInt(el.dataset.val), numEl=el.querySelector('.sn');
+  let v=0; const inc=target/38;
+  const t=setInterval(()=>{v=Math.min(v+inc,target);numEl.textContent=Math.floor(v);if(v>=target)clearInterval(t);},16);
+}
+function spawnImpactBurst(){
+  const cols=['#ffcc44','#ff8833','#fff','#cc44ff','#44aaff','#ff4488'];
+  const drop=document.getElementById('cs-card-drop');
+  const r=drop.getBoundingClientRect();
+  const cx=r.left+r.width/2, cy=r.top+r.height/2;
+  for(let i=0;i<100;i++){
+    const p=document.createElement('div'); p.className='conf';
+    const a=Math.random()*Math.PI*2, dist=60+Math.random()*320;
+    p.style.cssText=`left:${cx}px;top:${cy}px;background:${cols[i%cols.length]};width:${3+Math.random()*9}px;height:${3+Math.random()*9}px;border-radius:${Math.random()>.5?'50%':'2px'};animation-duration:${.55+Math.random()*1}s;animation-delay:${Math.random()*.08}s;`;
+    p.style.setProperty('--tx',Math.cos(a)*dist+'px');
+    p.style.setProperty('--ty',Math.sin(a)*dist+'px');
+    document.body.appendChild(p); setTimeout(()=>p.remove(),2000);
+  }
+}
 
 // ── FIGURINE AUDIO ────────────────────────────────────────────────────────
 function playWoohoo(){
@@ -1286,6 +2942,7 @@ function spawnCardConfetti(){
 // ── CARD TILT ─────────────────────────────────────────────────────────────
 const cardEl=document.getElementById('the-card');
 cardEl.addEventListener('mousemove',e=>{
+  if(!cardEl.classList.contains('tiltable'))return;
   const r=cardEl.getBoundingClientRect();
   cardEl.style.transform=`rotateX(${(e.clientY-(r.top+r.height/2))/r.height*-16}deg) rotateY(${(e.clientX-(r.left+r.width/2))/r.width*16}deg) scale(1.04)`;
 });
@@ -1297,6 +2954,7 @@ let figStop=null; // called by launch() to shut down figurine
 function launch(){
   if(launched)return; launched=true;
   if(figStop)figStop();
+  if(window._bgStop)window._bgStop();
   ['fig-canvas','fig-hit','fig-speech-3d'].forEach(id=>{
     const el=document.getElementById(id); if(el)el.style.display='none';
   });
@@ -1310,7 +2968,10 @@ function launch(){
     },800);
   },600);
 }
-document.getElementById('cs-btn').addEventListener('click',launch);
+document.getElementById('cs-btn').addEventListener('click',function(){
+  if(window.__triggerSignHim) window.__triggerSignHim();
+  else launch(); // fallback if 3D scene not ready
+});
 
 // ══════════════════════════════════════════════════════════════════════════
 function initWorld(){
