@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Alexandros — Concept Prototype</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { overflow: hidden; background: #000; font-family: 'Segoe UI', Arial, sans-serif; }
+    canvas { display: block; }
+
+    #ui {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 10;
+      color: white;
+    }
+
+    .label-left {
+      position: absolute;
+      left: 5%;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.6rem;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: #66ff88;
+      opacity: 0.55;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+    }
+
+    .label-right {
+      position: absolute;
+      right: 5%;
+      top: 50%;
+      transform: translateY(-50%) rotate(180deg);
+      font-size: 0.6rem;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: #4499ff;
+      opacity: 0.55;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+    }
+
+    .hero {
+      position: absolute;
+      top: 38%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.2rem, 7vw, 6rem);
+      font-weight: 900;
+      letter-spacing: 14px;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, #66ff88 0%, #ffffff 50%, #4499ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+    }
+
+    .hero .sub {
+      font-size: 0.65rem;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      opacity: 0.4;
+      margin-top: 14px;
+      color: white;
+    }
+
+    .divider-line {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 1px;
+      height: 100px;
+      background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.25), transparent);
+      margin-top: 90px;
+    }
+
+    .hint {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.55rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      opacity: 0.3;
+      color: white;
+      animation: blink 3s ease-in-out infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.65; }
+    }
+
+    .badge {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 0.5rem;
+      letter-spacing: 3px;
+      opacity: 0.25;
+      text-transform: uppercase;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 5px 12px;
+      border-radius: 20px;
+      color: white;
+    }
+
+    .nav {
+      position: absolute;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 36px;
+      font-size: 0.55rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      opacity: 0.35;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+<div id="ui">
+  <div class="label-left">The Athlete</div>
+  <div class="label-right">The Developer</div>
+
+  <div class="nav">
+    <span>About</span>
+    <span>Projects</span>
+    <span>Skills</span>
+    <span>Contact</span>
+  </div>
+
+  <div class="hero">
+    <h1>Alexandros</h1>
+    <div class="sub">Goalkeeper &nbsp;·&nbsp; Developer &nbsp;·&nbsp; Thomas More Geel</div>
+  </div>
+
+  <div class="divider-line"></div>
+  <div class="hint">Move your mouse · Scroll to dive in</div>
+  <div class="badge">Concept Prototype</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script>
+  // ── SCENE SETUP ──────────────────────────────────────────────────────────
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x030308);
+  scene.fog = new THREE.Fog(0x030308, 28, 58);
+
+  const camera = new THREE.PerspectiveCamera(62, innerWidth / innerHeight, 0.1, 200);
+  camera.position.set(0, 5.5, 20);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(innerWidth, innerHeight);
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  document.body.appendChild(renderer.domElement);
+
+  // ── HELPERS ──────────────────────────────────────────────────────────────
+  function box(w, h, d, color, rx, ry, rz) {
+    const m = new THREE.Mesh(
+      new THREE.BoxGeometry(w, h, d),
+      new THREE.MeshStandardMaterial({ color, roughness: 0.7, metalness: 0.1 })
+    );
+    if (rx !== undefined) { m.rotation.x = rx; m.rotation.y = ry; m.rotation.z = rz; }
+    m.castShadow = true; m.receiveShadow = true;
+    return m;
+  }
+
+  function cylinder(rt, rb, h, color) {
+    const m = new THREE.Mesh(
+      new THREE.CylinderGeometry(rt, rb, h, 14),
+      new THREE.MeshStandardMaterial({ color, roughness: 0.4, metalness: 0.3 })
+    );
+    m.castShadow = true;
+    return m;
+  }
+
+  function plane(w, d, color, opacity = 1) {
+    const mat = new THREE.MeshLambertMaterial({ color });
+    if (opacity < 1) { mat.transparent = true; mat.opacity = opacity; }
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(w, d), mat);
+    m.rotation.x = -Math.PI / 2;
+    m.receiveShadow = true;
+    return m;
+  }
+
+  // ── FOOTBALL PITCH (LEFT, x < 0) ─────────────────────────────────────────
+  const PITCH_CX = -14;
+
+  // Grass base
+  const grass = plane(28, 54, 0x0c380c);
+  grass.position.set(PITCH_CX, 0, 0);
+  scene.add(grass);
+
+  // Alternating stripes
+  for (let i = 0; i < 6; i++) {
+    const stripe = plane(26, 4.5, 0x0e420e, 0.6);
+    stripe.position.set(PITCH_CX, 0.001, -13.5 + i * 4.5);
+    scene.add(stripe);
+  }
+
+  // White line material
+  const wLine = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.45 });
+
+  // Boundary
+  [[-1.2, 27, 0.07], [-26.8, 27, 0.07]].forEach(([x, h, w]) => {
+    const l = new THREE.Mesh(new THREE.PlaneGeometry(w, h), wLine);
+    l.rotation.x = -Math.PI / 2;
+    l.position.set(x, 0.002, 0);
+    scene.add(l);
+  });
+  [-13.4, 13.4].forEach(z => {
+    const l = new THREE.Mesh(new THREE.PlaneGeometry(25.6, 0.07), wLine);
+    l.rotation.x = -Math.PI / 2;
+    l.position.set(PITCH_CX, 0.002, z);
+    scene.add(l);
+  });
+
+  // Center circle
+  const circlePoints = [];
+  for (let i = 0; i <= 64; i++) {
+    const a = (i / 64) * Math.PI * 2;
+    circlePoints.push(new THREE.Vector3(Math.cos(a) * 4, 0.003, Math.sin(a) * 4));
+  }
+  const circleGeo = new THREE.BufferGeometry().setFromPoints(circlePoints);
+  const circleLine = new THREE.Line(circleGeo, new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.35 }));
+  circleLine.position.set(PITCH_CX, 0, 0);
+  scene.add(circleLine);
+
+  // Center spot
+  const spot = new THREE.Mesh(new THREE.CircleGeometry(0.12, 16), wLine);
+  spot.rotation.x = -Math.PI / 2;
+  spot.position.set(PITCH_CX, 0.003, 0);
+  scene.add(spot);
+
+  // Goal posts
+  const postMat = new THREE.MeshStandardMaterial({ color: 0xfafafa, roughness: 0.2, metalness: 0.6 });
+  function addGoal(z) {
+    const postH = 2.44, postW = 7.32;
+    [-postW/2, postW/2].forEach(dx => {
+      const p = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, postH, 12), postMat);
+      p.position.set(PITCH_CX + dx, postH/2, z);
+      p.castShadow = true;
+      scene.add(p);
+    });
+    const cross = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, postW + 0.14, 12), postMat);
+    cross.rotation.z = Math.PI / 2;
+    cross.position.set(PITCH_CX, postH, z);
+    cross.castShadow = true;
+    scene.add(cross);
+
+    // Net lines (simplified)
+    for (let nx = -3.5; nx <= 3.5; nx += 1.1) {
+      const netLine = new THREE.Mesh(new THREE.BoxGeometry(0.02, postH, 0.02),
+        new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.15 }));
+      netLine.position.set(PITCH_CX + nx, postH / 2, z + (z > 0 ? 0.6 : -0.6));
+      scene.add(netLine);
+    }
+  }
+  addGoal(-13);
+  addGoal(13);
+
+  // Football (sphere)
+  const ball = new THREE.Mesh(
+    new THREE.SphereGeometry(0.22, 20, 20),
+    new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.6 })
+  );
+  ball.position.set(PITCH_CX, 0.22, 2);
+  ball.castShadow = true;
+  scene.add(ball);
+
+  // Black patches on ball (pentagons approximated)
+  [0, 1.2, 2.4, 3.6, 4.8].forEach(angle => {
+    const patch = new THREE.Mesh(
+      new THREE.SphereGeometry(0.09, 8, 8, angle, 0.6, angle, 0.6),
+      new THREE.MeshStandardMaterial({ color: 0x111111 })
+    );
+    patch.position.copy(ball.position);
+    scene.add(patch);
+  });
+
+  // Floodlights
+  const fl1 = new THREE.SpotLight(0xfff8e0, 2.5, 70, Math.PI / 6, 0.4);
+  fl1.position.set(-3, 22, -12);
+  fl1.target.position.set(PITCH_CX, 0, 0);
+  fl1.castShadow = true;
+  scene.add(fl1); scene.add(fl1.target);
+
+  const fl2 = new THREE.SpotLight(0xfff8e0, 2, 70, Math.PI / 6, 0.4);
+  fl2.position.set(-25, 20, 10);
+  fl2.target.position.set(PITCH_CX, 0, 0);
+  scene.add(fl2); scene.add(fl2.target);
+
+  // Green pitch ambient
+  const pitchAmbient = new THREE.PointLight(0x1a5c1a, 1.2, 40);
+  pitchAmbient.position.set(PITCH_CX, 4, 0);
+  scene.add(pitchAmbient);
+
+  // Pitch particle sparkles (crowd/atmosphere)
+  const pitchParticleGeo = new THREE.BufferGeometry();
+  const pp = new Float32Array(300 * 3);
+  for (let i = 0; i < 300; i++) {
+    pp[i*3]   = PITCH_CX + (Math.random() - 0.5) * 26;
+    pp[i*3+1] = 0.5 + Math.random() * 14;
+    pp[i*3+2] = (Math.random() - 0.5) * 30;
+  }
+  pitchParticleGeo.setAttribute('position', new THREE.BufferAttribute(pp, 3));
+  const pitchParticles = new THREE.Points(pitchParticleGeo,
+    new THREE.PointsMaterial({ color: 0x88ffaa, size: 0.07, transparent: true, opacity: 0.4 }));
+  scene.add(pitchParticles);
+
+  // ── DIVIDER ───────────────────────────────────────────────────────────────
+  // Vertical glow beam at x=0
+  const beamMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.08, side: THREE.DoubleSide });
+  const beam = new THREE.Mesh(new THREE.PlaneGeometry(0.05, 18), beamMat);
+  beam.position.set(0, 9, 0);
+  scene.add(beam);
+
+  const groundDivider = new THREE.Mesh(new THREE.PlaneGeometry(0.05, 54),
+    new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.18 }));
+  groundDivider.rotation.x = -Math.PI / 2;
+  groundDivider.rotation.z = Math.PI / 2;
+  groundDivider.position.set(0, 0.003, 0);
+  scene.add(groundDivider);
+
+  // Divider light
+  const divLight = new THREE.PointLight(0xffffff, 0.6, 8);
+  divLight.position.set(0, 2, 3);
+  scene.add(divLight);
+
+  // ── CODE LAB (RIGHT, x > 0) ───────────────────────────────────────────────
+  const LAB_CX = 14;
+
+  // Dark floor
+  const labFloor = plane(28, 54, 0x07070f);
+  labFloor.position.set(LAB_CX, 0, 0);
+  scene.add(labFloor);
+
+  // Grid on floor
+  const grid = new THREE.GridHelper(28, 20, 0x0e0e2a, 0x0e0e2a);
+  grid.position.set(LAB_CX, 0.008, 0);
+  scene.add(grid);
+
+  // Main desk
+  const deskColor = 0x10101e;
+  const desk = box(6.5, 0.1, 2.6, deskColor);
+  desk.position.set(LAB_CX - 1, 0.88, 0.8);
+  scene.add(desk);
+
+  // Desk legs
+  [[2.8, 1.1], [2.8, -0.4], [-2.8, 1.1], [-2.8, -0.4]].forEach(([dx, dz]) => {
+    const leg = box(0.08, 0.88, 0.08, deskColor);
+    leg.position.set(LAB_CX - 1 + dx, 0.44, 0.8 + dz);
+    scene.add(leg);
+  });
+
+  // Main monitor
+  const monColor = 0x0a0a16;
+  const monFrame = box(3.4, 2.0, 0.1, monColor);
+  monFrame.position.set(LAB_CX - 1, 2.1, -0.3);
+  scene.add(monFrame);
+
+  // Screen surface
+  const screenMesh = new THREE.Mesh(
+    new THREE.PlaneGeometry(3.1, 1.78),
+    new THREE.MeshBasicMaterial({ color: 0x001a66 })
+  );
+  screenMesh.position.set(LAB_CX - 1, 2.1, -0.24);
+  scene.add(screenMesh);
+
+  // Code lines on screen
+  const codeMats = [0x00ff88, 0xff8833, 0xffffff, 0x4499ff, 0x00ff88, 0xffcc00];
+  const indents = [0, 0.3, 0.6, 0.3, 0, 0.3, 0.6, 0.6, 0.3];
+  for (let i = 0; i < 9; i++) {
+    const w = 0.4 + Math.random() * 1.8;
+    const indent = indents[i] || 0;
+    const cLine = new THREE.Mesh(
+      new THREE.PlaneGeometry(w, 0.05),
+      new THREE.MeshBasicMaterial({ color: codeMats[i % codeMats.length] })
+    );
+    cLine.position.set(LAB_CX - 1 - 1.4 + indent + w/2, 2.68 - i * 0.17, -0.23);
+    scene.add(cLine);
+  }
+
+  // Monitor stand
+  const mStand = cylinder(0.07, 0.14, 0.55, monColor);
+  mStand.position.set(LAB_CX - 1, 0.95, -0.3);
+  scene.add(mStand);
+
+  // Screen glow light
+  const screenGlow = new THREE.PointLight(0x2255ff, 4, 12);
+  screenGlow.position.set(LAB_CX - 1, 2.1, 1.5);
+  scene.add(screenGlow);
+
+  // Second monitor (side, angled)
+  const mon2 = box(2.4, 1.55, 0.09, monColor);
+  mon2.position.set(LAB_CX + 2.2, 1.9, -0.3);
+  mon2.rotation.y = -0.35;
+  scene.add(mon2);
+
+  const screen2 = new THREE.Mesh(
+    new THREE.PlaneGeometry(2.2, 1.38),
+    new THREE.MeshBasicMaterial({ color: 0x000a22 })
+  );
+  screen2.position.set(LAB_CX + 2.15, 1.9, -0.24);
+  screen2.rotation.y = -0.35;
+  scene.add(screen2);
+
+  // Side screen glow
+  const screenGlow2 = new THREE.PointLight(0x1133cc, 2, 8);
+  screenGlow2.position.set(LAB_CX + 2.5, 2, 1);
+  scene.add(screenGlow2);
+
+  // Keyboard
+  const keyboard = box(2.2, 0.04, 0.7, 0x0d0d1c);
+  keyboard.position.set(LAB_CX - 1, 0.94, 1.3);
+  scene.add(keyboard);
+
+  // Coffee mug
+  const mug = cylinder(0.14, 0.12, 0.28, 0x1a1a3a);
+  mug.position.set(LAB_CX + 1.4, 0.97, 1.3);
+  scene.add(mug);
+
+  // Bookshelf on the wall
+  const shelf = box(3, 0.08, 0.6, 0x12121f);
+  shelf.position.set(LAB_CX + 4, 2.2, -6);
+  scene.add(shelf);
+  [0, 1.2].forEach(shelfY => {
+    const shelf2 = box(3, 0.08, 0.6, 0x12121f);
+    shelf2.position.set(LAB_CX + 4, 2.2 + shelfY, -6);
+    scene.add(shelf2);
+  });
+
+  // Books on shelf
+  const bookColors = [0x8833aa, 0xaa3322, 0x2255aa, 0x229944, 0xaa7722];
+  bookColors.forEach((c, i) => {
+    const book = box(0.18, 0.4 + Math.random() * 0.3, 0.5, c);
+    book.position.set(LAB_CX + 3.2 + i * 0.22, 2.45, -6);
+    scene.add(book);
+  });
+
+  // Lab spotlight
+  const labSpot = new THREE.SpotLight(0x4466ff, 1.8, 50, Math.PI / 5, 0.5);
+  labSpot.position.set(LAB_CX + 5, 18, -5);
+  labSpot.target.position.set(LAB_CX, 0, 0);
+  labSpot.castShadow = true;
+  scene.add(labSpot); scene.add(labSpot.target);
+
+  const labAmbient = new THREE.PointLight(0x1122bb, 1.5, 35);
+  labAmbient.position.set(LAB_CX, 5, 0);
+  scene.add(labAmbient);
+
+  // Lab floating code particles (blue)
+  const labParticleGeo = new THREE.BufferGeometry();
+  const lp = new Float32Array(300 * 3);
+  for (let i = 0; i < 300; i++) {
+    lp[i*3]   = 2 + Math.random() * 26;
+    lp[i*3+1] = 0.5 + Math.random() * 14;
+    lp[i*3+2] = (Math.random() - 0.5) * 30;
+  }
+  labParticleGeo.setAttribute('position', new THREE.BufferAttribute(lp, 3));
+  const labParticles = new THREE.Points(labParticleGeo,
+    new THREE.PointsMaterial({ color: 0x3366ff, size: 0.07, transparent: true, opacity: 0.45 }));
+  scene.add(labParticles);
+
+  // ── GLOBAL LIGHTS ─────────────────────────────────────────────────────────
+  scene.add(new THREE.AmbientLight(0x111111, 1));
+
+  // ── MOUSE + SCROLL ────────────────────────────────────────────────────────
+  let mx = 0, my = 0, tx = 0, ty = 0;
+  let scrollDepth = 0, targetScroll = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = (e.clientX / innerWidth  - 0.5) * 2;
+    my = (e.clientY / innerHeight - 0.5) * 2;
+  });
+
+  window.addEventListener('wheel', e => {
+    targetScroll = Math.max(0, Math.min(targetScroll + e.deltaY * 0.01, 14));
+  });
+
+  window.addEventListener('resize', () => {
+    camera.aspect = innerWidth / innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(innerWidth, innerHeight);
+  });
+
+  // ── ANIMATE ───────────────────────────────────────────────────────────────
+  const clock = new THREE.Clock();
+
+  function animate() {
+    requestAnimationFrame(animate);
+    const t = clock.getElapsedTime();
+
+    // Smooth mouse parallax
+    tx += (mx - tx) * 0.035;
+    ty += (my - ty) * 0.035;
+    scrollDepth += (targetScroll - scrollDepth) * 0.06;
+
+    // Camera movement
+    camera.position.x = tx * 5;
+    camera.position.y = 5.5 - ty * 1.8 - scrollDepth * 0.25;
+    camera.position.z = 20 - scrollDepth;
+    camera.lookAt(tx * 0.8, 1.8, -scrollDepth * 0.4);
+
+    // Screen glow pulse
+    screenGlow.intensity  = 3.5 + Math.sin(t * 2.2) * 1;
+    screenGlow2.intensity = 1.8 + Math.sin(t * 1.7 + 1) * 0.6;
+    divLight.intensity    = 0.5 + Math.sin(t * 0.9) * 0.2;
+
+    // Ball subtle roll
+    ball.rotation.z = Math.sin(t * 0.5) * 0.12;
+
+    // Particle drift
+    pitchParticles.rotation.y =  t * 0.008;
+    labParticles.rotation.y   = -t * 0.01;
+
+    renderer.render(scene, camera);
+  }
+
+  animate();
+</script>
+</body>
+</html>

@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alexandros — Portfolio</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:#000; color:#fff; font-family:'Segoe UI',Arial,sans-serif; overflow:hidden; }
+
+    /* ── SELECT SCREEN ── */
+    #sel {
+      position:fixed; inset:0; z-index:100;
+      background:radial-gradient(ellipse at 50% 65%, #0d0d22 0%, #000 100%);
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      transition: opacity 1s ease, transform 1s ease;
+    }
+    #sel.out { opacity:0; transform:scale(1.06); pointer-events:none; }
+
+    #sel::before {
+      content:''; position:absolute; inset:0; pointer-events:none;
+      background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.07) 3px,rgba(0,0,0,0.07) 4px);
+    }
+
+    .cs-title {
+      font-size:.6rem; letter-spacing:10px; text-transform:uppercase;
+      color:#ffcc44; opacity:0; margin-bottom:32px; z-index:1;
+      animation: up .8s ease .2s forwards;
+    }
+
+    /* FIFA card */
+    .card-outer { perspective:900px; opacity:0; z-index:1; animation: up 1s cubic-bezier(.34,1.56,.64,1) .5s forwards; }
+
+    .card {
+      width:238px; height:348px; border-radius:14px; position:relative;
+      overflow:hidden; cursor:pointer;
+      background:linear-gradient(155deg,#b8861e,#f5d060,#c89a22,#f0c840,#9a7018,#e8c038);
+      box-shadow:0 0 50px rgba(255,200,50,.25), 0 20px 60px rgba(0,0,0,.9);
+      transition:transform .2s, box-shadow .2s;
+    }
+    .card:hover { transform:rotateY(6deg) rotateX(-3deg) scale(1.04); box-shadow:0 0 80px rgba(255,200,50,.45),0 30px 70px rgba(0,0,0,.95); }
+    .card::before {
+      content:''; position:absolute; inset:0; pointer-events:none;
+      background:repeating-linear-gradient(55deg,transparent,transparent 9px,rgba(255,255,255,.04) 9px,rgba(255,255,255,.04) 10px);
+    }
+    .card::after {
+      content:''; position:absolute; top:0; left:-80%; width:60%; height:100%; pointer-events:none;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);
+      transform:skewX(-15deg); animation:sheen 5s ease-in-out infinite;
+    }
+    @keyframes sheen { 0%,40%{left:-80%} 70%,100%{left:160%} }
+
+    .c-top { position:absolute; top:14px; left:16px; display:flex; flex-direction:column; align-items:center; gap:2px; }
+    .c-rating { font-size:2.8rem; font-weight:900; color:#1a0e00; line-height:1; text-shadow:0 1px 0 rgba(255,255,255,.3); }
+    .c-pos { font-size:.65rem; font-weight:800; letter-spacing:1px; color:#1a0e00; opacity:.8; }
+
+    .c-flag {
+      position:absolute; top:14px; right:16px; width:30px; height:20px;
+      border-radius:3px; overflow:hidden; box-shadow:0 2px 5px rgba(0,0,0,.4);
+      background:repeating-linear-gradient(to bottom,#005baa 0,#005baa 22%,#fff 22%,#fff 44%,#005baa 44%,#005baa 66%,#fff 66%,#fff 88%,#005baa 88%,#005baa 100%);
+    }
+
+    .c-photo {
+      position:absolute; top:48px; left:50%; transform:translateX(-50%);
+      width:148px; height:148px; display:flex; align-items:flex-end; justify-content:center;
+    }
+    .c-sil {
+      width:120px; height:130px; border-radius:50% 50% 30% 30%;
+      background:linear-gradient(180deg,rgba(0,0,0,.15),rgba(0,0,0,.35));
+      display:flex; align-items:center; justify-content:center;
+      font-size:3.5rem; filter:drop-shadow(0 4px 10px rgba(0,0,0,.4));
+    }
+
+    .c-name {
+      position:absolute; bottom:98px; left:0; right:0; text-align:center;
+      font-size:1rem; font-weight:900; letter-spacing:3px; text-transform:uppercase;
+      color:#1a0e00; text-shadow:0 1px 0 rgba(255,255,255,.3);
+    }
+    .c-div { position:absolute; bottom:92px; left:16px; right:16px; height:1px; background:rgba(0,0,0,.2); }
+
+    .c-stats {
+      position:absolute; bottom:14px; left:0; right:0;
+      display:flex; justify-content:center; gap:18px; padding:0 18px;
+    }
+    .sc { display:flex; flex-direction:column; gap:4px; }
+    .st { display:flex; align-items:center; gap:6px; }
+    .sn { font-size:.72rem; font-weight:900; color:#1a0e00; min-width:18px; }
+    .sl { font-size:.5rem; font-weight:800; letter-spacing:.5px; color:rgba(0,0,0,.55); text-transform:uppercase; }
+
+    .cs-btn {
+      margin-top:34px; padding:13px 50px; background:transparent; z-index:1;
+      border:1px solid rgba(255,200,50,.4); color:#ffcc44; font-size:.6rem;
+      letter-spacing:7px; text-transform:uppercase; cursor:pointer; border-radius:2px;
+      transition:all .25s; opacity:0; animation:up .8s ease 1.1s forwards;
+    }
+    .cs-btn:hover { background:rgba(255,200,50,.12); border-color:#ffcc44; }
+
+    .spark {
+      position:absolute; width:2px; height:2px; background:#ffcc44; border-radius:50%;
+      opacity:0; animation:sp linear infinite; z-index:0;
+    }
+    @keyframes sp { 0%{opacity:0;transform:translateY(0)} 15%{opacity:.7} 85%{opacity:.2} 100%{opacity:0;transform:translateY(-80px)} }
+    @keyframes up { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+
+    /* ── WORLD SCREEN ── */
+    #world {
+      position:fixed; inset:0;
+      opacity:0; pointer-events:none;
+      transition:opacity 1.2s ease;
+    }
+    #world.on { opacity:1; pointer-events:all; }
+    #world canvas { position:absolute; top:0; left:0; width:100%!important; height:100%!important; display:block; }
+
+    /* HUD */
+    #hud { position:fixed; inset:0; pointer-events:none; z-index:20; }
+
+    .ch {
+      position:absolute; left:50%; top:22%;
+      transform:translateX(-50%);
+      text-align:center; opacity:0;
+      transition:opacity .5s;
+      white-space:nowrap; pointer-events:none;
+    }
+    .ch h2 {
+      font-size:clamp(1.5rem,4.5vw,3.8rem); font-weight:900;
+      letter-spacing:8px; text-transform:uppercase; line-height:1.1;
+    }
+    .ch p { font-size:.62rem; letter-spacing:5px; text-transform:uppercase; opacity:.45; margin-top:10px; }
+
+    .gg { background:linear-gradient(90deg,#66ff88,#ccffdd); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    .gb { background:linear-gradient(90deg,#aaccff,#4499ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    .gd { background:linear-gradient(90deg,#ffcc44,#ffe88a); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+
+    .tl {
+      position:absolute; text-align:center; font-size:.5rem;
+      letter-spacing:3px; text-transform:uppercase;
+      color:#ffcc44; opacity:0; transition:opacity .4s;
+      pointer-events:none; white-space:nowrap;
+    }
+
+    #hint {
+      position:absolute; bottom:52px; left:50%; transform:translateX(-50%);
+      font-size:.55rem; letter-spacing:5px; text-transform:uppercase;
+      color:white; opacity:.35; animation:blink 2.5s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:.35} 50%{opacity:.75} }
+
+    #pbar { position:absolute; bottom:36px; left:50%; transform:translateX(-50%); width:180px; height:1.5px; background:rgba(255,255,255,.08); border-radius:1px; }
+    #pfill { height:100%; width:0; background:linear-gradient(90deg,#66ff88,#fff,#4499ff); border-radius:1px; transition:width .08s; }
+
+    #dots { position:absolute; right:24px; top:50%; transform:translateY(-50%); display:flex; flex-direction:column; gap:10px; }
+    .dot { width:5px; height:5px; border-radius:50%; background:rgba(255,255,255,.22); transition:background .3s,transform .3s; }
+    .dot.on { background:#ffcc44; transform:scale(1.6); }
+
+    #dbg { position:absolute; top:14px; left:14px; font-size:.5rem; letter-spacing:2px; color:#ffcc44; opacity:.35; }
+  </style>
+</head>
+<body>
+
+<!-- SELECT SCREEN -->
+<div id="sel">
+  <div class="cs-title">Choose Your Player</div>
+  <div class="card-outer">
+    <div class="card" id="card">
+      <div class="c-top">
+        <div class="c-rating">94</div>
+        <div class="c-pos">GK · DEV</div>
+      </div>
+      <div class="c-flag"></div>
+      <div class="c-photo"><div class="c-sil">🧤</div></div>
+      <div class="c-name">Alexandros</div>
+      <div class="c-div"></div>
+      <div class="c-stats">
+        <div class="sc">
+          <div class="st"><span class="sn">90</span><span class="sl">HTML</span></div>
+          <div class="st"><span class="sn">88</span><span class="sl">CSS</span></div>
+          <div class="st"><span class="sn">84</span><span class="sl">JS</span></div>
+        </div>
+        <div class="sc">
+          <div class="st"><span class="sn">82</span><span class="sl">PHP</span></div>
+          <div class="st"><span class="sn">80</span><span class="sl">Python</span></div>
+          <div class="st"><span class="sn">95</span><span class="sl">GK</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button class="cs-btn" id="csbtn">▶ &nbsp; Select Player</button>
+</div>
+
+<!-- WORLD -->
+<div id="world">
+  <div id="hud">
+    <div class="ch" id="c0"><h2>Alexandros Giorginis</h2><p>Goalkeeper · Developer · Thomas More Geel</p></div>
+    <div class="ch" id="c1"><h2 class="gg">The Athlete</h2><p>12 years as a goalkeeper · 4 languages · 2 countries</p></div>
+    <div class="ch" id="c2"><h2 class="gb">The Developer</h2><p>Applied Computer Science · Thomas More · Geel</p></div>
+    <div class="ch" id="c3" style="top:35%;"><h2 style="font-size:clamp(1.1rem,2.8vw,2.4rem);letter-spacing:4px;line-height:1.5">"I don't just build websites.<br>I build experiences."</h2><p>Full-stack · AI · Web Development</p></div>
+    <div class="ch" id="c4"><h2 class="gd">My Trophies</h2><p>Four projects · Hover to explore</p></div>
+
+    <div class="tl" id="tl0">EduQuest</div>
+    <div class="tl" id="tl1">CampusBridge</div>
+    <div class="tl" id="tl2">Football FC</div>
+    <div class="tl" id="tl3">AscendHub</div>
+
+    <div id="dots">
+      <div class="dot on" id="d0"></div>
+      <div class="dot" id="d1"></div>
+      <div class="dot" id="d2"></div>
+      <div class="dot" id="d3"></div>
+      <div class="dot" id="d4"></div>
+    </div>
+    <div id="hint">↓ &nbsp; Scroll to play &nbsp; ↓</div>
+    <div id="pbar"><div id="pfill"></div></div>
+    <div id="dbg">SCROLL 0 / 100</div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script>
+// ── SPARKS ───────────────────────────────────────────────────────────────
+for(let i=0;i<50;i++){
+  const s=document.createElement('div');
+  s.className='spark';
+  s.style.cssText=`left:${Math.random()*100}%;top:${40+Math.random()*55}%;animation-duration:${3+Math.random()*5}s;animation-delay:${Math.random()*5}s;`;
+  document.getElementById('sel').appendChild(s);
+}
+
+// ── CARD TILT ─────────────────────────────────────────────────────────────
+const cardEl=document.getElementById('card');
+cardEl.addEventListener('mousemove',e=>{
+  const r=cardEl.getBoundingClientRect();
+  const rx=(e.clientY-(r.top+r.height/2))/r.height*-16;
+  const ry=(e.clientX-(r.left+r.width/2))/r.width*16;
+  cardEl.style.transform=`rotateX(${rx}deg) rotateY(${ry}deg) scale(1.04)`;
+});
+cardEl.addEventListener('mouseleave',()=>{ cardEl.style.transform=''; });
+
+// ── LAUNCH ────────────────────────────────────────────────────────────────
+let launched=false;
+function launch(){
+  if(launched)return; launched=true;
+  document.getElementById('sel').classList.add('out');
+  setTimeout(()=>{
+    document.getElementById('sel').style.display='none';
+    document.getElementById('world').classList.add('on');
+    try{ initWorld(); }
+    catch(err){
+      document.getElementById('dbg').textContent='ERROR: '+err.message;
+      document.getElementById('dbg').style.opacity=1;
+    }
+  },1000);
+}
+document.getElementById('csbtn').addEventListener('click',launch);
+cardEl.addEventListener('dblclick',launch);
+
+// ── 3D WORLD ─────────────────────────────────────────────────────────────
+function initWorld(){
+
+  // Scene
+  const scene=new THREE.Scene();
+  scene.background=new THREE.Color(0x040410);
+  scene.fog=new THREE.Fog(0x040410, 40, 80);
+
+  // Camera
+  const W=window.innerWidth, H=window.innerHeight;
+  const cam=new THREE.PerspectiveCamera(62,W/H,0.1,200);
+  cam.position.set(0,8,24);
+  cam.lookAt(0,0,0);
+
+  // Renderer — append to body so it's not affected by #world's CSS quirks
+  const renderer=new THREE.WebGLRenderer({antialias:true});
+  renderer.setSize(W,H);
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.shadowMap.enabled=true;
+  // Insert canvas before HUD
+  const worldEl=document.getElementById('world');
+  worldEl.insertBefore(renderer.domElement,worldEl.firstChild);
+
+  // Global lights
+  scene.add(new THREE.AmbientLight(0xffffff,0.55));
+  const sun=new THREE.DirectionalLight(0xfff5dd,1.2);
+  sun.position.set(10,20,10);
+  scene.add(sun);
+
+  // ══ ZONE A — FOOTBALL PITCH  (z = 0 centre) ══════════════════════════
+  const ZA=0;
+
+  // Grass floor
+  scene.add(hPlane(36,58,0x0c3a0c,0,0,ZA));
+
+  // Stripes
+  for(let i=0;i<7;i++) scene.add(hPlane(34,4.2,0x0f4510,0,0.001,ZA-14.7+i*4.2,0.55));
+
+  // White lines (pitch boundary, halfway)
+  [[36,.08,0,ZA-15],[36,.08,0,ZA+15],[.08,30,-17,ZA],[.08,30,17,ZA],[36,.08,0,ZA]].forEach(([w,d,x,z])=>{
+    const m=new THREE.Mesh(new THREE.PlaneGeometry(w,d),new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.4}));
+    m.rotation.x=-Math.PI/2; m.position.set(x,.002,z); scene.add(m);
+  });
+
+  // Centre circle
+  const cp=[];
+  for(let i=0;i<=64;i++){ const a=i/64*Math.PI*2; cp.push(new THREE.Vector3(Math.cos(a)*4.5,.003,Math.sin(a)*4.5)); }
+  const cl=new THREE.Line(new THREE.BufferGeometry().setFromPoints(cp),new THREE.LineBasicMaterial({color:0xffffff,transparent:true,opacity:.35}));
+  cl.position.z=ZA; scene.add(cl);
+
+  // Goals
+  goal(scene,0,ZA-14.5);
+  goal(scene,0,ZA+14.5);
+
+  // Floodlight towers
+  [[-18,-13],[18,-13],[-18,13],[18,13]].forEach(([x,z])=>{
+    // Pole
+    const pole=new THREE.Mesh(new THREE.CylinderGeometry(.12,.18,18,10),new THREE.MeshStandardMaterial({color:0x555566}));
+    pole.position.set(x,9,z); scene.add(pole);
+    // Light
+    const sl=new THREE.SpotLight(0xfff5cc,2.5,90,Math.PI/5,.4);
+    sl.position.set(x,18,z);
+    sl.target.position.set(0,0,ZA);
+    scene.add(sl); scene.add(sl.target);
+  });
+
+  // Green tint
+  const gL=new THREE.PointLight(0x1a5a1a,1.5,55); gL.position.set(0,8,ZA); scene.add(gL);
+
+  // Ball
+  const ball=new THREE.Mesh(new THREE.SphereGeometry(.22,24,24),new THREE.MeshStandardMaterial({color:0xf8f8f8,roughness:.5}));
+  ball.position.set(0,.22,ZA+2); ball.castShadow=true; scene.add(ball);
+
+  // Pitch particles
+  const pitchP=particles(450,38,18,54,0,ZA-27,0xaaffcc,.07,.38);
+  scene.add(pitchP);
+
+
+  // ══ ZONE B — CODE LAB  (z = -50) ══════════════════════════════════════
+  const ZB=-50;
+
+  scene.add(hPlane(36,56,0x07070f,0,0,ZB));
+
+  const gr=new THREE.GridHelper(36,22,0x0d0d2a,0x0d0d2a);
+  gr.position.set(0,.01,ZB); scene.add(gr);
+
+  // Desk
+  const dm=new THREE.MeshStandardMaterial({color:0x10101e,roughness:.8});
+  const desk=new THREE.Mesh(new THREE.BoxGeometry(7.5,.1,2.8),dm);
+  desk.position.set(-.5,.88,ZB+2); scene.add(desk);
+  [[-3.2,1],[-3.2,-.3],[3.2,1],[3.2,-.3]].forEach(([dx,dz])=>{
+    const leg=new THREE.Mesh(new THREE.BoxGeometry(.08,.88,.08),dm);
+    leg.position.set(-.5+dx,.44,ZB+2+dz); scene.add(leg);
+  });
+
+  // Monitor
+  const mm=new THREE.MeshStandardMaterial({color:0x0a0a16});
+  const mon=new THREE.Mesh(new THREE.BoxGeometry(3.6,2.1,.1),mm);
+  mon.position.set(-.5,2.1,ZB+.9); scene.add(mon);
+
+  const scr=new THREE.Mesh(new THREE.PlaneGeometry(3.3,1.87),new THREE.MeshBasicMaterial({color:0x001055}));
+  scr.position.set(-.5,2.1,ZB+.97); scene.add(scr);
+
+  // Code lines
+  [[0x00ff88],[0xff8833],[0x4499ff],[0xffcc00],[0xffffff],[0x00ff88],[0x4499ff],[0xff8833],[0xffcc00],[0xffffff]].forEach(([c],i)=>{
+    const w=.4+Math.random()*1.9, ind=[0,.3,.6][i%3];
+    const ln=new THREE.Mesh(new THREE.PlaneGeometry(w,.052),new THREE.MeshBasicMaterial({color:c}));
+    ln.position.set(-.5-1.55+ind+w/2,2.67-i*.165,ZB+.98); scene.add(ln);
+  });
+
+  // Stand + glow
+  const mstand=new THREE.Mesh(new THREE.CylinderGeometry(.08,.14,.6,12),mm); mstand.position.set(-.5,.94,ZB+.9); scene.add(mstand);
+  const sg=new THREE.PointLight(0x2255ff,5,14); sg.position.set(-.5,2.1,ZB+2.5); scene.add(sg);
+
+  // Side monitor
+  const mon2=new THREE.Mesh(new THREE.BoxGeometry(2.4,1.55,.09),mm);
+  mon2.position.set(3,1.88,ZB+.9); mon2.rotation.y=-.3; scene.add(mon2);
+  const scr2=new THREE.Mesh(new THREE.PlaneGeometry(2.18,1.4),new THREE.MeshBasicMaterial({color:0x000a22}));
+  scr2.position.set(2.95,1.88,ZB+.97); scr2.rotation.y=-.3; scene.add(scr2);
+  const sg2=new THREE.PointLight(0x1133cc,2.5,9); sg2.position.set(3,1.9,ZB+2); scene.add(sg2);
+
+  // Lab ambient + particles
+  const labL=new THREE.PointLight(0x1122bb,2,42); labL.position.set(0,6,ZB); scene.add(labL);
+  const labP=particles(400,38,18,54,0,ZB-27,0x3366ff,.07,.4);
+  scene.add(labP);
+
+
+  // ══ ZONE C — TROPHY ROOM  (z = -95) ═════════════════════════════════
+  const ZC=-95;
+
+  scene.add(hPlane(44,34,0x04040a,0,0,ZC));
+  const tg=new THREE.GridHelper(44,26,0x18183a,0x18183a);
+  tg.position.set(0,.01,ZC); scene.add(tg);
+
+  // Back wall
+  const wall=new THREE.Mesh(new THREE.PlaneGeometry(44,14),new THREE.MeshLambertMaterial({color:0x060610}));
+  wall.position.set(0,7,ZC-14); scene.add(wall);
+
+  const TDATA=[
+    {name:'EduQuest',    col:0xffcc44, x:-11},
+    {name:'CampusBridge',col:0x44aaff, x:-3.5},
+    {name:'Football FC', col:0x44ff88, x:3.5},
+    {name:'AscendHub',   col:0xff5599, x:11},
+  ];
+
+  const tGroups=[];
+  TDATA.forEach(({name,col,x},i)=>{
+    const g=new THREE.Group();
+    g.position.set(x,0,ZC);
+    scene.add(g); tGroups.push(g);
+    g.userData={name,col};
+
+    const gM=new THREE.MeshStandardMaterial({color:col,roughness:.08,metalness:.95});
+    const dM=new THREE.MeshStandardMaterial({color:0x1a1a24,roughness:.6,metalness:.7});
+
+    // Base
+    addP(g,new THREE.CylinderGeometry(.72,.95,.14,28),dM,0,.07,0);
+    addP(g,new THREE.CylinderGeometry(.52,.72,.1,28),dM,0,.19,0);
+    // Stem
+    addP(g,new THREE.CylinderGeometry(.12,.2,.9,16),gM,0,.74,0);
+    // Cup
+    addP(g,new THREE.CylinderGeometry(.58,.3,1.3,22),gM,0,1.89,0);
+    // Rim
+    const rim=new THREE.Mesh(new THREE.TorusGeometry(.58,.065,12,36),gM);
+    rim.position.y=2.54; rim.rotation.x=Math.PI/2; g.add(rim);
+    // Handles
+    [1,-1].forEach(s=>{
+      const h=new THREE.Mesh(new THREE.TorusGeometry(.32,.055,12,22,Math.PI),gM);
+      h.position.set(s*.62,1.88,0); h.rotation.y=s>0?Math.PI/2:-Math.PI/2; g.add(h);
+    });
+    // Star top
+    const star=new THREE.Mesh(new THREE.OctahedronGeometry(.18,0),gM);
+    star.position.y=2.9; star.rotation.y=Math.PI/4; g.add(star);
+    // Glow
+    const gl=new THREE.PointLight(col,2.5,7);
+    gl.position.set(0,2.5,.5); g.add(gl);
+    g.userData.gl=gl;
+  });
+
+  const goldL=new THREE.PointLight(0xffaa33,1.2,60); goldL.position.set(0,10,ZC); scene.add(goldL);
+  const trP=particles(300,44,16,34,0,ZC-17,0xffcc44,.06,.35);
+  scene.add(trP);
+
+
+  // ══ SCROLL STATE ═════════════════════════════════════════════════════
+  const MAX=100;
+  let scroll=0, target=0, mx=0, tx=0;
+
+  // Wheel
+  document.addEventListener('wheel',e=>{
+    e.preventDefault();
+    target=Math.max(0,Math.min(target+e.deltaY*.14,MAX));
+  },{passive:false});
+
+  // Keyboard
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowDown'||e.key==='PageDown'||e.key===' ') target=Math.min(target+6,MAX);
+    if(e.key==='ArrowUp'  ||e.key==='PageUp') target=Math.max(target-6,0);
+  });
+
+  // Touch
+  let lty=0;
+  document.addEventListener('touchstart',e=>{ lty=e.touches[0].clientY; },{passive:true});
+  document.addEventListener('touchmove',e=>{
+    const d=lty-e.touches[0].clientY; lty=e.touches[0].clientY;
+    target=Math.max(0,Math.min(target+d*.28,MAX));
+  },{passive:true});
+
+  // Resize
+  window.addEventListener('resize',()=>{
+    cam.aspect=innerWidth/innerHeight;
+    cam.updateProjectionMatrix();
+    renderer.setSize(innerWidth,innerHeight);
+  });
+
+
+  // ══ CAMERA PATH ══════════════════════════════════════════════════════
+  // [scroll%, px, py, pz, lx, ly, lz]
+  const KF=[
+    [  0, 0, 8,  24,  0, 1,   0 ],
+    [ 22, 0, 3.5,  8,  0, 1,  -6 ],
+    [ 42, 0, 5, -16,  0, 2, -30 ],
+    [ 58, 0, 4, -40,  0, 2, -50 ],
+    [ 75, 0, 3.5,-60,  0, 2, -68 ],
+    [ 88, 0, 5, -76,  0, 2, -86 ],
+    [100, 0, 4, -88,  0, 1.5,-96 ],
+  ];
+
+  function camAt(s){
+    let a=KF[0],b=KF[KF.length-1];
+    for(let i=0;i<KF.length-1;i++){ if(s>=KF[i][0]&&s<=KF[i+1][0]){a=KF[i];b=KF[i+1];break;} }
+    const t0=a[0]===b[0]?0:(s-a[0])/(b[0]-a[0]);
+    const e=t0<.5?2*t0*t0:-1+(4-2*t0)*t0;
+    const lerp=(ai,bi)=>a[ai]+(b[bi]-a[ai])*e;
+    return [lerp(1,1),lerp(2,2),lerp(3,3),lerp(4,4),lerp(5,5),lerp(6,6)];
+  }
+
+  function fade(v,enter,peak,exit,full){
+    if(v<enter)return 0;
+    if(v<peak)return(v-enter)/(peak-enter);
+    if(v<exit)return 1;
+    if(full&&v<full)return Math.max(0,1-(v-exit)/(full-exit));
+    return full?0:1;
+  }
+
+  // Screen-space project
+  function toScreen(worldPos){
+    const v=worldPos.clone().project(cam);
+    return {x:(v.x*.5+.5)*innerWidth, y:(-v.y*.5+.5)*innerHeight};
+  }
+
+  const chs=[0,1,2,3,4].map(i=>document.getElementById('c'+i));
+  const dots=[0,1,2,3,4].map(i=>document.getElementById('d'+i));
+  const tls=[0,1,2,3].map(i=>document.getElementById('tl'+i));
+  const pfill=document.getElementById('pfill');
+  const hintEl=document.getElementById('hint');
+  const dbg=document.getElementById('dbg');
+
+  const clock=new THREE.Clock();
+
+  (function animate(){
+    requestAnimationFrame(animate);
+    const t=clock.getElapsedTime();
+
+    scroll+=(target-scroll)*.055;
+    tx+=(mx-tx)*.04;
+
+    pfill.style.width=(scroll/MAX*100)+'%';
+    hintEl.style.opacity=scroll<4?.35:0;
+    dbg.textContent='SCROLL '+Math.round(scroll)+' / '+MAX;
+
+    // Camera
+    const [px,py,pz,lx,ly,lz]=camAt(scroll);
+    cam.position.set(px+tx*4, py, pz);
+    cam.lookAt(lx+tx*.6, ly, lz);
+
+    // Fog / bg colour
+    const t52=Math.max(0,Math.min(1,(scroll-38)/22));
+    const fogR=4+t52*3, fogB=16+t52*14;
+    scene.background.setRGB(fogR/255,4/255,fogB/255);
+    scene.fog.color.setRGB(fogR/255,4/255,fogB/255);
+
+    // Chapter text
+    chs[0].style.opacity=fade(scroll,0,0,12,18);
+    chs[1].style.opacity=fade(scroll,16,22,36,44);
+    chs[2].style.opacity=fade(scroll,52,58,68,76);
+    chs[3].style.opacity=fade(scroll,74,79,83,89);
+    chs[4].style.opacity=fade(scroll,88,92,97,101);
+
+    // Dots
+    const ch=scroll<22?0:scroll<52?1:scroll<74?2:scroll<88?3:4;
+    dots.forEach((d,i)=>d.classList.toggle('on',i===ch));
+
+    // Ball bounce
+    ball.position.y=.22+Math.abs(Math.sin(t*1.3))*.28;
+    ball.rotation.z=t*.9;
+
+    // Screen glows pulse
+    sg.intensity=3.5+Math.sin(t*2.2)*1;
+    sg2.intensity=2+Math.sin(t*1.7+1)*.7;
+
+    // Trophy float + labels
+    const trVis=scroll>86;
+    tGroups.forEach((g,i)=>{
+      g.position.y=Math.sin(t*1.2+i*1.2)*.1+.06;
+      g.rotation.y=t*.45+i*.9;
+      if(g.userData.gl) g.userData.gl.intensity=2+Math.sin(t*2+i)*.8;
+
+      const wp=new THREE.Vector3();
+      g.getWorldPosition(wp); wp.y+=3.5;
+      const sc=toScreen(wp);
+      tls[i].style.left=sc.x+'px';
+      tls[i].style.top=sc.y+'px';
+      tls[i].style.transform='translateX(-50%)';
+      tls[i].style.opacity=trVis?Math.min(1,(scroll-86)/6):0;
+    });
+
+    // Particles drift
+    pitchP.rotation.y= t*.007;
+    labP.rotation.y  =-t*.009;
+    trP.rotation.y   = t*.006;
+
+    renderer.render(scene,cam);
+  })();
+
+} // end initWorld
+
+
+// ── HELPERS ──────────────────────────────────────────────────────────────
+function hPlane(w,d,color,x,y,z,opacity){
+  const mat=new THREE.MeshLambertMaterial({color});
+  if(opacity!=null){mat.transparent=true;mat.opacity=opacity;}
+  const m=new THREE.Mesh(new THREE.PlaneGeometry(w,d),mat);
+  m.rotation.x=-Math.PI/2; m.position.set(x,y,z); m.receiveShadow=true;
+  return m;
+}
+
+function goal(scene,x,z){
+  const mat=new THREE.MeshStandardMaterial({color:0xf5f5f5,roughness:.2,metalness:.5});
+  const H=2.44, W=7.32;
+  [-W/2,W/2].forEach(dx=>{
+    const p=new THREE.Mesh(new THREE.CylinderGeometry(.07,.07,H,14),mat);
+    p.position.set(x+dx,H/2,z); p.castShadow=true; scene.add(p);
+  });
+  const bar=new THREE.Mesh(new THREE.CylinderGeometry(.07,.07,W+.14,14),mat);
+  bar.rotation.z=Math.PI/2; bar.position.set(x,H,z); bar.castShadow=true; scene.add(bar);
+  // Net lines
+  for(let nx=-3.4;nx<=3.4;nx+=1.1){
+    const nl=new THREE.Mesh(new THREE.BoxGeometry(.016,H,.016),new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.12}));
+    nl.position.set(x+nx,H/2,z+(z<0?-.5:.5)); scene.add(nl);
+  }
+}
+
+function addP(g,geo,mat,x,y,z){
+  const m=new THREE.Mesh(geo,mat);
+  m.position.set(x,y,z); m.castShadow=true; g.add(m);
+}
+
+function particles(count,rx,ry,rz,ox,oz,color,size,opacity){
+  const geo=new THREE.BufferGeometry();
+  const pos=new Float32Array(count*3);
+  for(let i=0;i<count;i++){
+    pos[i*3]  =ox+(Math.random()-.5)*rx;
+    pos[i*3+1]=.3+Math.random()*ry;
+    pos[i*3+2]=oz+(Math.random()-.5)*rz;
+  }
+  geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  return new THREE.Points(geo,new THREE.PointsMaterial({color,size,transparent:true,opacity}));
+}
+</script>
+</body>
+</html>
