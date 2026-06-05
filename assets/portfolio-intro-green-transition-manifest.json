@@ -1,0 +1,9 @@
+{
+  "model": "fal-ai/kling-video/v3/pro/image-to-video",
+  "request_id": "019e945c-2ca0-7eb3-b3a1-29fc9e159e4f",
+  "source_image": "/Users/robert/Downloads/PORTFOLIO/assets/portfolio-intro-start-v2.png",
+  "raw_video": "/Users/robert/Downloads/PORTFOLIO/assets/portfolio-intro-green-transition-raw.mp4",
+  "prompt": "Animate this exact retro portfolio loading screen as a five second image-to-video intro. Locked-off camera, absolutely no zoom-in, no push-in, no orbit, no scene cut. Keep the old beige CRT computer centered on a black background with a strong 1980s terminal vibe. Use subtle analog motion only: CRT scanline shimmer, phosphor glow pulsing, tiny static, screen flicker, cursor blink, and light reflections. During the last second, make the green phosphor from the monitor bloom outward until it becomes a full-screen bright terminal-green transition frame. End on the entire frame filled with green light so it can fade away to reveal the actual portfolio underneath. Do not add people, hands, new logos, readable subtitles, camera movement, or a new environment.",
+  "negative_prompt": "zoom in, push in, dolly, orbit, camera shake, scene cut, changing computer shape, new text, subtitles, watermark, logo, people, hands, bright white flash, blur, low quality, distorted screen, unreadable messy interface, modern laptop",
+  "result_video_url": "https://v3b.fal.media/files/b/0a9cfd15/0xJ2OjFr1VSmlUB1rybfl_output.mp4"
+}

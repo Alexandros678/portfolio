@@ -1,0 +1,12 @@
+{
+  "model": "fal-ai/kling-video/v3/pro/image-to-video",
+  "source_image": "/Users/robert/Downloads/PORTFOLIO/assets/portfolio-intro-start.png",
+  "video": "/Users/robert/Downloads/PORTFOLIO/assets/portfolio-intro-video.mp4",
+  "prompt": "Create a cinematic 5-second retro portfolio loading-screen video from this exact start frame. Keep the same centered beige 1980s CRT computer on a pure black background. The CRT screen flickers awake with green phosphor glow, scanlines, tiny static, and terminal energy. Subtle camera push-in toward the screen. The text BOOTING PORTFOLIO.EXE may flicker and glow, but keep the composition clean. Near the end, the green glow intensifies and the CRT fills the frame with a bright terminal flash, creating a transition point into the actual portfolio boot screen. Premium, nostalgic, minimal, dark, polished. No scene cuts, no people, no hands, no extra objects, no logos, no watermark, no subtitles outside the CRT.",
+  "negative_prompt": "people, hands, desk clutter, room background, extra monitor, modern laptop, phone, logos, watermark, subtitles, fast camera shake, warped computer, melted keyboard, unreadable mess, random new text outside the screen, scene cut, bright background",
+  "status": "generated",
+  "request_id": "019e9453-0f00-79b2-9825-767afe8fa661",
+  "fal_video_url": "https://v3b.fal.media/files/b/0a9cfcd5/VUIWdi5OH5f3ETkyHUz1o_output.mp4",
+  "bytes": 7406319,
+  "generated_at": 1780605027
+}
