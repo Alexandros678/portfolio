@@ -4,6 +4,16 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Alexandros Gkiorgkinis — Retro Resume</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<meta name="description" content="Alexandros Gkiorgkinis — Applied Computer Science student & web developer based in Brussels. Interned at the European Commission. Open to work." />
+<meta property="og:title" content="Alexandros Gkiorgkinis — Retro Resume" />
+<meta property="og:description" content="Computer Science student & web developer based in Brussels. Interned at the European Commission. Open to work." />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="assets/portfolio-intro-start.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Alexandros Gkiorgkinis — Retro Resume" />
+<meta name="twitter:description" content="Computer Science student & web developer based in Brussels. Interned at the European Commission. Open to work." />
+<meta name="twitter:image" content="assets/portfolio-intro-start.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
@@ -205,6 +215,9 @@ body{
 @media (max-width:680px){.topbar .meta,.topbar .dot{display:none}}
 .topbar .spacer{flex:1}
 .topbar .clock{color:var(--fg)}
+.otw{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--green-soft);color:var(--green);font-size:12px;padding:3px 10px;letter-spacing:.05em;white-space:nowrap}
+.otw-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:blink 1.4s steps(1) infinite;flex-shrink:0}
+@media(max-width:680px){.otw span:last-child{display:none}}
 .topbar .reboot{
   font-family:var(--mono);font-size:14px;color:var(--dim);
   background:none;border:1px solid var(--line2);padding:5px 10px;cursor:pointer;
@@ -451,9 +464,13 @@ body.light .theme-toggle[aria-pressed="true"]{background:#e9f3ea}
 .sc-techrow .sc-tlabel{color:var(--dim);font-size:13px;text-transform:uppercase;letter-spacing:1px}
 .sc-meta .tags{display:flex;flex-wrap:wrap;gap:6px}
 .sc-meta .tags span{border:1px solid var(--line2);color:var(--dim);font-size:13px;padding:2px 9px;font-family:var(--mono)}
-.sc-links{display:flex;gap:10px;flex-wrap:wrap}
-.sc-links .ghost{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);color:var(--dim);background:none;font-family:var(--mono);font-size:14px;padding:6px 14px;text-decoration:none}
-.sc-links .ghost:hover{border-color:var(--green-soft);color:var(--green)}
+.sc-links{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+.sc-demo-btn{display:inline-flex;align-items:center;gap:10px;padding:10px 20px;border:1px solid var(--green-soft);color:var(--green);background:none;font-family:var(--mono);font-size:14px;text-decoration:none;letter-spacing:.04em;transition:background .15s,color .15s,box-shadow .15s}
+.sc-demo-btn:hover{background:var(--green);color:#04120a;box-shadow:0 0 18px rgba(57,255,117,.35)}
+.sc-demo-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);flex-shrink:0;transition:background .15s}
+.sc-demo-btn:hover .sc-demo-dot{background:#04120a}
+.sc-demo-arr{font-size:16px;transition:transform .15s}
+.sc-demo-btn:hover .sc-demo-arr{transform:translate(2px,-2px)}
 .sc-meta .sc-org{color:var(--fg);font-size:15px;margin-top:4px}
 .sc-meta .sc-org .sc-when{color:var(--dim)}
 .sc-meta .sc-desc{color:var(--dim);font-size:15px;line-height:1.55;margin:9px 0 11px;text-wrap:pretty}
@@ -471,15 +488,15 @@ body.light .theme-toggle[aria-pressed="true"]{background:#e9f3ea}
 .contact-list a .val{color:var(--dim)}
 .contact-list a:hover .val{color:var(--fg)}
 
-.snake-game{display:flex;flex-direction:column;gap:16px}
-.snake-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
-.snake-title{font-family:var(--display);font-size:30px;color:var(--green);text-shadow:var(--glow);line-height:1}
-.snake-sub{color:var(--dim);font-size:15px;margin-top:4px}
-.snake-stats{display:grid;grid-template-columns:repeat(3,auto);gap:8px}
-.snake-stat{border:1px solid var(--line2);background:var(--panel);padding:7px 10px;min-width:84px}
-.snake-stat .k{display:block;color:var(--dim);font-size:11px;text-transform:uppercase;letter-spacing:1px}
-.snake-stat .v{display:block;color:var(--green);font-family:var(--display);font-size:27px;line-height:1;text-shadow:var(--glow)}
-.snake-arena{display:grid;grid-template-columns:minmax(260px,1fr) 190px;gap:16px;align-items:start}
+.snake-game{display:flex;flex-direction:column;gap:12px;max-width:620px}
+.snake-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.snake-title{font-family:var(--display);font-size:24px;color:var(--green);text-shadow:var(--glow);line-height:1}
+.snake-sub{color:var(--dim);font-size:13px;margin-top:3px}
+.snake-stats{display:grid;grid-template-columns:repeat(3,auto);gap:6px}
+.snake-stat{border:1px solid var(--line2);background:var(--panel);padding:5px 8px;min-width:68px}
+.snake-stat .k{display:block;color:var(--dim);font-size:10px;text-transform:uppercase;letter-spacing:1px}
+.snake-stat .v{display:block;color:var(--green);font-family:var(--display);font-size:22px;line-height:1;text-shadow:var(--glow)}
+.snake-arena{display:grid;grid-template-columns:minmax(180px,1fr) 160px;gap:12px;align-items:start}
 .snake-canvas{
   width:100%;aspect-ratio:1/1;display:block;
   border:2px solid var(--green-soft);background:#070a07;
@@ -522,8 +539,14 @@ body.light .theme-toggle[aria-pressed="true"]{background:#e9f3ea}
 .g-tab.g-on{color:var(--green);border-bottom:2px solid var(--green);margin-bottom:-1px;background:var(--panel)}
 .g-panel{display:none}.g-panel.g-on{display:block}
 /* pong */
-.pong-wrap{display:flex;gap:14px;align-items:flex-start}
+.pong-wrap{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}
 .pong-side{display:flex;flex-direction:column;gap:8px;min-width:130px}
+#pongCanvas,#invCanvas,#pacCanvas{max-width:100%;height:auto;display:block}
+@media(max-width:560px){
+  .pong-wrap{flex-direction:column}
+  .pong-side{flex-direction:row;flex-wrap:wrap;width:100%}
+  .games-tabs .g-tab{font-size:11px;padding:6px 9px}
+}
 /* hacker */
 .hacker-wrap{display:flex;flex-direction:column;gap:0;border:1px solid var(--line2)}
 .hacker-out{height:340px;overflow-y:auto;padding:14px 16px;font-family:var(--mono);font-size:12px;color:var(--green);line-height:1.6;background:#070a07;text-shadow:0 0 4px rgba(57,255,117,.2);white-space:pre-wrap;word-break:break-all}
@@ -637,6 +660,7 @@ body.light .theme-toggle[aria-pressed="true"]{background:#e9f3ea}
         <span class="dot">::</span>
         <span class="meta">Brussels, BE</span>
         <span class="spacer"></span>
+        <span class="otw"><span class="otw-dot"></span>open to work</span>
         <span class="clock" id="clock">--:--:--</span>
         <button class="reboot" id="cvBtn">▤ CV</button>
         <button class="reboot theme-toggle" id="themeBtn" type="button" aria-pressed="false">☼ light</button>
@@ -860,7 +884,7 @@ const SECTIONS = [
   {id:'projects',  cmd:'./projects',  desc:'things I have built'},
   {id:'internship', cmd:'./internship', desc:'internship — docs & reflection'},
   {id:'education', cmd:'./education',  desc:'where I learned it'},
-  {id:'snake',     cmd:'./snake',     desc:'play a terminal mini-game'},
+  {id:'snake',     cmd:'./mini-games', desc:'terminal mini-games hub'},
   {id:'contact',   cmd:'./contact',   desc:'say hello / hire me'},
 ];
 
@@ -909,7 +933,7 @@ const skill=(lab,pct)=>`<div class="sk"><span class="lab">${lab}</span><span cla
 
 const PROJECTS=[
   {t:'EduQuest', kind:'collab platform · team', year:'2024', cover:'screenshot1.png',
-   gallery:[{src:'screenshot5.png',cap:'StarUML use-case diagram'},{src:'screenshot6.png',cap:'Figma prototype'},{src:'screenshot7.png',cap:'Requirements document'}],
+   gallery:[{src:'screenshot5.png',cap:'Login page'},{src:'screenshot6.png',cap:'Dashboard'},{src:'screenshot7.png',cap:'Manage clients'}],
    long:'A web platform where students, coaches, clients and admins collaborate in one place — managing projects, giving feedback and keeping communication clear. Designed to be scalable, secure and adaptable for academic and professional settings.',
    role:'Team collaborator — UI design in Figma, use-case modelling in StarUML, requirements analysis and prototype testing.',
    tags:['Figma','StarUML','UX'], demo:'', code:'https://github.com/Alexandros678/portfolio'},
@@ -928,6 +952,11 @@ const PROJECTS=[
    long:'A gamified workout app inspired by Solo Leveling: complete daily exercise quests to earn XP, level up and unlock achievements — miss them and you lose XP. Built to turn a boring routine into a game you actually want to play.',
    role:'Full-stack developer (solo) — gamified system design, Laravel back end, Livewire + Alpine.js real-time UI, Tailwind styling.',
    tags:['Laravel','Tailwind','Livewire','Alpine.js'], demo:'', code:'https://github.com/Alexandros678/portfolio'},
+  {t:'Soccer AI Analytics', kind:'computer vision · team', year:'2025', cover:'assets/Pasted Graphic 1.png',
+   gallery:[{src:'assets/Pasted Graphic 1.png',cap:'Player & ball detection'},{src:'assets/Pasted Graphic 2.png',cap:'Ball detection'},{src:'assets/Pasted Graphic 3.png',cap:'Pitch detection'}],
+   long:'A computer vision pipeline for real-time soccer match analysis. We trained three custom YOLOv8 models using Roboflow datasets — a player/referee/ball detector, a specialized sliced-inference ball detector for catching the small fast-moving ball, and a pitch keypoint detector that maps the camera view to a top-down field layout. For the pitch model we also defined custom keypoint annotations on top of Roboflow community models to precisely localize field line landmarks. The pipeline runs in six modes: pitch detection, player detection, ball detection, player tracking with persistent IDs via ByteTrack, automatic team classification by jersey color clustering (no manual labeling), and a live radar minimap that projects every player\'s real position onto a 2D top-down overlay. Built with Python, Ultralytics, and Supervision.',
+   role:'Team collaborator — model training & annotation in Roboflow, YOLOv8 fine-tuning, pipeline integration, team classification module.',
+   tags:['Python','YOLOv8','ByteTrack','Roboflow','Ultralytics','Supervision','Computer Vision'], demo:'', code:'https://github.com/Alexandros678/portfolio'},
 ];
 
 const WORK=[
@@ -1012,7 +1041,17 @@ const PANELS = {
       const el=document.getElementById(id);
       if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
     };
-    return `<p class="lead dim">IBBDiS internship deliverables — planning, implementation &amp; reflection.</p>
+    return `<p class="lead dim">14 weeks at the European Commission — designing and building a feedback &amp; display system for 1,400+ meeting rooms.</p>
+      <div class="cards" style="margin-bottom:28px">
+        <div class="card">
+          <div class="ct"><span>European Commission — DG SCIC</span><span style="font-size:16px;color:var(--dim)">Feb – May 2026 · Brussels</span></div>
+          <div class="cd">DG SCIC is the Directorate-General for Interpretation — the department that manages conference infrastructure and interpretation services across all EU institutions. It handles around 1,400 meeting rooms in Brussels, all running on a digital signage platform called IBBDiS (Internal Browser Based Digital Signage): touchscreen panels mounted outside every room that show the current and upcoming meetings in real time, running on Raspberry Pi devices.</div>
+          <div class="cd">The internship project was to extend IBBDiS with a full feedback and display overhaul. The existing system only pushed information outward — there was no way for meeting participants to rate their experience. My task was to change that. I designed and built a three-state meeting room display (previous, ongoing, upcoming), an interactive smiley-face feedback system (1–5 tap rating) on the Chipsee 10-inch touchscreens, a live room occupancy indicator, a redesigned datagrid template for building entrance screens, a non-interactive TV template, and ensured WCAG accessibility compliance across everything. The backend (Go, PostgreSQL) was extended to store and process the collected feedback.</div>
+          <div class="cd">Working inside a real institution like the European Commission was a different experience from any course project. Decisions involved multiple teams, required approvals from different departments, and sometimes depended on priorities outside anyone's control. The most iterated piece was the occupancy indicator — something that looks simple took more rounds of feedback than anything else, because every person who looked at it read it differently. That taught me that design in a real environment is about what makes sense to the people who use it every day, not what looks right on a screen. The API access to EC internal systems never came through despite multiple attempts, which was the biggest constraint of the project — but the mentor reframed it well: the job was to analyse the problem, design a tested solution, and hand over a clear technical path. That was what got delivered.</div>
+          <div class="tags"><span>HTML/JS/jQuery</span><span>Go</span><span>PostgreSQL</span><span>Raspberry Pi</span><span>Chipsee</span><span>WCAG</span><span>Figma</span></div>
+        </div>
+      </div>
+      <p class="lead dim" style="margin-bottom:16px">Deliverables — planning, implementation &amp; reflection.</p>
       <div class="doc-nav">
         ${docs.map((d,i)=>`<button class="doc-nav-btn" onclick="document.getElementById('doc-${i}').scrollIntoView({behavior:'smooth',block:'start'})">
           <span class="doc-nav-idx">[0${i+1}]</span> ${d.name}
@@ -1603,7 +1642,7 @@ function selectShowcase(sc, kind, i){
       <div class="sc-role"><span class="sc-rlabel">my role</span>${p.role}</div>
       <div class="sc-techrow"><span class="sc-tlabel">built with</span><span class="tags">${p.tags.map(t=>`<span>${t}</span>`).join('')}</span></div>
       <div class="sc-gallery">${p.gallery.map(g=>`<button class="sc-thumb" type="button" data-src="${g.src}" data-cap="${g.cap}"><img src="${g.src}" alt="${g.cap}" loading="lazy"><span>${g.cap}</span></button>`).join('')}</div>
-      <div class="sc-links">${p.demo?`<a class="open" href="${p.demo}" target="_blank" rel="noopener">live demo ▶</a>`:''}<a class="ghost" href="${p.code}" target="_blank" rel="noopener">source ⌥</a></div>`;
+      ${p.demo?`<div class="sc-links"><a class="sc-demo-btn" href="${p.demo}" target="_blank" rel="noopener"><span class="sc-demo-dot"></span>live demo<span class="sc-demo-arr">↗</span></a></div>`:''}` ;
     meta.querySelectorAll('.sc-thumb').forEach(b=>b.addEventListener('click',()=>{ sfx.select(); openLightbox(b.dataset.src, b.dataset.cap); }));
   } else {
     const w=WORK[i];
@@ -1822,6 +1861,7 @@ $('#viewThemeBtn').addEventListener('click', toggleTheme);
 $('#sndBtn').addEventListener('click', toggleSound);
 $('#cvBtn').addEventListener('click', ()=>{ if(!viewOpen) openView('cv', null); });
 function runIntro(){
+  if(window.innerWidth<768){ goScene('boot'); runBoot(); return; }
   goScene('intro');
   const vid=$('#introVid');
   vid.currentTime=0;
@@ -1886,30 +1926,46 @@ function initPong(){
   const ctx=cv.getContext('2d'), W=cv.width, H=cv.height;
   const PW=10,PH=72,BR=7,SPD=4.5;
   let s={
-    p:{y:H/2-PH/2,score:0},
+    p:{y:H/2-PH/2,vy:0,score:0},
     b2:{y:H/2-PH/2,score:0},
     ball:{x:W/2,y:H/2,vx:SPD,vy:SPD*(Math.random()>.5?1:-1)},
     running:false,over:false
   };
   _pongState=s;
+  const keys={};
   const onKey=e=>{
-    if(!s.running)return;
-    if(e.key==='ArrowUp'){s.p.y=Math.max(0,s.p.y-22);e.preventDefault();}
-    if(e.key==='ArrowDown'){s.p.y=Math.min(H-PH,s.p.y+22);e.preventDefault();}
+    if(e.key==='ArrowUp'||e.key==='ArrowDown'){
+      keys[e.key]=true;
+      e.preventDefault();
+      if(!s.running&&!s.over){document.getElementById('pongStart').click();}
+    }
+    if(e.key==='Enter'&&!s.running&&!s.over){document.getElementById('pongStart').click();}
+  };
+  const onKeyUp=e=>{
+    if(e.key==='ArrowUp'||e.key==='ArrowDown') keys[e.key]=false;
   };
   const onMouse=e=>{
     const r=cv.getBoundingClientRect();
     s.p.y=Math.max(0,Math.min(H-PH,e.clientY-r.top-PH/2));
+    s.p.vy=0;
   };
   document.addEventListener('keydown',onKey);
+  document.addEventListener('keyup',onKeyUp);
   cv.addEventListener('mousemove',onMouse);
-  _pongClean=()=>{document.removeEventListener('keydown',onKey);cv.removeEventListener('mousemove',onMouse);};
+  _pongClean=()=>{document.removeEventListener('keydown',onKey);document.removeEventListener('keyup',onKeyUp);cv.removeEventListener('mousemove',onMouse);};
 
   function reset(){
     s.ball={x:W/2,y:H/2,vx:SPD*(Math.random()>.5?1:-1),vy:(Math.random()*2-1)*SPD};
   }
   function update(){
     const b=s.ball,p=s.p,b2=s.b2;
+    // Player paddle — smooth hold-to-move
+    const PMAXSPD=8,PACC=1.4,PFRIC=0.78;
+    if(keys['ArrowUp']) p.vy=Math.max(-PMAXSPD,p.vy-PACC);
+    else if(keys['ArrowDown']) p.vy=Math.min(PMAXSPD,p.vy+PACC);
+    else p.vy*=PFRIC;
+    if(Math.abs(p.vy)<0.1) p.vy=0;
+    p.y=Math.max(0,Math.min(H-PH,p.y+p.vy));
     // Bot AI
     const bc=b2.y+PH/2;
     if(bc<b.y-3) b2.y=Math.min(H-PH,b2.y+4.2);
@@ -1954,7 +2010,7 @@ function initPong(){
   if(sb) sb.onclick=()=>{if(!s.running&&!s.over){s.running=true;loop();}};
   if(rb) rb.onclick=()=>{
     stopPong();s.running=false;s.over=false;
-    s.p={y:H/2-PH/2,score:0};s.b2={y:H/2-PH/2,score:0};
+    s.p={y:H/2-PH/2,vy:0,score:0};s.b2={y:H/2-PH/2,score:0};
     reset();
     document.getElementById('pongScoreP').textContent='0';
     document.getElementById('pongScoreB').textContent='0';
@@ -1992,6 +2048,9 @@ function initInvaders(){
   }
   const onKey=e=>{
     _invKeys[e.key]=true;
+    if(s&&s.phase==='idle'&&(e.key==='ArrowLeft'||e.key==='ArrowRight'||e.key===' '||e.key==='Enter')){
+      e.preventDefault();document.getElementById('invStart').click();return;
+    }
     if((e.key===' '||e.key==='ArrowUp')&&s&&s.phase==='playing'){e.preventDefault();shoot();}
   };
   const onKeyUp=e=>{_invKeys[e.key]=false;};
@@ -2212,8 +2271,8 @@ function initPacman(){
     // Win
     if(s.dots<=0){s.level++;newGame();_pacState.phase='playing';_pacState.level=s.level;_pacState.score=s.score;_pacState.lives=s.lives;sfx.ok();}
 
-    // Move ghosts (every 3 ticks)
-    if(s.tick%3===0){
+    // Move ghosts (every 10 ticks)
+    if(s.tick%10===0){
       s.ghosts.forEach(g=>{
         if(g.scareTimer>0) g.scareTimer--;
         if(g.scareTimer===0) g.scared=false;
@@ -2326,7 +2385,11 @@ function initPacman(){
   function loop(){render();if(_pacState&&_pacState.phase==='playing'){update();_pacRAF=requestAnimationFrame(loop);}}
 
   const onKey=e=>{
-    if(!_pacState||_pacState.phase!=='playing') return;
+    if(!_pacState) return;
+    if(_pacState.phase==='idle'&&(e.key==='ArrowUp'||e.key==='ArrowDown'||e.key==='ArrowLeft'||e.key==='ArrowRight'||e.key==='Enter')){
+      e.preventDefault();document.getElementById('pacStart').click();return;
+    }
+    if(_pacState.phase!=='playing') return;
     const p=_pacState.pac;
     if(e.key==='ArrowUp'){p.ndr=-1;p.ndc=0;e.preventDefault();}
     if(e.key==='ArrowDown'){p.ndr=1;p.ndc=0;e.preventDefault();}
