@@ -212,7 +212,13 @@ body{
 .topbar .brand{font-family:var(--display);font-size:30px;color:var(--green);text-shadow:var(--glow);letter-spacing:.5px}
 .topbar .dot{color:var(--dimmer)}
 .topbar .meta{color:var(--dim);white-space:nowrap}
-@media (max-width:680px){.topbar .meta,.topbar .dot{display:none}}
+@media (max-width:680px){
+  .topbar .meta,.topbar .dot{display:none}
+  .topbar{padding:8px 14px;gap:8px;flex-wrap:nowrap}
+  .topbar .brand{font-size:22px}
+  .topbar .clock{font-size:13px}
+  #sndBtn,#rebootBtn{display:none}
+}
 .topbar .spacer{flex:1}
 .topbar .clock{color:var(--fg)}
 .otw{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--green-soft);color:var(--green);font-size:12px;padding:3px 10px;letter-spacing:.05em;white-space:nowrap}
@@ -582,6 +588,10 @@ body.light .theme-toggle[aria-pressed="true"]{background:#e9f3ea}
   #headshot,.photo-render{width:120px;height:140px}
   .exp .erow{flex-direction:column;gap:2px}
   .exp .erow .right{text-align:left}
+}
+@media (max-width:680px){
+  .hub-main{justify-content:flex-start;padding:14px 16px}
+  .hub-greet,.hub-sub{display:none}
 }
 @media (max-width:460px){
   .tiles{grid-template-columns:1fr}
