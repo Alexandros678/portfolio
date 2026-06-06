@@ -9,11 +9,11 @@
 <meta property="og:title" content="Alexandros Gkiorgkinis — Retro Resume" />
 <meta property="og:description" content="Computer Science student & web developer based in Brussels. Interned at the European Commission. Open to work." />
 <meta property="og:type" content="website" />
-<meta property="og:image" content="assets/portfolio-intro-start.png" />
+<meta property="og:image" content="assets/portfolio-intro-start.webp" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Alexandros Gkiorgkinis — Retro Resume" />
 <meta name="twitter:description" content="Computer Science student & web developer based in Brussels. Interned at the European Commission. Open to work." />
-<meta name="twitter:image" content="assets/portfolio-intro-start.png" />
+<meta name="twitter:image" content="assets/portfolio-intro-start.webp" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
@@ -620,7 +620,7 @@ body.light .theme-toggle[aria-pressed="true"]{background:#e9f3ea}
         <div class="id-row">
           <div class="pfp-wrap">
             <div class="photo-render" id="photoRender">
-              <img class="pr-img" src="assets/portrait.png" alt="Alexandros Gkiorgkinis" />
+              <img class="pr-img" src="assets/portrait.webp" alt="Alexandros Gkiorgkinis" />
               <div class="pr-grid"></div>
               <div class="pr-scan"></div>
             </div>
@@ -932,28 +932,28 @@ function startClock(){
 const skill=(lab,pct)=>`<div class="sk"><span class="lab">${lab}</span><span class="bar"><i style="--w:${pct}%"></i></span><span class="pct">${pct}</span></div>`;
 
 const PROJECTS=[
-  {t:'EduQuest', kind:'collab platform · team', year:'2024', cover:'screenshot1.png',
-   gallery:[{src:'screenshot5.png',cap:'Login page'},{src:'screenshot6.png',cap:'Dashboard'},{src:'screenshot7.png',cap:'Manage clients'}],
+  {t:'EduQuest', kind:'collab platform · team', year:'2024', cover:'screenshot1.webp',
+   gallery:[{src:'screenshot5.webp',cap:'Login page'},{src:'screenshot6.webp',cap:'Dashboard'},{src:'screenshot7.webp',cap:'Manage clients'}],
    long:'A web platform where students, coaches, clients and admins collaborate in one place — managing projects, giving feedback and keeping communication clear. Designed to be scalable, secure and adaptable for academic and professional settings.',
    role:'Team collaborator — UI design in Figma, use-case modelling in StarUML, requirements analysis and prototype testing.',
    tags:['Figma','StarUML','UX'], demo:'', code:'https://github.com/Alexandros678/portfolio'},
-  {t:'CampusBridge', kind:'enrollment portal · team', year:'2024', cover:'screenshot2.png',
-   gallery:[{src:'screenshot8.png',cap:'Jira sprint board'},{src:'screenshot9.png',cap:'Manage students'},{src:'screenshot10.png',cap:'Login page'}],
+  {t:'CampusBridge', kind:'enrollment portal · team', year:'2024', cover:'screenshot2.webp',
+   gallery:[{src:'screenshot8.webp',cap:'Jira sprint board'},{src:'screenshot9.webp',cap:'Manage students'},{src:'screenshot10.webp',cap:'Login page'}],
    long:'Also known as SMOB — a centralised portal for international & Erasmus students and coordinators at Thomas More. It replaces scattered emails with one place to submit applications, request a buddy or a bike, register as a buddy/landlord, and chat directly.',
    role:'Collaborator & developer — Figma prototype, PHP/Laravel coding, sprint management in Jira, and client meetings.',
    tags:['PHP','Laravel','Figma','Jira'], demo:'', code:'https://github.com/Alexandros678/portfolio'},
-  {t:'Greenfield United FC', kind:'one-pager site · solo', year:'2024', cover:'screenshot3.png',
-   gallery:[{src:'screenshot11.png',cap:'Welcome / hero'},{src:'screenshot12.png',cap:'News & matches'},{src:'screenshot13.png',cap:'About the club'}],
+  {t:'Greenfield United FC', kind:'one-pager site · solo', year:'2024', cover:'screenshot3.webp',
+   gallery:[{src:'screenshot11.webp',cap:'Welcome / hero'},{src:'screenshot12.webp',cap:'News & matches'},{src:'screenshot13.webp',cap:'About the club'}],
    long:'A dynamic one-pager for a community football club, built solo for Full Stack Essentials. It promotes youth development, matches and events, with live-feeling content driven by a mock API — match results, fixtures and schedules.',
    role:'Full-stack developer (solo) — design, Bootstrap + Sass theming, mock API, JavaScript interactivity, GitHub version control.',
    tags:['Bootstrap','Sass','JavaScript','API'], demo:'https://greenfield-united-fc.netlify.app', code:'https://github.com/Alexandros678/portfolio'},
-  {t:'AscendHub', kind:'gamified fitness app · solo', year:'2024', cover:'screenshot4.png',
-   gallery:[{src:'screenshot14.png',cap:'Dashboard'},{src:'screenshot15.png',cap:'Daily quests'},{src:'screenshot16.png',cap:'Leaderboard'}],
+  {t:'AscendHub', kind:'gamified fitness app · solo', year:'2024', cover:'screenshot4.webp',
+   gallery:[{src:'screenshot14.webp',cap:'Dashboard'},{src:'screenshot15.webp',cap:'Daily quests'},{src:'screenshot16.webp',cap:'Leaderboard'}],
    long:'A gamified workout app inspired by Solo Leveling: complete daily exercise quests to earn XP, level up and unlock achievements — miss them and you lose XP. Built to turn a boring routine into a game you actually want to play.',
    role:'Full-stack developer (solo) — gamified system design, Laravel back end, Livewire + Alpine.js real-time UI, Tailwind styling.',
    tags:['Laravel','Tailwind','Livewire','Alpine.js'], demo:'', code:'https://github.com/Alexandros678/portfolio'},
-  {t:'Soccer AI Analytics', kind:'computer vision · team', year:'2025', cover:'assets/Pasted Graphic 1.png',
-   gallery:[{src:'assets/Pasted Graphic 1.png',cap:'Player & ball detection'},{src:'assets/Pasted Graphic 2.png',cap:'Ball detection'},{src:'assets/Pasted Graphic 3.png',cap:'Pitch detection'}],
+  {t:'Soccer AI Analytics', kind:'computer vision · team', year:'2025', cover:'assets/Pasted Graphic 1.webp',
+   gallery:[{src:'assets/Pasted Graphic 1.webp',cap:'Player & ball detection'},{src:'assets/Pasted Graphic 2.webp',cap:'Ball detection'},{src:'assets/Pasted Graphic 3.webp',cap:'Pitch detection'}],
    long:'A computer vision pipeline for real-time soccer match analysis. We trained three custom YOLOv8 models using Roboflow datasets — a player/referee/ball detector, a specialized sliced-inference ball detector for catching the small fast-moving ball, and a pitch keypoint detector that maps the camera view to a top-down field layout. For the pitch model we also defined custom keypoint annotations on top of Roboflow community models to precisely localize field line landmarks. The pipeline runs in six modes: pitch detection, player detection, ball detection, player tracking with persistent IDs via ByteTrack, automatic team classification by jersey color clustering (no manual labeling), and a live radar minimap that projects every player\'s real position onto a 2D top-down overlay. Built with Python, Ultralytics, and Supervision.',
    role:'Team collaborator — model training & annotation in Roboflow, YOLOv8 fine-tuning, pipeline integration, team classification module.',
    tags:['Python','YOLOv8','ByteTrack','Roboflow','Ultralytics','Supervision','Computer Vision'], demo:'', code:'https://github.com/Alexandros678/portfolio'},
