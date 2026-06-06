@@ -214,10 +214,11 @@ body{
 .topbar .meta{color:var(--dim);white-space:nowrap}
 @media (max-width:680px){
   .topbar .meta,.topbar .dot{display:none}
-  .topbar{padding:8px 14px;gap:8px;flex-wrap:nowrap}
-  .topbar .brand{font-size:22px}
-  .topbar .clock{font-size:13px}
-  #sndBtn,#rebootBtn{display:none}
+  .topbar{padding:8px 14px;gap:8px;flex-wrap:nowrap;overflow:hidden}
+  .topbar .brand{font-size:20px;flex-shrink:0}
+  .topbar .clock,#sndBtn,#rebootBtn{display:none}
+  .otw{flex-shrink:0}
+  #cvBtn,#themeBtn{flex-shrink:0;font-size:13px;padding:4px 8px}
 }
 .topbar .spacer{flex:1}
 .topbar .clock{color:var(--fg)}
